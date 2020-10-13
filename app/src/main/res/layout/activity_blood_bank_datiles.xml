@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context=".BloodBank_datiles_Activity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Person Details"/>
+    <View
+        android:layout_width="105dp"
+        android:layout_height="1dp"
+        android:background="#1D1C1C"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="15dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ID:"/>
+                    <TextView
+                        android:id="@+id/personDetiles_id_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="82dp"
+                        android:text="Empty"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Name:"/>
+                    <TextView
+                        android:id="@+id/emp_name_detiles_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="61dp"
+                        android:textColor="@color/sky"
+                        android:text="Empty"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Designation:"/>
+
+                    <TextView
+                        android:id="@+id/dept_degDetls_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="29dp"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Empty"
+                        android:textAlignment="center"
+                        android:textColor="@color/sky"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Reports to:"/>
+
+                    <TextView
+                        android:id="@+id/reports_detiles_blood_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="37dp"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Empty"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:text="Mobile No:"/>
+                    <TextView
+                        android:id="@+id/mobile_no_deiles_blood_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="39dp"
+                        android:textColor="@color/sky"
+                        android:text="Empty"/>
+                    <Button
+                        android:id="@+id/call_btn_bloodDetails"
+                        android:layout_width="25dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="7dp"
+                        android:background="@drawable/call_icon"
+                        />
+                    <Button
+                        android:id="@+id/sms_btn_bloodDetails"
+                        android:layout_width="25dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/sms_icon"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="65dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:text="Emergency Contact No:"/>
+                    <TextView
+                        android:id="@+id/emergency_mobileNO_detiles_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:layout_marginLeft="33dp"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/yelow"
+                        android:text="Empty"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:text="Email(Personal):"/>
+
+                    <TextView
+                        android:id="@+id/email_pers_detiles_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:layout_marginLeft="6dp"
+                        android:text="Empty"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:text="Email(Official):"/>
+
+                    <TextView
+                        android:id="@+id/email_office_detiles_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Empty"
+                        android:textAlignment="center"
+                        android:textColor="@color/sky" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:text="Address:"/>
+
+                    <TextView
+                        android:id="@+id/address_detiles_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="49dp"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Empty" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:text="Joining Date:"/>
+
+                    <TextView
+                        android:id="@+id/joinDate_detiles_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="25dp"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Empty"
+                        android:textAlignment="center" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:text="PABX:"/>
+                    <TextView
+                        android:id="@+id/pabx_detiles_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:layout_marginLeft="64dp"
+                        android:text="Empty"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:textAlignment="center"
+                        android:text="Blood Group:"/>
+
+                    <TextView
+                        android:id="@+id/blood_Grp_detiles_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="27dp"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:text="Empty"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+</LinearLayout>

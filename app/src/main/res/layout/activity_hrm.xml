@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    tools:context=".HRMActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_top_corner_round_sheet"
+        android:orientation="vertical"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp">
+
+        <TextView
+            android:id="@+id/p_name"
+            android:text="AKK(ANWARUL KABIR KHAN)"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_below="@+id/p_name"
+            android:id="@+id/p_designation"
+            android:text="Manager,Human Resources"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+<!--       <ImageButton-->
+<!--           android:id="@+id/back_btn"-->
+<!--           android:layout_width="wrap_content"-->
+<!--           android:layout_height="35dp"-->
+<!--           android:background="#39F3EDED"-->
+<!--           android:src="@drawable/logout"-->
+<!--           android:layout_alignParentRight="true"-->
+<!--           />-->
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/hrm_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/button_shape"
+            android:padding="2dp"
+            android:text="HRM"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorHeader"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <ListView
+            android:id="@+id/hrm_listView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"/>
+    </LinearLayout>
+</LinearLayout>
