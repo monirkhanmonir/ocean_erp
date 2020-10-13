@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -72,8 +73,12 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 manufacture_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 manufacture_dailog.show();
 
+
                 SearchView manufactureSpinnerSearchView = manufacture_dailog.findViewById(R.id.spinner_search);
                 ListView manufactureSpinnerListView = manufacture_dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView current_stock_image = manufacture_dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
                 manufactureSpinnerSearchView.setQueryHint("Search here...");
                 manufactureSpinnerSearchView.onActionViewExpanded();
                 manufactureSpinnerSearchView.setIconified(false);
@@ -149,6 +154,9 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 manufacture_dailog.show();
 
 
+                ImageView current_stock_image = manufacture_dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
+
                 ListView stockGroupSpinnerListView = manufacture_dailog.findViewById(R.id.spinnerItemList);
                 SearchView manufactureSpinnerSearchView = manufacture_dailog.findViewById(R.id.spinner_search);
                 manufactureSpinnerSearchView.setQueryHint("Search here...");
@@ -221,6 +229,9 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 manufacture_dailog.show();
 
 
+                ImageView current_stock_image = manufacture_dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
+
                 ListView itemNameSpinnerListView = manufacture_dailog.findViewById(R.id.spinnerItemList);
                 SearchView itemNameSpinnerSearchView = manufacture_dailog.findViewById(R.id.spinner_search);
                 itemNameSpinnerSearchView.setQueryHint("Search here...");
@@ -292,6 +303,9 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 manufacture_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 manufacture_dailog.show();
 
+
+                ImageView current_stock_image = manufacture_dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
 
                 ListView stockQuentitySpinnerListView = manufacture_dailog.findViewById(R.id.spinnerItemList);
                 SearchView stockQuentitySpinnerSearchView = manufacture_dailog.findViewById(R.id.spinner_search);

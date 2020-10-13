@@ -16,4 +16,9 @@ public class Billinvoice_Customer_Entity {
     public String getCustomer_Name() {
         return customer_Name;
     }
+
+    @Override
+    public String toString() {
+        return customer_Name;
+    }
 }

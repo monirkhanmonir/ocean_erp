@@ -3,14 +3,21 @@ package com.ocean.orcl;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,80 +47,277 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
     private Billinvoice_item_Adapter item_adapter;
     private Bill_Results_CustomAdapter result_adapter;
 
+    private Button j_bill_customer_dropdown_btn, j_bill_group_dropdown_btn, j_bill_item_dropdown_btn;
+    private Dialog bill_customer_dailog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill__invoice);
-        group_spinner =findViewById(R.id.bill_Group_spinner);
-        customerName_spinner =findViewById(R.id.bill_customer_spinner);
-        itemName_spinner =findViewById(R.id.bill_item_spinner);
+        //group_spinner =findViewById(R.id.bill_Group_spinner);
+       // customerName_spinner =findViewById(R.id.bill_customer_spinner);
         text_formDate =findViewById(R.id.bill_from_date);
         text_toDate =findViewById(R.id.bill_to_date);
         listView =findViewById(R.id.bill_result_listView);
 
+        j_bill_customer_dropdown_btn = findViewById(R.id.bill_customer_dropdown_btn);
+        j_bill_group_dropdown_btn = findViewById(R.id.bill_group_dropdown_btn);
+        j_bill_item_dropdown_btn  = findViewById(R.id.bill_item_dropdown_btn);
 
-        customerName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+
+
+        j_bill_customer_dropdown_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_Customer_Entity  clickedItem = (Billinvoice_Customer_Entity) parent.getItemAtPosition(position);
-                customer_id =clickedItem.getCustomer_Id();
-                if(clickedItem.getCustomer_Name().equals("<< Select Customer >>")){
+            public void onClick(View v) {
 
-                }else {
-                    groupName_initList();;
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getCustomer_Name(),Toast.LENGTH_SHORT).show();
 
+                if(customerNameList==null){
+                    Toast.makeText(Bill_Invoice_Activity.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                bill_customer_dailog = new Dialog(Bill_Invoice_Activity.this);
+                bill_customer_dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                bill_customer_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                bill_customer_dailog.show();
+
+
+                SearchView customerNameSpinnerSearchView = bill_customer_dailog.findViewById(R.id.spinner_search);
+                ListView customerNameSpinnerListView = bill_customer_dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView current_stock_image = bill_customer_dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
+                customerNameSpinnerSearchView.setQueryHint("Search here...");
+                customerNameSpinnerSearchView.onActionViewExpanded();
+                customerNameSpinnerSearchView.setIconified(false);
+                customerNameSpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_Customer_Entity> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
+                        Bill_Invoice_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
+                );
+
+
+
+                customerNameSpinnerListView.setAdapter(customerAdapter);
+                customerNameSpinnerListView.setHeaderDividersEnabled(true);
+
+                customerNameSpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        customerAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                customerNameSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(customerAdapter.getItem(position).getCustomer_Name().equals("<<< Select Customer >>")){
+                            Toast.makeText(Bill_Invoice_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            j_bill_group_dropdown_btn.setText("Select Group");
+                            j_bill_item_dropdown_btn.setText("Select Item Name");
+//                            j_stock_quentity_dropdown_btn.setText("Select Quentity");
+
+                            groupNameList =null;
+                            itemNameList =null;
+//                            qtyList = null;
+
+
+                            customer_id = customerAdapter.getItem(position).getCustomer_Id();
+                            groupName_initList();
+                            bill_customer_dailog.dismiss();
+                            j_bill_customer_dropdown_btn.setText(customerAdapter.getItem(position).getCustomer_Name());
+                        }
+
+
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
-        group_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+
+        j_bill_group_dropdown_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_Group_Entity  clickedItem = (Billinvoice_Group_Entity) parent.getItemAtPosition(position);
-                groupItem_id =clickedItem.itemGroup_Id;
-                if(clickedItem.getItemGroup_Name().equals("<< Select Group >>")){
+            public void onClick(View v) {
 
-                }else {
-                    itemName_initList();
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItemGroup_Name(),Toast.LENGTH_SHORT).show();
-
+                if(groupNameList==null){
+                    Toast.makeText(Bill_Invoice_Activity.this, "Please select customer name.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+
+                bill_customer_dailog = new Dialog(Bill_Invoice_Activity.this);
+                bill_customer_dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                bill_customer_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                bill_customer_dailog.show();
+
+
+                SearchView groupSpinnerSearchView = bill_customer_dailog.findViewById(R.id.spinner_search);
+                ListView groupSpinnerListView = bill_customer_dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView bill_invoice_image = bill_customer_dailog.findViewById(R.id.spinner_icon_img);
+                bill_invoice_image.setImageResource(R.drawable.ic_bill_invoice);
+                groupSpinnerSearchView.setQueryHint("Search here...");
+                groupSpinnerSearchView.onActionViewExpanded();
+                groupSpinnerSearchView.setIconified(false);
+                groupSpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_Group_Entity> itemGroupAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
+                        Bill_Invoice_Activity.this, android.R.layout.simple_spinner_dropdown_item,groupNameList
+                );
+
+
+
+                groupSpinnerListView.setAdapter(itemGroupAdapter);
+
+                groupSpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        itemGroupAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                groupSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(itemGroupAdapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")){
+                            Toast.makeText(Bill_Invoice_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+
+                            j_bill_item_dropdown_btn.setText("Select Item Name");
+//                            j_stock_quentity_dropdown_btn.setText("Select Quentity");
+                            itemNameList =null;
+//                            qtyList = null;
+
+                            groupItem_id = itemGroupAdapter.getItem(position).getItemGroup_Id();
+                            itemName_initList();
+                            bill_customer_dailog.dismiss();
+                            j_bill_group_dropdown_btn.setText(itemGroupAdapter.getItem(position).getItemGroup_Name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
             }
         });
-        itemName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+//        group_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Billinvoice_Group_Entity  clickedItem = (Billinvoice_Group_Entity) parent.getItemAtPosition(position);
+//                groupItem_id =clickedItem.itemGroup_Id;
+//                if(clickedItem.getItemGroup_Name().equals("<< Select Group >>")){
+//
+//                }else {
+//                    itemName_initList();
+//                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItemGroup_Name(),Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+
+
+        j_bill_item_dropdown_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_item_Entity  clickedItem = (Billinvoice_item_Entity) parent.getItemAtPosition(position);
-                item_id =clickedItem.getItem_id();
-                if(clickedItem.getItem_name().equals("<< Select Item Name >>")){
+            public void onClick(View v) {
 
-                }else {
-//                    showResult_initList();
-                    dateSetFROM();
-                    dateSetTO();
-                    new Result_Task().execute();
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItem_name(),Toast.LENGTH_SHORT).show();
 
+                if(itemNameList==null){
+                    Toast.makeText(Bill_Invoice_Activity.this, "Please select group.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+
+                bill_customer_dailog = new Dialog(Bill_Invoice_Activity.this);
+                bill_customer_dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                bill_customer_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                bill_customer_dailog.show();
+
+
+                SearchView itemSpinnerSearchView = bill_customer_dailog.findViewById(R.id.spinner_search);
+                ListView itemSpinnerListView = bill_customer_dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView bill_item_image = bill_customer_dailog.findViewById(R.id.spinner_icon_img);
+                bill_item_image.setImageResource(R.drawable.ic_bill_invoice);
+                itemSpinnerSearchView.setQueryHint("Search here...");
+                itemSpinnerSearchView.onActionViewExpanded();
+                itemSpinnerSearchView.setIconified(false);
+                itemSpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_item_Entity> billItemAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
+                        Bill_Invoice_Activity.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                );
+
+
+
+                itemSpinnerListView.setAdapter(billItemAdapter);
+
+                itemSpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        billItemAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                itemSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(billItemAdapter.getItem(position).getItem_name().equals("<< Select Group >>")){
+                            Toast.makeText(Bill_Invoice_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            item_id = billItemAdapter.getItem(position).getItem_id();
+
+                            dateSetFROM();
+                            dateSetTO();
+                            new Result_Task().execute();
+
+                            bill_customer_dailog.dismiss();
+                            j_bill_item_dropdown_btn.setText(billItemAdapter.getItem(position).getItem_name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
 
-//        groupName_initList();
+
         new CustomerName_Task().execute();
         currentDate();
 //        dateSetFROM();
@@ -191,8 +395,8 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 //                    Log.d("value2","======Group==Name==2==========="+rs.getString(2));
 
                 }
-                group_adapter =new Billinvoice_Group_Adapter(getApplication(),groupNameList);
-                group_spinner.setAdapter(group_adapter);
+//                group_adapter =new Billinvoice_Group_Adapter(getApplication(),groupNameList);
+//                group_spinner.setAdapter(group_adapter);
             }
 
 
@@ -236,8 +440,8 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                     Log.d("value2","======Item====2==========="+rs.getString(2));
 
                 }
-                item_adapter =new Billinvoice_item_Adapter(getApplication(),itemNameList);
-                itemName_spinner.setAdapter(item_adapter);
+//                item_adapter =new Billinvoice_item_Adapter(getApplication(),itemNameList);
+//                itemName_spinner.setAdapter(item_adapter);
 
             }
 
@@ -250,9 +454,9 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
             Toast.makeText(Bill_Invoice_Activity.this, " " + e,Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
-
-
     }
+
+
     private void showResult_initList(){
 
         try {
@@ -331,8 +535,8 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
 
-            customer_adapter =new Billinvoice_Customer_Adapter(getApplication(),customerNameList);
-            customerName_spinner.setAdapter(customer_adapter);
+//            customer_adapter =new Billinvoice_Customer_Adapter(getApplication(),customerNameList);
+//            customerName_spinner.setAdapter(customer_adapter);
             loadingBar.dismiss();
         }
     }

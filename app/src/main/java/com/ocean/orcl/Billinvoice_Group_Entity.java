@@ -9,11 +9,16 @@ public class Billinvoice_Group_Entity {
         this.itemGroup_Name = itemGroup_Name;
     }
 
-    public String getItemGroup_Id() {
+    public String getItemGroup_Id()  {
         return itemGroup_Id;
     }
 
     public String getItemGroup_Name() {
+        return itemGroup_Name;
+    }
+
+    @Override
+    public String toString() {
         return itemGroup_Name;
     }
 }

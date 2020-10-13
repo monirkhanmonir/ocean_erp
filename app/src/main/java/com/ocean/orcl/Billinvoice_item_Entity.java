@@ -16,4 +16,11 @@ public class Billinvoice_item_Entity {
     public String getItem_name() {
         return item_name;
     }
+
+    @Override
+    public String toString() {
+        return item_name;
+    }
+
+
 }
