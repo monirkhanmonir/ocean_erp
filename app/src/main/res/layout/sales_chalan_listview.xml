@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/chalanNO_text"
+            android:fontFamily="sans-serif-condensed-light"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Medium Text"
+            android:textSize="15sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/chalanDate_text"
+            android:fontFamily="sans-serif-condensed-light"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Medium"
+            android:textSize="15sp"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="45dp"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/chalan_amount_text"
+            android:fontFamily="sans-serif-condensed-light"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Medium Text"
+            android:textSize="15sp"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+
+</LinearLayout>

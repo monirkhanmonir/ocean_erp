@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context=".AttendenceLog_Details_ativity">
+
+<!--    <GridLayout-->
+<!--        android:id="@+id/mainGrid"-->
+<!--        android:columnCount="1"-->
+<!--        android:rowCount="1"-->
+<!--        android:alignmentMode="alignMargins"-->
+<!--        android:columnOrderPreserved="false"-->
+<!--        android:layout_weight="5"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:backgroundTint="@color/light_blue"-->
+<!--        android:padding="14dp"-->
+<!--        >-->
+
+<!--    &lt;!&ndash; Row 1 &ndash;&gt;-->
+
+<!--    &lt;!&ndash; Column 1 &ndash;&gt;-->
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_columnWeight="1"-->
+<!--        android:layout_rowWeight="1"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:layout_marginLeft="16dp"-->
+<!--        android:layout_marginRight="16dp"-->
+<!--        app:cardElevation="8dp"-->
+<!--        app:cardCornerRadius="8dp">-->
+<!--    android:layout_gravity="center_horizontal|center_vertical"-->
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/sky"
+        android:textSize="18dp"
+        android:text="Attendance Details:"/>
+    <View
+        android:layout_width="154dp"
+        android:background="@color/sky"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_height="0.5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/border_dark_green"
+        android:padding="5dp"
+        android:orientation="vertical">
+
+<!--    ...................For Query A.............-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="ID:"/>
+        <TextView
+            android:id="@+id/aDetiles_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/aDetiles_Empname"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text=" "/>
+            <TextView
+                android:id="@+id/aDetiles_designation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text=" "/>
+            <TextView
+                android:id="@+id/aDetiles_department"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text=" "/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="15dp"
+            android:id="@+id/aDetiles_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text=""/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weekend="/>
+            <TextView
+                android:id="@+id/aDetailes_weekend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=", "/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Holiday="/>
+            <TextView
+                android:id="@+id/aDetailes_holiday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Summary:"/>
+            <View
+                android:layout_width="58dp"
+                android:background="@color/black"
+                android:layout_height="0.5dp"/>
+        </LinearLayout>
+
+        <!--    ...................For Query B.............-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IN:"/>
+            <TextView
+                android:id="@+id/aDetailes_inTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text=""/>
+            <TextView
+                android:id="@+id/aDetailes_login_Office_Location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:text=""/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text="Due:"/>
+            <TextView
+                android:id="@+id/aDetailes_requireLoginTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OUT:"/>
+            <TextView
+                android:id="@+id/aDetailes_officeLogOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text=""/>
+            <TextView
+                android:id="@+id/aDetailes_logOutOffice_Location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:text=""/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text="Due:"/>
+            <TextView
+                android:id="@+id/aDetailes_requireLogOutTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/aDetailes_earlyLogoutReason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:textColor="@color/blue"
+            android:text=""/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detail:"/>
+            <View
+                android:layout_width="37dp"
+                android:background="@color/black"
+                android:layout_height="0.5dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/attendenceDetails_listView"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:divider="#E6E9EB"
+                android:dividerHeight="0.5dp"
+                />
+        </LinearLayout>
+
+<!--    </androidx.cardview.widget.CardView>-->
+<!--    </GridLayout>-->
+    </LinearLayout>
+</LinearLayout>

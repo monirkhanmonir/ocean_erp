@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "843714113375",
+    "firebase_url": "https://ocean-erp.firebaseio.com",
+    "project_id": "ocean-erp",
+    "storage_bucket": "ocean-erp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843714113375:android:a3258e18d70c8a6abdd0ea",
+        "android_client_info": {
+          "package_name": "com.ocean.orcl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "843714113375-6iclgnodftqoij3fv84ct78gfb52dqiq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnkUCnDuqZHLr_yvph8qAVki9e4gnZMMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "843714113375-6iclgnodftqoij3fv84ct78gfb52dqiq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

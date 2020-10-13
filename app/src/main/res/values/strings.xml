@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Ocean</string>
+    <string name="wenLink">www.excellenceict.com</string>
+    <string name="hint_mobile">Mobile number</string>
+    <string name="hint_password">password</string>
+    <string name="hint_username">user name</string>
+</resources>

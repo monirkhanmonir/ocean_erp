@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".MyAttendence_DetailsUpdate_Activity">
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/sky"
+        android:textSize="20dp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:text="Attendance Reason Update:"/>
+    <View
+        android:layout_width="215dp"
+        android:background="@color/sky"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_height="0.5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/border_dark_green"
+        android:padding="5dp"
+        android:orientation="vertical">
+
+        <!--    ...................For Query A.............-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/myAttendance_updateDate"
+                android:layout_width="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:layout_height="wrap_content"
+                android:text=" "/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Weekend" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="="/>
+            <TextView
+                android:id="@+id/update_weekend"
+                android:layout_width="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:layout_height="wrap_content"
+                android:text=" "/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=","/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Holiday"/>
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="="/>
+            <TextView
+                android:id="@+id/update_holiday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text=" "/>
+
+        </LinearLayout>
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/sky"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="IN:"/>
+            <TextView
+                android:id="@+id/updateInTime"
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:layout_height="wrap_content"
+                android:text=" "/>
+            <TextView
+                android:id="@+id/updateDept"
+                android:layout_marginLeft="3dp"
+                android:fontFamily="sans-serif-condensed-light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" "/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Due:"/>
+            <TextView
+                android:id="@+id/updateLoginDueTime"
+                android:layout_width="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:layout_marginLeft="3dp"
+                android:layout_height="wrap_content"
+                android:text=" "/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Reason:"/>
+            <EditText
+                android:id="@+id/updateLateLoginReason"
+                android:layout_marginLeft="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:maxLength="1000"
+                android:hint="Late login reason" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/sky"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="OUT:"/>
+            <TextView
+                android:id="@+id/updateOutTime"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="sans-serif-condensed-light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" "/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:layout_marginLeft="5dp"
+                android:text="Due:"/>
+            <TextView
+                android:id="@+id/updateLogOutDueTime"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="sans-serif-condensed-light"
+                android:layout_height="wrap_content"
+                android:text=" "/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Reason:"/>
+            <EditText
+                android:id="@+id/updateEarlyLogOutReason"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content"
+                android:maxLength="1000"
+                android:fontFamily="sans-serif-condensed-light"
+                android:hint="Early logout reason" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/sky"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Absence:"/>
+            <TextView
+                android:id="@+id/update_absence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:fontFamily="sans-serif-condensed-light"
+                android:textColor="@color/sky"
+                android:text=" "/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/updateReasonAbcence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Reason:"/>
+            <EditText
+                android:id="@+id/updateAbsentReason"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content"
+                android:maxLength="1000"
+                android:fontFamily="sans-serif-condensed-light"
+                android:hint="Absence reason"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/sky"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           android:layout_marginTop="30dp">
+
+            <Button
+                android:id="@+id/update_Btn"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Save"
+                android:fontFamily="sans-serif-condensed-light"
+                android:textColor="@color/sky"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:clickable="true"
+                android:textSize="18dp"
+                android:background="#00E4E3E3"
+                android:layout_marginBottom="70dp"
+                />
+
+        </RelativeLayout>
+    </LinearLayout>
+    </LinearLayout>
+    </ScrollView>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context="login.RegistrationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/compLogoName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OCEAN ERP"
+            android:textColor="@color/blues"
+            android:textSize="50dp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+        </TextView>
+
+
+        <RelativeLayout
+            android:id="@+id/phoneAuth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textview1"
+            android:layout_marginHorizontal="10dp"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Phone Number:"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <com.hbb20.CountryCodePicker
+                        android:id="@+id/ccp"
+                        android:layout_width="wrap_content"
+                        app:ccp_textSize="15dp"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        app:ccp_defaultNameCode="BD" />
+
+
+                    <EditText
+                        android:id="@+id/phoneText"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:inputType="phone"
+                        android:singleLine="true"
+                        android:backgroundTint="#D4D4D4"/>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+
+        <EditText
+            android:id="@+id/codeText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="25dp"
+            android:hint="Write you code here..."
+            android:inputType="phone"
+            android:singleLine="true"
+            android:layout_below="@+id/phoneAuth"
+            android:drawableLeft="@drawable/password"
+            android:drawableTint="@android:color/white"
+            android:visibility="gone"
+            android:backgroundTint="#D4D4D4"/>/>
+
+        <Button
+            android:id="@+id/continueNextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
+            android:onClick="Login"
+            android:textAllCaps="false"
+            android:text="Login"
+            android:textColor="@android:color/white"
+            android:background="@color/green"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <WebView
+            android:id="@+id/updateNewsReg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:src="@drawable/erp_logo" />
+
+    </LinearLayout>
+</LinearLayout>
