@@ -119,7 +119,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 customerNameSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(customerAdapter.getItem(position).getCustomer_Name().equals("<<< Select Customer >>")){
+                        if(customerAdapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")){
                             Toast.makeText(Bill_Invoice_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
                         }else {
 

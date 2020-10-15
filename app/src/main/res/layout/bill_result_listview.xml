@@ -5,66 +5,57 @@
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="3"
-        android:orientation="horizontal">
-
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingHorizontal="5dp"
-            android:paddingVertical="8dp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="8dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/invoiceNO_text"
-                android:fontFamily="sans-serif-condensed-light"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:text="Medium Text"
-                android:textSize="16sp"
-                android:paddingLeft="5dp"
-                android:textColor="@color/colorPrimary"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingVertical="8dp"
-            android:paddingHorizontal="5dp"
-            android:background="@color/rowColor"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/invoiceDate_text"
-                android:fontFamily="sans-serif-condensed-light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="Date"
-                android:paddingLeft="5dp"
-                android:textSize="16sp"
+                android:text="Medium Text"
+                android:textSize="15sp"
                 android:textColor="@color/colorHeader"
                 />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingHorizontal="5dp"
-            android:paddingVertical="8dp"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="8dp"
+            android:background="@color/rowColor"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/invoiceDate_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Medium Text"
+                android:textSize="15sp"
+                android:textColor="@color/colorHeader"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="8dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/amount_text"
-                android:fontFamily="sans-serif-condensed-light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:paddingLeft="5dp"
                 android:text="Medium Text"
-                android:textSize="16sp"
-                android:textColor="@color/colorHeader"/>
+                android:textSize="15sp"
+                android:textColor="@color/colorHeader"
+                />
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

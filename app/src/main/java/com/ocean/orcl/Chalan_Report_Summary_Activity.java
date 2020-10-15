@@ -3,14 +3,20 @@ package com.ocean.orcl;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +33,6 @@ import java.util.Locale;
 
 public class Chalan_Report_Summary_Activity extends AppCompatActivity {
     private Connection connection;
-    private Spinner group_spinner,customerName_spinner,itemName_spinner;
     TextView text_formDate,text_toDate;
     String groupItem_id,item_id,customer_id,customer_contact;
     private ListView listView;
@@ -35,10 +40,10 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
     private ArrayList<Billinvoice_Customer_Entity> customerNameList;
     private ArrayList<Billinvoice_item_Entity> itemNameList;
     private ArrayList<Chalan_Report_Summary_Entity> resultList;
-    private Billinvoice_Group_Adapter group_adapter;
-    private Billinvoice_Customer_Adapter customer_adapter;
-    private Billinvoice_item_Adapter item_adapter;
     private Chalan_Report_SummaryResult_Customadapter result_adapter;
+
+    private Dialog chalan_report_customer_dailog;
+    private TextView j_chalan_customer_dropdown_btn, j_chalanReportSummary_Group_spinner, j_chalanReportSummary_itemName_spinner;
 
 
     @Override
@@ -46,78 +51,237 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chalan_report_summary);
 
-        group_spinner =findViewById(R.id.chalanReportSummary_Group_spinner);
-        customerName_spinner =findViewById(R.id.chalanReportSummary_customer_spinner);
-        itemName_spinner =findViewById(R.id.chalanReportSummary_item_spinner);
+
+
         text_formDate =findViewById(R.id.chalanReportSummary_from_date);
         text_toDate =findViewById(R.id.chalanReportSummary_to_date);
         listView =findViewById(R.id.chalanReportSummary_result_listView);
 
+        j_chalan_customer_dropdown_btn = findViewById(R.id.chalan_customer_dropdown_btn);
+        j_chalanReportSummary_Group_spinner = findViewById(R.id.chalanReportSummary_Group_spinner);
+        j_chalanReportSummary_itemName_spinner = findViewById(R.id.chalanReportSummary_itemName_spinner);
+
+
         new CustomerName_Task().execute();
         CurrentDate();
-        customerName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+
+
+        j_chalan_customer_dropdown_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_Customer_Entity  clickedItem = (Billinvoice_Customer_Entity) parent.getItemAtPosition(position);
-                customer_id =clickedItem.getCustomer_Id();
-                if(clickedItem.getCustomer_Name().equals("<< Select Customer >>")){
+            public void onClick(View v) {
 
-                }else {
-                    groupName_initList();;
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getCustomer_Name(),Toast.LENGTH_SHORT).show();
-
+                if(customerNameList==null){
+                    Toast.makeText(Chalan_Report_Summary_Activity.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                chalan_report_customer_dailog = new Dialog(Chalan_Report_Summary_Activity.this);
+                chalan_report_customer_dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                chalan_report_customer_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                chalan_report_customer_dailog.show();
+
+
+                SearchView customerSpinnerSearchView = chalan_report_customer_dailog.findViewById(R.id.spinner_search);
+                ListView customerSpinnerListView = chalan_report_customer_dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView current_stock_image = chalan_report_customer_dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_chalan_report);
+                customerSpinnerSearchView.setQueryHint("Search here...");
+                customerSpinnerSearchView.onActionViewExpanded();
+                customerSpinnerSearchView.setIconified(false);
+                customerSpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_Customer_Entity> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
+                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
+                );
+
+                customerSpinnerListView.setAdapter(customerAdapter);
+                customerSpinnerListView.setHeaderDividersEnabled(true);
+
+                customerSpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        customerAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                customerSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(customerAdapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")){
+                            Toast.makeText(Chalan_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            j_chalanReportSummary_Group_spinner.setText("Select Group");
+                            j_chalanReportSummary_itemName_spinner.setText("Select Item Name");
+
+                            groupNameList = null;
+                            itemNameList = null;
+
+
+                            customer_id = customerAdapter.getItem(position).getCustomer_Id();
+                            groupName_initList();
+                            chalan_report_customer_dailog.dismiss();
+                            j_chalan_customer_dropdown_btn.setText(customerAdapter.getItem(position).getCustomer_Name());
+                        }
+
+
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
-        group_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+        j_chalanReportSummary_Group_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_Group_Entity  clickedItem = (Billinvoice_Group_Entity) parent.getItemAtPosition(position);
-                groupItem_id =clickedItem.itemGroup_Id;
-                if(clickedItem.getItemGroup_Name().equals("<< Select Group >>")){
-
-                }else {
-                    itemName_initList();
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItemGroup_Name(),Toast.LENGTH_SHORT).show();
-
+            public void onClick(View v) {
+                if(groupNameList==null){
+                    Toast.makeText(Chalan_Report_Summary_Activity.this, "Please select customer name.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                chalan_report_customer_dailog = new Dialog(Chalan_Report_Summary_Activity.this);
+                chalan_report_customer_dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                chalan_report_customer_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                chalan_report_customer_dailog.show();
+
+
+                SearchView groupSpinnerSearchView = chalan_report_customer_dailog.findViewById(R.id.spinner_search);
+                ListView groupSpinnerListView = chalan_report_customer_dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView chalan_image = chalan_report_customer_dailog.findViewById(R.id.spinner_icon_img);
+                chalan_image.setImageResource(R.drawable.ic_chalan_report);
+                groupSpinnerSearchView.setQueryHint("Search here...");
+                groupSpinnerSearchView.onActionViewExpanded();
+                groupSpinnerSearchView.setIconified(false);
+                groupSpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_Group_Entity> groupAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
+                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,groupNameList
+                );
+
+                groupSpinnerListView.setAdapter(groupAdapter);
+                groupSpinnerListView.setHeaderDividersEnabled(true);
+
+                groupSpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        groupAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                groupSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(groupAdapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")){
+                            Toast.makeText(Chalan_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            j_chalanReportSummary_itemName_spinner.setText("Select Item Name");
+
+                            itemNameList = null;
+
+                            groupItem_id = groupAdapter.getItem(position).getItemGroup_Id();
+                            itemName_initList();
+                            chalan_report_customer_dailog.dismiss();
+                            j_chalanReportSummary_Group_spinner.setText(groupAdapter.getItem(position).getItemGroup_Name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
-        itemName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+
+        j_chalanReportSummary_itemName_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_item_Entity  clickedItem = (Billinvoice_item_Entity) parent.getItemAtPosition(position);
-                item_id =clickedItem.getItem_id();
-                if(clickedItem.getItem_name().equals("<< Select Item Name >>")){
+            public void onClick(View v) {
 
-                }else {
-//                    showResult_initList();
-                    new Result_Task().execute();
-                    dateSetFROM();
-                    dateSetTO();
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItem_name(),Toast.LENGTH_SHORT).show();
-
+                if(itemNameList==null){
+                    Toast.makeText(Chalan_Report_Summary_Activity.this, "Select Item Group.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                chalan_report_customer_dailog = new Dialog(Chalan_Report_Summary_Activity.this);
+                chalan_report_customer_dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                chalan_report_customer_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                chalan_report_customer_dailog.show();
+
+
+                SearchView itemNameSpinnerSearchView = chalan_report_customer_dailog.findViewById(R.id.spinner_search);
+                ListView itemNameSpinnerListView = chalan_report_customer_dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView chalan_image = chalan_report_customer_dailog.findViewById(R.id.spinner_icon_img);
+                chalan_image.setImageResource(R.drawable.ic_chalan_report);
+                itemNameSpinnerSearchView.setQueryHint("Search here...");
+                itemNameSpinnerSearchView.onActionViewExpanded();
+                itemNameSpinnerSearchView.setIconified(false);
+                itemNameSpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_item_Entity> itemNameAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
+                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                );
+
+                itemNameSpinnerListView.setAdapter(itemNameAdapter);
+
+                itemNameSpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        itemNameAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                itemNameSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(itemNameAdapter.getItem(position).getItem_name().equals("<< Select Item Name >>")){
+                            Toast.makeText(Chalan_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            item_id = itemNameAdapter.getItem(position).getItem_id();
+                            new Result_Task().execute();
+                            dateSetFROM();
+                            dateSetTO();
+                            chalan_report_customer_dailog.dismiss();
+                            j_chalanReportSummary_itemName_spinner.setText(itemNameAdapter.getItem(position).getItem_name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
     }
-    private void customerName_initList(){
 
+
+    private void customerName_initList(){
         try {
 
             connection = com.ocean.orcl.ODBC.Db.createConnection();
@@ -187,8 +351,8 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
 //                    Log.d("value2","======Group==Name==2==========="+rs.getString(2));
 
                 }
-                group_adapter =new Billinvoice_Group_Adapter(getApplication(),groupNameList);
-                group_spinner.setAdapter(group_adapter);
+//                group_adapter =new Billinvoice_Group_Adapter(getApplication(),groupNameList);
+//                group_spinner.setAdapter(group_adapter);
             }
 
 
@@ -232,8 +396,8 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                     Log.d("value2","======Item====2==========="+rs.getString(2));
 
                 }
-                item_adapter =new Billinvoice_item_Adapter(getApplication(),itemNameList);
-                itemName_spinner.setAdapter(item_adapter);
+//                item_adapter =new Billinvoice_item_Adapter(getApplication(),itemNameList);
+//                itemName_spinner.setAdapter(item_adapter);
 
             }
 
@@ -416,8 +580,8 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
 
-            customer_adapter =new Billinvoice_Customer_Adapter(getApplication(),customerNameList);
-            customerName_spinner.setAdapter(customer_adapter);
+//            customer_adapter =new Billinvoice_Customer_Adapter(getApplication(),customerNameList);
+//            customerName_spinner.setAdapter(customer_adapter);
             loadingBar.dismiss();
         }
     }

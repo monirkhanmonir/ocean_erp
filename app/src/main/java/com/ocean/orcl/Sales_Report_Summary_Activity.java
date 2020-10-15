@@ -3,16 +3,20 @@ package com.ocean.orcl;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +33,6 @@ import java.util.Locale;
 
 public class Sales_Report_Summary_Activity extends AppCompatActivity {
     private Connection connection;
-    private Spinner group_spinner,customerName_spinner,itemName_spinner;
     TextView text_formDate,text_toDate;
     String groupItem_id,item_id,customer_id,customer_contact;
     private ListView listView;
@@ -37,89 +40,260 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
     private ArrayList<Billinvoice_Customer_Entity> customerNameList;
     private ArrayList<Billinvoice_item_Entity> itemNameList;
     private ArrayList<Bill_Result_Entity> resultList;
-    private Billinvoice_Group_Adapter group_adapter;
-    private Billinvoice_Customer_Adapter customer_adapter;
-    private Billinvoice_item_Adapter item_adapter;
     private Bill_Results_CustomAdapter result_adapter;
+
+    private TextView j_sales_report_s_customer_spinner, j_sales_report_s_group_spinner, j_sales_report_s_item_spinner;
+    private Dialog dailog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_report_summary);
-        group_spinner =findViewById(R.id.salesReport_Group_spinner);
-        customerName_spinner =findViewById(R.id.salesReport_customer_spinner);
-        itemName_spinner =findViewById(R.id.salesReport_item_spinner);
         text_formDate =findViewById(R.id.salesReport_from_date);
         text_toDate =findViewById(R.id.salesReport_to_date);
         listView =findViewById(R.id.salesReport_result_listView);
 
+        j_sales_report_s_customer_spinner = findViewById(R.id.sales_report_s_customer_spinner);
+        j_sales_report_s_group_spinner = findViewById(R.id.sales_report_s_group_spinner);
+        j_sales_report_s_item_spinner = findViewById(R.id.sales_report_s_item_spinner);
+
         new CustomerName_Task().execute();
         CurrentDate();
 
-        customerName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        j_sales_report_s_customer_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_Customer_Entity  clickedItem = (Billinvoice_Customer_Entity) parent.getItemAtPosition(position);
-                customer_id =clickedItem.getCustomer_Id();
-                if(clickedItem.getCustomer_Name().equals("<< Select Customer >>")){
+            public void onClick(View v) {
 
-                }else {
-                    groupName_initList();;
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getCustomer_Name(),Toast.LENGTH_SHORT).show();
-
+                if(customerNameList==null){
+                    Toast.makeText(Sales_Report_Summary_Activity.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                dailog = new Dialog(Sales_Report_Summary_Activity.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
+
+
+                SearchView SpinnerSearchView = dailog.findViewById(R.id.spinner_search);
+                ListView SpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView sales_report_image = dailog.findViewById(R.id.spinner_icon_img);
+                sales_report_image.setImageResource(R.drawable.ic_sales_summary);
+                SpinnerSearchView.setQueryHint("Search here...");
+                SpinnerSearchView.onActionViewExpanded();
+                SpinnerSearchView.setIconified(false);
+                SpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_Customer_Entity> adapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
+                        Sales_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
+                );
+
+
+
+                SpinnerListView.setAdapter(adapter);
+
+                SpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(adapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")){
+                            Toast.makeText(Sales_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            j_sales_report_s_group_spinner.setText("Select Group");
+                            j_sales_report_s_item_spinner.setText("Select Item Name");
+
+                            groupNameList =null;
+                            itemNameList =null;
+
+                            customer_id = adapter.getItem(position).getCustomer_Id();
+                            groupName_initList();
+                            dailog.dismiss();
+                            j_sales_report_s_customer_spinner.setText(adapter.getItem(position).getCustomer_Name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
-        group_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+
+        j_sales_report_s_group_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_Group_Entity  clickedItem = (Billinvoice_Group_Entity) parent.getItemAtPosition(position);
-                groupItem_id =clickedItem.itemGroup_Id;
+            public void onClick(View v) {
 
-                if(clickedItem.getItemGroup_Name().equals("<< Select Group >>")){
-
-                }else {
-                    itemName_initList();
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItemGroup_Name(),Toast.LENGTH_SHORT).show();
-
-
+                if(groupNameList==null){
+                    Toast.makeText(Sales_Report_Summary_Activity.this, "Please select customer", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+                dailog = new Dialog(Sales_Report_Summary_Activity.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
 
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                SearchView SpinnerSearchView = dailog.findViewById(R.id.spinner_search);
+                ListView SpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView sales_report_image = dailog.findViewById(R.id.spinner_icon_img);
+                sales_report_image.setImageResource(R.drawable.ic_sales_summary);
+                SpinnerSearchView.setQueryHint("Search here...");
+                SpinnerSearchView.onActionViewExpanded();
+                SpinnerSearchView.setIconified(false);
+                SpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_Group_Entity> adapter = new ArrayAdapter<Billinvoice_Group_Entity>(
+                        Sales_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,groupNameList
+                );
+
+                SpinnerListView.setAdapter(adapter);
+
+                SpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(adapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")){
+                            Toast.makeText(Sales_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+
+                            j_sales_report_s_item_spinner.setText("Select Item Name");
+
+                            itemNameList =null;
+
+                            groupItem_id = adapter.getItem(position).getItemGroup_Id();
+                            itemName_initList();
+                            dailog.dismiss();
+                            j_sales_report_s_group_spinner.setText(adapter.getItem(position).getItemGroup_Name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
-        itemName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        j_sales_report_s_item_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Billinvoice_item_Entity  clickedItem = (Billinvoice_item_Entity) parent.getItemAtPosition(position);
-                item_id =clickedItem.getItem_id();
-                if(clickedItem.getItem_name().equals("<< Select Item Name >>")){
+            public void onClick(View v) {
 
-                }else {
-//                    showResult_initList();
-                    new Result_Task().execute();
-                    dateSetFROM();
-                    dateSetTO();
-                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItem_name(),Toast.LENGTH_SHORT).show();
-
+                if(groupNameList==null){
+                    Toast.makeText(Sales_Report_Summary_Activity.this, "Please select group", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                dailog = new Dialog(Sales_Report_Summary_Activity.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
 
+
+                SearchView SpinnerSearchView = dailog.findViewById(R.id.spinner_search);
+                ListView SpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView sales_report_image = dailog.findViewById(R.id.spinner_icon_img);
+                sales_report_image.setImageResource(R.drawable.ic_sales_summary);
+                SpinnerSearchView.setQueryHint("Search here...");
+                SpinnerSearchView.onActionViewExpanded();
+                SpinnerSearchView.setIconified(false);
+                SpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<Billinvoice_item_Entity> adapter = new ArrayAdapter<Billinvoice_item_Entity>(
+                        Sales_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                );
+
+                SpinnerListView.setAdapter(adapter);
+
+                SpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(adapter.getItem(position).getItem_name().equals("<< Select Item Name >>")){
+                            Toast.makeText(Sales_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            item_id = adapter.getItem(position).getItem_id();
+
+                            new Result_Task().execute();
+                            dateSetFROM();
+                            dateSetTO();
+
+                            dailog.dismiss();
+                            j_sales_report_s_item_spinner.setText(adapter.getItem(position).getItem_name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+
+
+//        itemName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Billinvoice_item_Entity  clickedItem = (Billinvoice_item_Entity) parent.getItemAtPosition(position);
+//                item_id =clickedItem.getItem_id();
+//                if(clickedItem.getItem_name().equals("<< Select Item Name >>")){
+//
+//                }else {
+////                    showResult_initList();
+//                    new Result_Task().execute();
+//                    dateSetFROM();
+//                    dateSetTO();
+//                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItem_name(),Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+
 
     }
     private void customerName_initList(){
@@ -193,8 +367,8 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
 //                    Log.d("value2","======Group==Name==2==========="+rs.getString(2));
 
                 }
-                group_adapter =new Billinvoice_Group_Adapter(getApplication(),groupNameList);
-                group_spinner.setAdapter(group_adapter);
+//                group_adapter =new Billinvoice_Group_Adapter(getApplication(),groupNameList);
+//                group_spinner.setAdapter(group_adapter);
             }
 
 
@@ -238,8 +412,8 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                     Log.d("value2","======Item====2==========="+rs.getString(2));
 
                 }
-                item_adapter =new Billinvoice_item_Adapter(getApplication(),itemNameList);
-                itemName_spinner.setAdapter(item_adapter);
+//                item_adapter =new Billinvoice_item_Adapter(getApplication(),itemNameList);
+//                itemName_spinner.setAdapter(item_adapter);
 
             }
 
@@ -422,8 +596,8 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
 
-            customer_adapter =new Billinvoice_Customer_Adapter(getApplication(),customerNameList);
-            customerName_spinner.setAdapter(customer_adapter);
+//            customer_adapter =new Billinvoice_Customer_Adapter(getApplication(),customerNameList);
+//            customerName_spinner.setAdapter(customer_adapter);
             loadingBar.dismiss();
         }
     }

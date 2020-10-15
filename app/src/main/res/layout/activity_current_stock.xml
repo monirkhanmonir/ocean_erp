@@ -28,175 +28,148 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="7dp"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/manufacture_dropdown_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_shape"
-            android:backgroundTint="@color/colorHeader"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:padding="6dp"
-            android:text="Select Manufacturer"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginTop="7dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:layout_marginHorizontal="10dp"
-        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/stock_group_dropdown_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_shape"
-            android:backgroundTint="@color/colorHeader"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:padding="6dp"
-            android:text="Select Group"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginTop="7dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:layout_marginHorizontal="10dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/stock_item_dropdown_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_shape"
-            android:backgroundTint="@color/colorHeader"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:padding="6dp"
-            android:text="Select Item Name"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-<!--    <LinearLayout-->
-<!--        android:layout_marginTop="7dp"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:gravity="center"-->
-<!--        android:background="@drawable/simple_btn_border"-->
-<!--        android:orientation="horizontal">-->
-
-<!--        <Spinner-->
-<!--            android:id="@+id/ud_no_spinner"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:textAlignment="center"-->
-<!--            android:layout_marginLeft="45dp"-->
-<!--            android:layout_height="50dp" />-->
-
-<!--    </LinearLayout>-->
     <LinearLayout
         android:layout_marginTop="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginHorizontal="10dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/rowColor"
         android:orientation="horizontal">
+        <TextView
+            android:id="@+id/manufacture_dropdown_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_dropdown_arro_24"
+            android:paddingVertical="10dp"
+            android:paddingStart="10sp"
+            android:text="Select Manufacturer"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-        <Button
+    <LinearLayout
+        android:layout_marginTop="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/rowColor"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/stock_group_dropdown_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_dropdown_arro_24"
+            android:paddingVertical="10dp"
+            android:paddingStart="10sp"
+            android:text="Select Group"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/rowColor"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/stock_item_dropdown_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_dropdown_arro_24"
+            android:paddingVertical="10dp"
+            android:paddingStart="10sp"
+            android:text="Select Item Name"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/rowColor"
+        android:orientation="horizontal">
+        <TextView
             android:id="@+id/stock_quentity_dropdown_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_shape"
-            android:backgroundTint="@color/colorHeader"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:padding="5dp"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_dropdown_arro_24"
+            android:paddingVertical="10dp"
+            android:paddingStart="10sp"
             android:text="Select Quentity"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
-
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:layout_marginHorizontal="10dp"
         android:weightSum="3"
         android:orientation="horizontal">
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="5dp"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@color/rowColor">
+            android:background="@color/colorHeader"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingVertical="10dp"
+                android:paddingLeft="10sp"
                 android:text="Lot No"
-                android:textSize="18sp"
-                android:paddingHorizontal="5sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorHeader"/>
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="5dp"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@color/colorRowMiddle">
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingVertical="10dp"
+                android:paddingLeft="10sp"
                 android:text="Expiry on"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingHorizontal="5sp"
-                android:textColor="@color/colorHeader"/>
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="5dp"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@color/rowColor">
+            android:background="@color/colorHeader"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingVertical="10dp"
+                android:paddingLeft="10sp"
                 android:text="Qty"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingHorizontal="5sp"
-                android:textColor="@color/colorHeader"/>
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
         android:orientation="vertical">
 
         <ListView

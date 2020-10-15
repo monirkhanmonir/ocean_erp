@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -39,7 +40,7 @@ public class CurrentStock_Activity extends AppCompatActivity {
     private ArrayList<CurrentStock_Quantity_Entity_E> qtyList;
 
     //for search
-    private Button manufacture_dropdown, j_stock_group_dropdown_btn, j_stock_item_dropdown_btn, j_stock_quentity_dropdown_btn;
+    private TextView manufacture_dropdown, j_stock_group_dropdown_btn, j_stock_item_dropdown_btn, j_stock_quentity_dropdown_btn;
     private Dialog manufacture_dailog;
 
     @Override

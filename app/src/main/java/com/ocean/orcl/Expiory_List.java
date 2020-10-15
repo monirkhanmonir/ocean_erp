@@ -3,14 +3,20 @@ package com.ocean.orcl;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,96 +43,318 @@ public class Expiory_List extends AppCompatActivity {
     private ArrayList<CurrentStock_Group_Entity_B> groupnameList;
     private ArrayList<CurrentStock_ItemName_Entity_C> itemNameList;
     //    private ArrayList<CurrentStock_UD_No_Entity_D> udNoList;
-    private ArrayList<CurrentStock_Quantity_Entity_E> qtyList;
-    private Current_Stock_Manufacturer_Adapter manufacture_adapter;
-    private Current_Stock_GroupName_Adapter group_adapter;
-    private Current_Stock_ItemName_Adapter itmeName_adapter;
-    //    private Current_Stock_UN_No_Adapter unNo_adapter;
-   // private Current_Stock_Quantiy_Adapter qty_adapter;
+
+    private TextView j_Expiry_menufacture_spinner,j_Expiry_group_spinner, j_Expiry_item_spinner;
+    private Dialog dailog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expiory_list);
         toDate =findViewById(R.id.expiry_dateTex);
-        manufacture_spinner = (Spinner) findViewById(R.id.Expiry_menufacture_spinner);
-        group_spinner = (Spinner) findViewById(R.id.Expiry_group_spinner);
-        itemName_spinner = (Spinner) findViewById(R.id.Expiry_item_spinner);
-//        udNo_spinner = (Spinner) findViewById(R.id.ud_no_spinner);
-//        quantity_spinner = (Spinner) findViewById(R.id.quentity_spinner);
+       // manufacture_spinner = (Spinner) findViewById(R.id.Expiry_menufacture_spinner);
+      //  group_spinner = (Spinner) findViewById(R.id.Expiry_group_spinner);
+     //    itemName_spinner = (Spinner) findViewById(R.id.Expiry_item_spinner);
         listView =findViewById(R.id.expiry_listView);
+        j_Expiry_menufacture_spinner = findViewById(R.id.Expiry_menufacture_spinner);
+        j_Expiry_group_spinner = findViewById(R.id.Expiry_group_spinner);
+        j_Expiry_item_spinner = findViewById(R.id.Expiry_item_spinner);
 
         CurrentDate();
 //        DateSetTO();
        new ManufactureInfoTask().execute();
-        manufacture_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        j_Expiry_menufacture_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                CurrentStock_Manufacturer_Entity_A clickedItem = (CurrentStock_Manufacturer_Entity_A) parent.getItemAtPosition(position);
-                String manufacture_name =clickedItem.getMenufacture_Name();
-                manufacture_id =clickedItem.getManufacture_Id();
-                if(manufacture_name.equals("<< Select Manufacturer >>")){
-                    //nothing do
-                }else{
-                    groupName_initList();
-                    Toast.makeText(getApplication(),"selected : "+manufacture_name,Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+
+                if(manufactureList==null){
+                    Toast.makeText(Expiory_List.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+                dailog = new Dialog(Expiory_List.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
 
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                SearchView SpinnerSearchView = dailog.findViewById(R.id.spinner_search);
+                ListView SpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView current_stock_image = dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_loan_chalan);
+                SpinnerSearchView.setQueryHint("Search here...");
+                SpinnerSearchView.onActionViewExpanded();
+                SpinnerSearchView.setIconified(false);
+                SpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<CurrentStock_Manufacturer_Entity_A> adapter = new ArrayAdapter<CurrentStock_Manufacturer_Entity_A>(
+                        Expiory_List.this, android.R.layout.simple_spinner_dropdown_item,manufactureList
+                );
+
+
+
+                SpinnerListView.setAdapter(adapter);
+
+                SpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(adapter.getItem(position).getMenufacture_Name().equals("<< Select Manufacturer >>")){
+                            Toast.makeText(Expiory_List.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            j_Expiry_group_spinner.setText("Select Group");
+                            j_Expiry_item_spinner.setText("Select Item Name");
+
+                            groupnameList =null;
+                            itemNameList =null;
+
+                            manufacture_id = adapter.getItem(position).getManufacture_Id();
+                            groupName_initList();
+                            dailog.dismiss();
+                            j_Expiry_menufacture_spinner.setText(adapter.getItem(position).getMenufacture_Name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
-        group_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+
+        j_Expiry_group_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                CurrentStock_Group_Entity_B clickedItem = (CurrentStock_Group_Entity_B) parent.getItemAtPosition(position);
-                String groupname =clickedItem.getItem_groupName();
-                itemGroup_Id =clickedItem.getItem_Id();
-//                Log.d("group_id","======test==========="+groupId+"\n"+"G_name "+groupname);
+            public void onClick(View v) {
 
-
-                if(itemGroup_Id.equals("-1")){
-                    //nothing do
-                }else{
-                    itemName_initList();
-//                    udNo_initList();
-//                    quantity_initList();
-                    Toast.makeText(getApplication(),"selected : "+groupname,Toast.LENGTH_SHORT).show();
+                if(groupnameList==null){
+                    Toast.makeText(Expiory_List.this, "please Select manufacturer", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+                dailog = new Dialog(Expiory_List.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
 
+
+                SearchView spinnerSearchView = dailog.findViewById(R.id.spinner_search);
+                ListView SpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView current_stock_image = dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_loan_chalan);
+                spinnerSearchView.setQueryHint("Search here...");
+                spinnerSearchView.onActionViewExpanded();
+                spinnerSearchView.setIconified(false);
+                spinnerSearchView.clearFocus();
+
+                final ArrayAdapter<CurrentStock_Group_Entity_B> adapter = new ArrayAdapter<CurrentStock_Group_Entity_B>(
+                        Expiory_List.this, android.R.layout.simple_spinner_dropdown_item,groupnameList
+                );
+
+
+                SpinnerListView.setAdapter(adapter);
+
+                spinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(adapter.getItem(position).getItem_groupName().equals("<< Select Group >>")){
+                            Toast.makeText(Expiory_List.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            j_Expiry_item_spinner.setText("Select Item Name");
+
+                            itemNameList =null;
+
+
+                            itemGroup_Id = adapter.getItem(position).getItem_Id();
+                            itemName_initList();
+                            dailog.dismiss();
+                            j_Expiry_group_spinner.setText(adapter.getItem(position).getItem_groupName());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
+        });
 
+
+
+        j_Expiry_item_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onClick(View v) {
+
+                if(itemNameList==null){
+                    Toast.makeText(Expiory_List.this, "Please Select group", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                dailog = new Dialog(Expiory_List.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
+
+
+                SearchView spinnerSearchView = dailog.findViewById(R.id.spinner_search);
+                ListView SpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+
+                ImageView current_stock_image = dailog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_loan_chalan);
+                spinnerSearchView.setQueryHint("Search here...");
+                spinnerSearchView.onActionViewExpanded();
+                spinnerSearchView.setIconified(false);
+                spinnerSearchView.clearFocus();
+
+                final ArrayAdapter<CurrentStock_ItemName_Entity_C> adapter = new ArrayAdapter<CurrentStock_ItemName_Entity_C>(
+                        Expiory_List.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                );
+
+                SpinnerListView.setAdapter(adapter);
+
+                spinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        if(adapter.getItem(position).getItem_Name().equals("<< Select Group >>")){
+                            Toast.makeText(Expiory_List.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            //     j_Expiry_item_spinner.setText("Select Item Name");
+
+                          //  itemNameList =null;
+
+
+                            item_Id = adapter.getItem(position).getItem_Id();
+
+                     DateSetTO();
+                     new Result_Task().execute();
+                            dailog.dismiss();
+                            j_Expiry_item_spinner.setText(adapter.getItem(position).getItem_Name());
+                        }
+
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });
-        itemName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                CurrentStock_ItemName_Entity_C clickedItem = (CurrentStock_ItemName_Entity_C) parent.getItemAtPosition(position);
-                item_Id =clickedItem.getItem_Id();
-                String item_name = clickedItem.getItem_Name();
 
-                if(item_name.equals("<< Select Item Name >>")){
-                }else {
-                    DateSetTO();
-                    new Result_Task().execute();
-                    Toast.makeText(Expiory_List.this,"selected : "+item_name,Toast.LENGTH_SHORT).show();
 
-                }
-            }
+//        manufacture_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                CurrentStock_Manufacturer_Entity_A clickedItem = (CurrentStock_Manufacturer_Entity_A) parent.getItemAtPosition(position);
+//                String manufacture_name =clickedItem.getMenufacture_Name();
+//                manufacture_id =clickedItem.getManufacture_Id();
+//                if(manufacture_name.equals("<< Select Manufacturer >>")){
+//                    //nothing do
+//                }else{
+//                    groupName_initList();
+//                    Toast.makeText(getApplication(),"selected : "+manufacture_name,Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//        group_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                CurrentStock_Group_Entity_B clickedItem = (CurrentStock_Group_Entity_B) parent.getItemAtPosition(position);
+//                String groupname =clickedItem.getItem_groupName();
+//                itemGroup_Id =clickedItem.getItem_Id();
+////                Log.d("group_id","======test==========="+groupId+"\n"+"G_name "+groupname);
+//
+//
+//                if(itemGroup_Id.equals("-1")){
+//                    //nothing do
+//                }else{
+//                    itemName_initList();
+////                    udNo_initList();
+////                    quantity_initList();
+//                    Toast.makeText(getApplication(),"selected : "+groupname,Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+//        itemName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                CurrentStock_ItemName_Entity_C clickedItem = (CurrentStock_ItemName_Entity_C) parent.getItemAtPosition(position);
+//                item_Id =clickedItem.getItem_Id();
+//                String item_name = clickedItem.getItem_Name();
+//
+//                if(item_name.equals("<< Select Item Name >>")){
+//                }else {
+//                    DateSetTO();
+//                    new Result_Task().execute();
+//                    Toast.makeText(Expiory_List.this,"selected : "+item_name,Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+
+
     }
     private void DateSetTO(){
 
@@ -246,8 +474,8 @@ public class Expiory_List extends AppCompatActivity {
 
                 }
             }
-            group_adapter =new Current_Stock_GroupName_Adapter(getApplication(),groupnameList);
-            group_spinner.setAdapter(group_adapter);
+//            group_adapter =new Current_Stock_GroupName_Adapter(getApplication(),groupnameList);
+//            group_spinner.setAdapter(group_adapter);
 
             connection.close();
 
@@ -291,8 +519,8 @@ public class Expiory_List extends AppCompatActivity {
                     Log.d("value2","==========2==========="+rs.getString(2));
                     itemNameList.add(new CurrentStock_ItemName_Entity_C(rs.getString(1),rs.getString(2)));
                 }
-                itmeName_adapter =new Current_Stock_ItemName_Adapter(Expiory_List.this,itemNameList);
-                itemName_spinner.setAdapter(itmeName_adapter);
+//                itmeName_adapter =new Current_Stock_ItemName_Adapter(Expiory_List.this,itemNameList);
+//                itemName_spinner.setAdapter(itmeName_adapter);
 
             }
 
@@ -339,7 +567,7 @@ public class Expiory_List extends AppCompatActivity {
                 }
 
             }
-//        adapter = new CustomAdapter_CurrentStock(this,currentStockItems);
+//        adapter = new CustomAdapter_CurrentStock(this,expiryItems);
 //        listView.setAdapter(adapter);
 
             connection.close();
@@ -375,8 +603,8 @@ public class Expiory_List extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<CurrentStock_Manufacturer_Entity_A> currentStock_manufacturer_entity_as) {
             loadingBar.dismiss();
-            manufacture_adapter =new Current_Stock_Manufacturer_Adapter(getApplication(),manufactureList);
-            manufacture_spinner.setAdapter(manufacture_adapter);
+//            manufacture_adapter =new Current_Stock_Manufacturer_Adapter(getApplication(),manufactureList);
+//            manufacture_spinner.setAdapter(manufacture_adapter);
 
         }
 
