@@ -17,8 +17,10 @@
     <color name="colorHeader">#196A98</color>
     <color name="colorRowMiddle">#B287BBDA</color>
     <color name="appBackground">#4378B8D8</color>
+    <color name="appPoorBackground">#43AFD3E4</color>
 
     <color name="colorYellow">#ffb300</color>
-    <color name="colorGray">#EDEDED</color>
+    <color name="colorGray">#D7D7D8</color>
+    <color name="colorGray1">#C3196A98</color>
 
 </resources>

@@ -38,7 +38,6 @@ public class Expiory_List extends AppCompatActivity {
     private CustomAdapter_CurrentStock adapter;
     private ArrayList<CurrentStock_Entity_F> expiryItems;
     private String manufacture_id,itemGroup_Id,item_Id,quantity;
-    private Spinner manufacture_spinner,group_spinner,itemName_spinner,udNo_spinner,quantity_spinner;
     private ArrayList<CurrentStock_Manufacturer_Entity_A> manufactureList;
     private ArrayList<CurrentStock_Group_Entity_B> groupnameList;
     private ArrayList<CurrentStock_ItemName_Entity_C> itemNameList;
@@ -52,9 +51,6 @@ public class Expiory_List extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expiory_list);
         toDate =findViewById(R.id.expiry_dateTex);
-       // manufacture_spinner = (Spinner) findViewById(R.id.Expiry_menufacture_spinner);
-      //  group_spinner = (Spinner) findViewById(R.id.Expiry_group_spinner);
-     //    itemName_spinner = (Spinner) findViewById(R.id.Expiry_item_spinner);
         listView =findViewById(R.id.expiry_listView);
         j_Expiry_menufacture_spinner = findViewById(R.id.Expiry_menufacture_spinner);
         j_Expiry_group_spinner = findViewById(R.id.Expiry_group_spinner);

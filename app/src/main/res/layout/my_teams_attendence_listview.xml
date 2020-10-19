@@ -29,6 +29,7 @@
                     android:layout_height="50dp"
                     android:padding="5dp"
                     android:gravity="center"
+                    android:backgroundTint="@color/rowColor"
                     android:background="@drawable/bg_custom_row">
                     <TextView
                         android:id="@+id/empId_team"
@@ -36,8 +37,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="user id"
-                        android:textSize="16sp"
-                        android:textColor="@color/colorHeader"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"/>
                 </RelativeLayout>
                 <!--            <de.hdodenhof.circleimageview.CircleImageView-->
                 <!--                android:layout_width="match_parent"-->
@@ -60,24 +62,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="User name"
-                    android:textSize="18sp"
-                    android:textColor="@color/blue"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
                     />
                 <TextView
                     android:id="@+id/designation_team"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Designation name"
-                    android:textSize="13sp"
-                    android:textColor="#1189E7"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorHeader"
                     />
                 <TextView
                     android:id="@+id/department_team"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Medium Text"
-                    android:textSize="12sp"
-                    android:textColor="#1189E7"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorHeader"
                     />
             </LinearLayout>
         </LinearLayout>

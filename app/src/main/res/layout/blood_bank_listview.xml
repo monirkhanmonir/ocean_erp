@@ -23,7 +23,8 @@
                 android:layout_height="60dp"
                 android:padding="10dp"
                 android:gravity="center"
-                android:background="@drawable/bg_custom_row">
+                android:background="@drawable/bg_custom_row"
+                android:backgroundTint="@color/rowColor">
                 <TextView
                     android:id="@+id/donner_blood_group"
                     android:layout_width="match_parent"
@@ -49,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Donner name"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimary"/>
                 <TextView
@@ -59,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:text="desg name"
                     android:textSize="14dp"
-                    android:textColor="@color/colorHeader"/>
+                    android:textColor="@color/colorPrimary"/>
 
             <TextView
                 android:id="@+id/donner_dept_name"
@@ -67,8 +68,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed-light"
                 android:text="Department name"
-                android:textSize="12sp"
-                android:textColor="@color/colorHeader"/>
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimary"/>
             <TextView
                 android:id="@+id/blood_donner_number"
                 android:fontFamily="sans-serif-condensed-light"
@@ -96,6 +97,7 @@
                     android:layout_height="60dp"
                     android:padding="10dp"
                     android:gravity="center"
+                    android:backgroundTint="@color/rowColor"
                     android:background="@drawable/bg_custom_row">
                     <ImageView
                         android:id="@+id/call_donner"

@@ -68,7 +68,6 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 if(customerNameList==null){
                     Toast.makeText(Sales_Chalan_Activity.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
                     return;

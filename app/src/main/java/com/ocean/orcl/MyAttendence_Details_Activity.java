@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ocean.orcl.util.Helper;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -45,8 +47,9 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         TextView personDepartment = findViewById(R.id.myAttendanceDetails_dept);
 
         // ....................For Query (B) ..............
-        final TextView weekend = findViewById(R.id.my_Att_Detailes_weekend);
-        final TextView holiday = findViewById(R.id.my_Att_Detailes_holiday);
+        final TextView weekend = findViewById(R.id.myAttendanceDetails_weekend);
+        final TextView holiday = findViewById(R.id.myAttendanceDetails_holiday);
+
 
         final TextView inTime = findViewById(R.id.my_Att_Detailes_inTime);
         final TextView Login_office_location = findViewById(R.id.my_Att_Detailes_login_Office_Location);
@@ -248,7 +251,7 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
             }
             adapter = new CustomAdapter_AttendenceLog_Details(this, myAttendenceDetiles_c);
             listView.setAdapter(adapter);
-
+            Helper.getListViewSize(listView);
 
             connection.close();
         } catch (Exception e) {

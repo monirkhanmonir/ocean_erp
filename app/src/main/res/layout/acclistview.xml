@@ -20,6 +20,7 @@
             <RelativeLayout
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:backgroundTint="@color/rowColor"
                 android:background="@drawable/bg_custom_row">
 
                 <ImageView

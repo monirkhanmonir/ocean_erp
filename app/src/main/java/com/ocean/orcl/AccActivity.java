@@ -34,7 +34,7 @@ public class AccActivity extends AppCompatActivity {
     private String access_Accounts,access_ViewVoucher,access_PartyDueStatement,access_LedgerPosition;
     private ArrayList<HRM_AccessPermission_Entity> itemNameList;
     String accTitle[] = {"Chart of Accounts","View Voucher","Party Due Statement","Ledger Position"};
-    int [] accimageItem = {R.drawable.prtydue, R.drawable.expencess,R.drawable.expencess,R.drawable.expencess};
+    int [] accimageItem = {R.drawable.ic_account_chart, R.drawable.ic_bill_invoice,R.drawable.ic_chalan_report,R.drawable.ic_position};
 
 //    String accTitle[] = {"Party Due","Expencess"};
 //    int [] accimageItem = {R.drawable.prtydue, R.drawable.expencess};

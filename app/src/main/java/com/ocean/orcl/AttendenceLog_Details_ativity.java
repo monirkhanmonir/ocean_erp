@@ -7,10 +7,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ocean.orcl.util.Helper;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -26,6 +29,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
     ListView listView;
     CustomAdapter_AttendenceLog_Details adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +44,8 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
         TextView personDepartment = findViewById(R.id.aDetiles_department);
 
         // ....................For Query (B) ..............
-        TextView weekend = findViewById(R.id.aDetailes_weekend);
-        TextView holiday = findViewById(R.id.aDetailes_holiday);
+        TextView weekend_holyday = findViewById(R.id.aDetailes_weekend_holiday);
+       // TextView holiday = findViewById(R.id.aDetailes_holiday);
 
         TextView inTime = findViewById(R.id.aDetailes_inTime);
         TextView Login_office_location = findViewById(R.id.aDetailes_login_Office_Location);
@@ -137,8 +141,8 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
             while (rs.next()) {
 //                myAttendenceDetiles.add(new AttendenceLog_Details_A_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)));
 
-                weekend.setText(rs.getString(1));
-                holiday.setText(rs.getString(2));
+                weekend_holyday.setText("Weekend= "+rs.getString(1)+", Holiday= "+rs.getString(2));
+                //holiday.setText(rs.getString(2));
 
                 //...............2nd line......
                 inTime.setText(rs.getString(3));
@@ -223,7 +227,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
             }
             adapter = new CustomAdapter_AttendenceLog_Details(this, myAttendenceDetiles_c);
             listView.setAdapter(adapter);
-
+            Helper.getListViewSize(listView);
 
             connection.close();
         } catch (Exception e) {

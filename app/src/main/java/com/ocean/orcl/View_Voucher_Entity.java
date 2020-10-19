@@ -16,4 +16,9 @@ public class View_Voucher_Entity {
     public String getTr_type_val() {
         return tr_type_val;
     }
+
+    @Override
+    public String toString() {
+        return tr_type;
+    }
 }

@@ -2,14 +2,21 @@ package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -19,48 +26,124 @@ import java.util.ArrayList;
 
 public class Party_Due_Statement_Activity extends AppCompatActivity {
     private Connection connection;
-    private Spinner customer_spinner;
-    String sub_header_name,sub_header_code;
+    String sub_header_name;
+    String sub_header_code = "-1";
     private ArrayList<ACC_partyDueStatement_Entity> customerNameList;
     private ArrayList<Acc_PartyDueStatement_Result_Entity> resultList;
     private ACC_PartyDueResult_Adapter result_adapter;
 
-    private ACC_Party_Due_Adapter customer_adapter;
     private ListView listView;
+
+    private TextView j_partyDue_statement_spinner;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_party_due_statement);
-        customer_spinner =findViewById(R.id.partyDue_statement_spinner);
+        //customer_spinner =findViewById(R.id.partyDue_statement_spinner);
         listView = findViewById(R.id.partyDueStatement_result_listView);
-        customer_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        j_partyDue_statement_spinner = findViewById(R.id.partyDue_statement_spinner);
+
+
+        j_partyDue_statement_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ACC_partyDueStatement_Entity  clickedItem = (ACC_partyDueStatement_Entity) parent.getItemAtPosition(position);
-                sub_header_name =clickedItem.getSub_head_name();
-                sub_header_code = clickedItem.getSub_head_code();
-                if(clickedItem.getSub_head_name().equals("Customer")){
+            public void onClick(View v) {
 
-                }else {
-//                    showResult_initList();
-                    new Result_Task().execute();
-                    Toast.makeText(getApplicationContext(),"selected: "+clickedItem.getSub_head_name(),Toast.LENGTH_SHORT).show();
-
+                if(customerNameList==null){
+                    Toast.makeText(Party_Due_Statement_Activity.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
-            }
+                dialog = new Dialog(Party_Due_Statement_Activity.this);
+                dialog.setContentView(R.layout.manufacture_dailog_spinner);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
+                SearchView SpinnerSearchView = dialog.findViewById(R.id.spinner_search);
+                ListView SpinnerListView = dialog.findViewById(R.id.spinnerItemList);
+
+                ImageView current_stock_image = dialog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_loan_chalan);
+                SpinnerSearchView.setQueryHint("Search here...");
+                SpinnerSearchView.onActionViewExpanded();
+                SpinnerSearchView.setIconified(false);
+                SpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<ACC_partyDueStatement_Entity> adapter = new ArrayAdapter<ACC_partyDueStatement_Entity>(
+                        Party_Due_Statement_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
+                );
+
+                SpinnerListView.setAdapter(adapter);
+
+                SpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(adapter.getItem(position).getSub_head_name().equals("Customer")){
+                            sub_header_code = adapter.getItem(position).getSub_head_code();
+                            Toast.makeText(Party_Due_Statement_Activity.this, "Please select an item: "+sub_header_code, Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            sub_header_code = adapter.getItem(position).getSub_head_code();
+
+                            new Result_Task().execute();
+                            dialog.dismiss();
+                            j_partyDue_statement_spinner.setText(adapter.getItem(position).getSub_head_name());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+
+
+
+//        customer_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                ACC_partyDueStatement_Entity  clickedItem = (ACC_partyDueStatement_Entity) parent.getItemAtPosition(position);
+//                sub_header_name =clickedItem.getSub_head_name();
+//                sub_header_code = clickedItem.getSub_head_code();
+//                if(clickedItem.getSub_head_name().equals("Customer")){
+//
+//                }else {
+////                    showResult_initList();
+//                    new Result_Task().execute();
+//                    Toast.makeText(getApplicationContext(),"selected: "+clickedItem.getSub_head_name(),Toast.LENGTH_SHORT).show();
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+
+
         new CustomerName_Task().execute();
         new Result_Task().execute();
 
 
     }
+
+
     private void Customer_initList(){
 
         try {
@@ -174,11 +257,13 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<ACC_partyDueStatement_Entity> acc_partyDueStatement_entities) {
-            customer_adapter =new ACC_Party_Due_Adapter(getApplication(),customerNameList);
-            customer_spinner.setAdapter(customer_adapter);
+//            customer_adapter =new ACC_Party_Due_Adapter(getApplication(),customerNameList);
+//            customer_spinner.setAdapter(customer_adapter);
             loadingBar.dismiss();
         }
     }
+
+
     private class Result_Task extends AsyncTask<Void,Void,ArrayList<Acc_PartyDueStatement_Result_Entity>> {
         ProgressDialog loadingBar;
         @Override

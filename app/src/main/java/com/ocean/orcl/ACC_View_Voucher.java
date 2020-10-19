@@ -1,21 +1,32 @@
 package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ocean.orcl.adapter.CustomACCVoucherResultAdapter;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,59 +42,130 @@ public class ACC_View_Voucher extends AppCompatActivity {
     private Connection connection;
     private ArrayList<View_Voucher_Entity> transactionList;
     private ArrayList<ACC_View_Voucher_Result_Entity> voucher_Result;
-    private ACC_ViewVoucher_Result_Adapter restult_adapter;
-    private View_Voucher_Adapter view_voucher_adapter;
-    private Spinner transation_spinner;
     private TextView from_Date,to_date;
-    private EditText referenceTextView;
+   // private EditText referenceTextView;
     private String tr_typeVal;
-    private Button button;
-    private ListView listView;
+    //private Button button;
+    private RecyclerView recyclerView;
+
+    private Dialog dialog;
+    private TextView j_acc_view_voucher_spinner;
+    private CustomACCVoucherResultAdapter voucherListadapter;
+    private SearchView j_viewVoucher_Reference_search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acc__view__voucher);
 
-        transation_spinner =findViewById(R.id.view_voucher_spinner);
         from_Date =findViewById(R.id.viewVoucher_from_date);
         to_date =findViewById(R.id.viewVoucher_to_date);
-        referenceTextView =findViewById(R.id.viewVoucher_Reference_text);
-        button =findViewById(R.id.voucher_btn);
-        listView = findViewById(R.id.voucher_result_listView);
+        recyclerView = findViewById(R.id.voucher_result_listView);
+
+        j_acc_view_voucher_spinner = findViewById(R.id.acc_view_voucher_spinner);
+        j_viewVoucher_Reference_search = findViewById(R.id.viewVoucher_Reference_search);
+
+
+        j_viewVoucher_Reference_search.setActivated(true);
+        j_viewVoucher_Reference_search.setQueryHint("Search Here...");
+        j_viewVoucher_Reference_search.onActionViewExpanded();
+        j_viewVoucher_Reference_search.setIconified(false);
+        j_viewVoucher_Reference_search.clearFocus();
+
         new Transaction_Task().execute();
         currentDate();
 
-
-        transation_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                View_Voucher_Entity  clickedItem = (View_Voucher_Entity) parent.getItemAtPosition(position);
-                tr_typeVal =clickedItem.getTr_type_val();
-                if(clickedItem.getTr_type().equals("<< Select Transaction Type >>")){
-
-                }else {
-//                    transaction_initList();
-                    dateSetFROM();
-                    dateSetTO();
-                    new Result_Task().execute();
-                    Toast.makeText(getApplicationContext(),"Selected : "+clickedItem.getTr_type(),Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        button.setOnClickListener(new View.OnClickListener() {
+        j_acc_view_voucher_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Result_Task().execute();
+
+                if(transactionList==null){
+                    Toast.makeText(ACC_View_Voucher.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                dialog = new Dialog(ACC_View_Voucher.this);
+                dialog.setContentView(R.layout.manufacture_dailog_spinner);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+
+                SearchView SpinnerSearchView = dialog.findViewById(R.id.spinner_search);
+                ListView SpinnerListView = dialog.findViewById(R.id.spinnerItemList);
+
+                ImageView current_stock_image = dialog.findViewById(R.id.spinner_icon_img);
+                current_stock_image.setImageResource(R.drawable.ic_loan_chalan);
+                SpinnerSearchView.setQueryHint("Search here...");
+                SpinnerSearchView.onActionViewExpanded();
+                SpinnerSearchView.setIconified(false);
+                SpinnerSearchView.clearFocus();
+
+                final ArrayAdapter<View_Voucher_Entity> adapter = new ArrayAdapter<View_Voucher_Entity>(
+                        ACC_View_Voucher.this, android.R.layout.simple_spinner_dropdown_item,transactionList
+                );
+
+
+
+                SpinnerListView.setAdapter(adapter);
+
+                SpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+                SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if(adapter.getItem(position).getTr_type_val().equals("<< Select Transaction Type >>")){
+                            Toast.makeText(ACC_View_Voucher.this, "Please select an item", Toast.LENGTH_SHORT).show();
+                        }else {
+
+                            tr_typeVal = adapter.getItem(position).getTr_type_val();
+                            dateSetFROM();
+                            dateSetTO();
+                            new Result_Task().execute();
+
+                            dialog.dismiss();
+                            j_acc_view_voucher_spinner.setText(adapter.getItem(position).getTr_type());
+                        }
+
+                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+
+
+        j_viewVoucher_Reference_search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("CLASS", "SEARCH DATA>>>"+newText);
+                voucherListadapter.getFilter().filter(newText);
+
+                return false;
+            }
+        });
+
+
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new Result_Task().execute();
+//            }
+//        });
 
     }
     private void transaction_initList(){
@@ -130,6 +212,7 @@ public class ACC_View_Voucher extends AppCompatActivity {
 
 
     }
+
     private void showResult_initList(){
 
         try {
@@ -137,7 +220,7 @@ public class ACC_View_Voucher extends AppCompatActivity {
             connection = com.ocean.orcl.ODBC.Db.createConnection();
             Log.d("connection","================View_Voucher Result==Connected===========");
             Log.d("Date","================fromDate==========="+from_Date.getText()+" toDt"+to_date.getText());
-            Log.d("value","=========Tr_typeVal = "+tr_typeVal+" Reference = "+referenceTextView.getText());
+          //  Log.d("value","=========Tr_typeVal = "+tr_typeVal+" Reference = "+referenceTextView.getText());
             if(connection != null){
                 voucher_Result = new ArrayList<ACC_View_Voucher_Result_Entity>();
 
@@ -153,7 +236,6 @@ public class ACC_View_Voucher extends AppCompatActivity {
 //                        "and D_VOUCHER_DT = to_date('"+text_Date.getText()+"','MON DD,RRRR')\n" +
 //                        "and D_VOUCHER_DT between to_date('"+from_Date.getText()+"','MON DD,RRRR') and to_date("+to_date.getText()+",'MON DD,RRRR')\n" +
                         "AND D_VOUCHER_DT BETWEEN to_date('"+from_Date.getText()+"','MON DD,RRRR') AND to_date('"+to_date.getText()+"','MON DD,RRRR')\n" +
-                        "and V_REF_VOUCHER like '%'||upper('"+referenceTextView.getText().toString()+"')||'%'\n" +
                         "group by D_VOUCHER_DT, v.V_VOUCHER_NO, V_REF_VOUCHER, TR_TYPE,N_VOUCHER_TYPE,V_NARRATION\n" +
                         "order by v.D_VOUCHER_DT desc,V_REF_VOUCHER desc";
 
@@ -209,8 +291,8 @@ public class ACC_View_Voucher extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<View_Voucher_Entity> view_voucher_entities) {
-            view_voucher_adapter =new View_Voucher_Adapter(getApplication(),transactionList);
-            transation_spinner.setAdapter(view_voucher_adapter);
+//            view_voucher_adapter =new View_Voucher_Adapter(getApplication(),transactionList);
+//            transation_spinner.setAdapter(view_voucher_adapter);
             loadingBar.dismiss();
         }
     }
@@ -236,8 +318,11 @@ public class ACC_View_Voucher extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<ACC_View_Voucher_Result_Entity> bill_result_entities) {
             super.onPostExecute(bill_result_entities);
-            restult_adapter =new ACC_ViewVoucher_Result_Adapter(getApplication(),voucher_Result);
-            listView.setAdapter(restult_adapter);
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(ACC_View_Voucher.this));
+            recyclerView.addItemDecoration(new DividerItemDecoration(ACC_View_Voucher.this,DividerItemDecoration.VERTICAL));
+            voucherListadapter =new CustomACCVoucherResultAdapter(voucher_Result);
+            recyclerView.setAdapter(voucherListadapter);
 
             loadingBar.dismiss();
         }

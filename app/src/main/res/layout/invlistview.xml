@@ -21,7 +21,8 @@
             <RelativeLayout
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/bg_custom_row">
+                android:background="@drawable/bg_custom_row"
+                android:backgroundTint="@color/rowColor">
 
                 <ImageView
                     android:id="@+id/imgIcon_inv"

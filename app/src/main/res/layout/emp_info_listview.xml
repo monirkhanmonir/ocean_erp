@@ -30,15 +30,17 @@
                     android:layout_height="50dp"
                     android:padding="5dp"
                     android:gravity="center"
-                    android:background="@drawable/bg_custom_row">
+                    android:background="@drawable/bg_custom_row"
+                    android:backgroundTint="@color/rowColor">
                     <TextView
                         android:id="@+id/emp_info_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="user id"
-                        android:textSize="16sp"
-                        android:textColor="@color/colorHeader"/>
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorPrimary"/>
                 </RelativeLayout>
 
             </LinearLayout>
@@ -54,24 +56,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="User name"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorHeader"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
                     />
                 <TextView
                     android:id="@+id/emp_info_desig_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Designation name"
-                    android:textSize="13sp"
-                    android:textColor="@color/blue"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"
                     />
                 <TextView
                     android:id="@+id/emp_dept_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Medium Text"
-                    android:textSize="12sp"
-                    android:textColor="@color/blue"/>
+                    android:textSize="13sp"
+                    android:textColor="@color/colorPrimary"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -102,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:textSize="14dp"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/colorPrimary"
                     android:text="01*******"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     />
@@ -127,7 +130,7 @@
                     android:paddingLeft="5dp"
                     android:textSize="14dp"
                     android:text="Email"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/colorPrimary"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     />
             </LinearLayout>

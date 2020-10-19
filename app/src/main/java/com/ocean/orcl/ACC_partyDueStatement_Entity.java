@@ -16,4 +16,9 @@ public class ACC_partyDueStatement_Entity {
     public String getSub_head_code() {
         return sub_head_code;
     }
+
+    @Override
+    public String toString() {
+        return sub_head_name;
+    }
 }
