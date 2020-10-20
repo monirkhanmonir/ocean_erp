@@ -21,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ocean.orcl.util.Helper;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -72,6 +74,8 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 manufacture_dailog = new Dialog(CurrentStock_Activity.this);
                 manufacture_dailog.setContentView(R.layout.manufacture_dailog_spinner);
                 manufacture_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
                 manufacture_dailog.show();
 
 
@@ -86,7 +90,7 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 manufactureSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<CurrentStock_Manufacturer_Entity_A> menuAdapter = new ArrayAdapter<CurrentStock_Manufacturer_Entity_A>(
-                        CurrentStock_Activity.this, android.R.layout.simple_spinner_dropdown_item,manufactureList
+                        CurrentStock_Activity.this, android.R.layout.simple_list_item_1,manufactureList
                 );
 
 
@@ -166,7 +170,7 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 manufactureSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<CurrentStock_Group_Entity_B> groupAdapter = new ArrayAdapter<CurrentStock_Group_Entity_B>(
-                        CurrentStock_Activity.this, android.R.layout.simple_spinner_dropdown_item,groupnameList
+                        CurrentStock_Activity.this, android.R.layout.simple_list_item_1,groupnameList
                 );
 
 
@@ -241,7 +245,7 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 itemNameSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<CurrentStock_ItemName_Entity_C> itemAdapter = new ArrayAdapter<CurrentStock_ItemName_Entity_C>(
-                        CurrentStock_Activity.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                        CurrentStock_Activity.this, android.R.layout.simple_list_item_1,itemNameList
                 );
 
                 if(itemNameList == null){
@@ -316,7 +320,7 @@ public class CurrentStock_Activity extends AppCompatActivity {
                 stockQuentitySpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<CurrentStock_Quantity_Entity_E> quentityAdapter = new ArrayAdapter<CurrentStock_Quantity_Entity_E>(
-                        CurrentStock_Activity.this, android.R.layout.simple_spinner_dropdown_item,qtyList
+                        CurrentStock_Activity.this, android.R.layout.simple_list_item_1,qtyList
                 );
 
                 stockQuentitySpinnerListView.setAdapter(quentityAdapter);
@@ -636,6 +640,7 @@ public class CurrentStock_Activity extends AppCompatActivity {
             loadingBar.dismiss();
             adapter = new CustomAdapter_CurrentStock(CurrentStock_Activity.this,currentStockItems);
             listView.setAdapter(adapter);
+            Helper.getListViewSize(listView);
 
 
         }

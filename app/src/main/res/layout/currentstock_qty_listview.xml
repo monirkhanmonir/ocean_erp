@@ -7,29 +7,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="8">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="8dp"
+            android:layout_weight="3"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="5dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/lotNo_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textColor="@color/colorHeader"
                 />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="8dp"
+            android:layout_weight="3"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="5dp"
             android:background="@color/rowColor"
             android:orientation="vertical">
             <TextView
@@ -37,23 +37,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textColor="@color/colorHeader"
                 />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="8dp"
+            android:layout_weight="2"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="5dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/qty_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textColor="@color/colorHeader"
                 />
         </LinearLayout>

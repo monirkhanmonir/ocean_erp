@@ -26,50 +26,59 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <LinearLayout
         android:layout_marginTop="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginHorizontal="10dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/rowColor"
         android:orientation="horizontal">
-
-        <Button
+        <TextView
             android:id="@+id/bill_customer_dropdown_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_shape"
-            android:backgroundTint="@color/rowColor"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:gravity="start"
-            android:padding="6dp"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_dropdown_arro_24"
+            android:paddingVertical="10dp"
             android:paddingStart="10sp"
             android:text="Select Customer"
-            android:textAllCaps="false"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
-
     </LinearLayout>
+
+
     <LinearLayout
         android:layout_marginTop="7dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="start"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/rowColor"
         android:orientation="horizontal">
-
-        <Button
+        <TextView
             android:id="@+id/bill_group_dropdown_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_shape"
-            android:backgroundTint="@color/rowColor"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:padding="6dp"
-            android:gravity=""
-            android:paddingHorizontal="10dp"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_dropdown_arro_24"
+            android:paddingVertical="10dp"
+            android:paddingStart="10sp"
             android:text="Select Group"
-            android:textAllCaps="false"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
     </LinearLayout>
@@ -77,27 +86,23 @@
     <LinearLayout
         android:layout_marginTop="7dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="start"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/rowColor"
         android:orientation="horizontal">
-
-        <Button
+        <TextView
             android:id="@+id/bill_item_dropdown_btn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_shape"
-            android:backgroundTint="@color/rowColor"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:paddingVertical="6dp"
-            android:paddingHorizontal="10dp"
-            android:gravity="start"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_dropdown_arro_24"
+            android:paddingVertical="10dp"
+            android:paddingStart="10sp"
             android:text="Select Item Name"
-            android:textAllCaps="false"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
-
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -258,6 +263,7 @@
             android:divider="#D3D1D1"
             android:dividerHeight="1dp"/>
     </LinearLayout>
-
+    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

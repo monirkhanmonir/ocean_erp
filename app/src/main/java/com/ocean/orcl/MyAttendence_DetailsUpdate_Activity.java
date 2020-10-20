@@ -8,19 +8,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.sql.Connection;
 import java.sql.Statement;
 
 public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
     private TextView date,weekend,holiday,loginTime,dueLoginTime,logoutTime,dueLogOutTime,dept,absenceFlag,reason_text_absence;
-    private EditText lateLogin_reason,earlyLogout_reason,absent_reason;
+
+
+    private TextInputEditText lateLogin_reason,earlyLogout_reason, absent_reason;
+    private LinearLayout j_absentReasonUpdateLayout;
+
     String dates,userInput;
     private Button update_btn;
     private Connection connection;
@@ -29,7 +37,6 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_attendence__details_update);
-        reason_text_absence =findViewById(R.id.updateReasonAbcence);
         date =findViewById(R.id.myAttendance_updateDate);
         lateLogin_reason =findViewById(R.id.updateLateLoginReason);
         earlyLogout_reason =findViewById(R.id.updateEarlyLogOutReason);
@@ -41,8 +48,9 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
         logoutTime =findViewById(R.id.updateOutTime);
         dueLogOutTime =findViewById(R.id.updateLogOutDueTime);
         dept =findViewById(R.id.updateDept);
-        absenceFlag =findViewById(R.id.update_absence);
+
         update_btn =findViewById(R.id.update_Btn);
+        j_absentReasonUpdateLayout = findViewById(R.id.absentReasonUpdateLayout);
 
         final Intent intent = getIntent();
 
@@ -89,16 +97,13 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
             logoutTime.setTextColor(Color.RED);
         }else {
             logoutTime.setTextColor(Color.GREEN);
-        }if(absence_flag.equals("0")){
-            absenceFlag.setText("NO");
-        }else {
-            absenceFlag.setText("Yes");
-        }if (absence_flag.equals("0")) {
-            absent_reason.setVisibility(View.GONE);
-            reason_text_absence.setVisibility(View.GONE);
+        }
+
+        if (absence_flag.equals("0")) {
+            j_absentReasonUpdateLayout.setVisibility(View.GONE);
+
         } else {
-            absent_reason.setVisibility(View.VISIBLE);
-            reason_text_absence.setVisibility(View.VISIBLE);
+            j_absentReasonUpdateLayout.setVisibility(View.VISIBLE);
         }
 update_btn.setOnClickListener(new View.OnClickListener() {
     @Override
@@ -124,8 +129,8 @@ update_btn.setOnClickListener(new View.OnClickListener() {
         textView.setText("Are you sure to commit changes?");
         textView.setPadding(20, 30, 20, 30);
         textView.setTextSize(20F);
-        textView.setBackgroundColor(Color.LTGRAY);
-        textView.setTextColor(Color.BLUE);
+        textView.setBackgroundColor(Color.parseColor("#196A98"));
+        textView.setTextColor(Color.WHITE);
         dialog.setCustomTitle(textView);
 
 

@@ -86,7 +86,7 @@ public class Expiory_List extends AppCompatActivity {
                 SpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<CurrentStock_Manufacturer_Entity_A> adapter = new ArrayAdapter<CurrentStock_Manufacturer_Entity_A>(
-                        Expiory_List.this, android.R.layout.simple_spinner_dropdown_item,manufactureList
+                        Expiory_List.this, android.R.layout.simple_list_item_1,manufactureList
                 );
 
 
@@ -160,7 +160,7 @@ public class Expiory_List extends AppCompatActivity {
                 spinnerSearchView.clearFocus();
 
                 final ArrayAdapter<CurrentStock_Group_Entity_B> adapter = new ArrayAdapter<CurrentStock_Group_Entity_B>(
-                        Expiory_List.this, android.R.layout.simple_spinner_dropdown_item,groupnameList
+                        Expiory_List.this, android.R.layout.simple_list_item_1,groupnameList
                 );
 
 
@@ -231,7 +231,7 @@ public class Expiory_List extends AppCompatActivity {
                 spinnerSearchView.clearFocus();
 
                 final ArrayAdapter<CurrentStock_ItemName_Entity_C> adapter = new ArrayAdapter<CurrentStock_ItemName_Entity_C>(
-                        Expiory_List.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                        Expiory_List.this, android.R.layout.simple_list_item_1,itemNameList
                 );
 
                 SpinnerListView.setAdapter(adapter);
@@ -277,79 +277,6 @@ public class Expiory_List extends AppCompatActivity {
 
             }
         });
-
-
-//        manufacture_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                CurrentStock_Manufacturer_Entity_A clickedItem = (CurrentStock_Manufacturer_Entity_A) parent.getItemAtPosition(position);
-//                String manufacture_name =clickedItem.getMenufacture_Name();
-//                manufacture_id =clickedItem.getManufacture_Id();
-//                if(manufacture_name.equals("<< Select Manufacturer >>")){
-//                    //nothing do
-//                }else{
-//                    groupName_initList();
-//                    Toast.makeText(getApplication(),"selected : "+manufacture_name,Toast.LENGTH_SHORT).show();
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//        group_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                CurrentStock_Group_Entity_B clickedItem = (CurrentStock_Group_Entity_B) parent.getItemAtPosition(position);
-//                String groupname =clickedItem.getItem_groupName();
-//                itemGroup_Id =clickedItem.getItem_Id();
-////                Log.d("group_id","======test==========="+groupId+"\n"+"G_name "+groupname);
-//
-//
-//                if(itemGroup_Id.equals("-1")){
-//                    //nothing do
-//                }else{
-//                    itemName_initList();
-////                    udNo_initList();
-////                    quantity_initList();
-//                    Toast.makeText(getApplication(),"selected : "+groupname,Toast.LENGTH_SHORT).show();
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
-
-//        itemName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                CurrentStock_ItemName_Entity_C clickedItem = (CurrentStock_ItemName_Entity_C) parent.getItemAtPosition(position);
-//                item_Id =clickedItem.getItem_Id();
-//                String item_name = clickedItem.getItem_Name();
-//
-//                if(item_name.equals("<< Select Item Name >>")){
-//                }else {
-//                    DateSetTO();
-//                    new Result_Task().execute();
-//                    Toast.makeText(Expiory_List.this,"selected : "+item_name,Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
 
     }
     private void DateSetTO(){

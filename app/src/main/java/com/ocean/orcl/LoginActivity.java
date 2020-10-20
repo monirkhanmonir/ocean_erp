@@ -27,8 +27,7 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
-    //private EditText userName;
-    //private EditText password;
+
     private TextInputEditText userName, password;
     private TextView showText;
     Button showBtn;

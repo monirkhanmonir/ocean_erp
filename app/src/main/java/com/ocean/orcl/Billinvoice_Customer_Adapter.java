@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class Billinvoice_Customer_Adapter extends ArrayAdapter<Billinvoice_Customer_Entity> {
     private int mSelectedIndex = -1;
+
     public Billinvoice_Customer_Adapter(Context context, ArrayList<Billinvoice_Customer_Entity> customer_name){
         super(context,0,customer_name);
 

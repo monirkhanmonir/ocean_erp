@@ -21,7 +21,6 @@ public class EmpInfo_detiles_Activity extends AppCompatActivity {
     private Connection connection;
     ArrayList<Emp_detiles_Entity> empInfoDetiles;
     private TextView idNo,name,detp_desig,reports,mbl_personal,mbl_emergency,email_personal,email_office,address,joinDate,pabx,bloodGrp;
-    private Button callBtn,smsBtn;
     private static final int REQUEST_CALL =1;
 
     @Override
@@ -29,8 +28,6 @@ public class EmpInfo_detiles_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emp_info_detiles);
 
-        callBtn=findViewById(R.id.call_btn_empDelailes);
-        smsBtn =findViewById(R.id.sms_btn_empDelailes);
 
         idNo = findViewById(R.id.personDetiles_number);
         name = findViewById(R.id.emp_name_detiles);
@@ -109,30 +106,30 @@ public class EmpInfo_detiles_Activity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
-        callBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-//                makeCall();
-                String number = mbl_personal.getText().toString();
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+number));
-                startActivity(intent);
-
-            }
-        });
-        smsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(),"Going sms text...",Toast.LENGTH_SHORT).show();
-
-                String number = mbl_personal.getText().toString();
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("smsto:"+number));
-                startActivity(intent);
-
-            }
-        });
+//        callBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+////                makeCall();
+//                String number = mbl_personal.getText().toString();
+//                Intent intent = new Intent(Intent.ACTION_DIAL);
+//                intent.setData(Uri.parse("tel:"+number));
+//                startActivity(intent);
+//
+//            }
+//        });
+//        smsBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Toast.makeText(getApplicationContext(),"Going sms text...",Toast.LENGTH_SHORT).show();
+//
+//                String number = mbl_personal.getText().toString();
+//                Intent intent = new Intent(Intent.ACTION_SENDTO);
+//                intent.setData(Uri.parse("smsto:"+number));
+//                startActivity(intent);
+//
+//            }
+//        });
     }
 
 //    // ................ direct calling system ...................

@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ocean.orcl.util.Helper;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -42,12 +44,9 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
     private ArrayList<Billinvoice_Customer_Entity> customerNameList;
     private ArrayList<Billinvoice_item_Entity> itemNameList;
     private ArrayList<Bill_Result_Entity> resultList;
-    private Billinvoice_Group_Adapter group_adapter;
-    private Billinvoice_Customer_Adapter customer_adapter;
-    private Billinvoice_item_Adapter item_adapter;
     private Bill_Results_CustomAdapter result_adapter;
 
-    private Button j_bill_customer_dropdown_btn, j_bill_group_dropdown_btn, j_bill_item_dropdown_btn;
+    private TextView j_bill_customer_dropdown_btn, j_bill_group_dropdown_btn, j_bill_item_dropdown_btn;
     private Dialog bill_customer_dailog;
 
     @Override
@@ -95,7 +94,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 customerNameSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_Customer_Entity> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
-                        Bill_Invoice_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
+                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1,customerNameList
                 );
 
 
@@ -176,7 +175,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 groupSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_Group_Entity> itemGroupAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
-                        Bill_Invoice_Activity.this, android.R.layout.simple_spinner_dropdown_item,groupNameList
+                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1,groupNameList
                 );
 
 
@@ -224,26 +223,6 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         });
 
 
-//        group_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Billinvoice_Group_Entity  clickedItem = (Billinvoice_Group_Entity) parent.getItemAtPosition(position);
-//                groupItem_id =clickedItem.itemGroup_Id;
-//                if(clickedItem.getItemGroup_Name().equals("<< Select Group >>")){
-//
-//                }else {
-//                    itemName_initList();
-//                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItemGroup_Name(),Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
 
         j_bill_item_dropdown_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,7 +252,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 itemSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_item_Entity> billItemAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
-                        Bill_Invoice_Activity.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1,itemNameList
                 );
 
 
@@ -296,7 +275,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 itemSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(billItemAdapter.getItem(position).getItem_name().equals("<< Select Group >>")){
+                        if(billItemAdapter.getItem(position).getItem_name().equals("<< Select Item Name >>")){
                             Toast.makeText(Bill_Invoice_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
                         }else {
 
@@ -564,7 +543,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
             super.onPostExecute(bill_result_entities);
             result_adapter =new Bill_Results_CustomAdapter(getApplication(),resultList);
             listView.setAdapter(result_adapter);
-
+            Helper.getListViewSize(listView);
             loadingBar.dismiss();
         }
 

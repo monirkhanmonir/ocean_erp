@@ -86,7 +86,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                 SpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_Customer_Entity> adapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
-                        Sales_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
+                        Sales_Report_Summary_Activity.this, android.R.layout.simple_list_item_1,customerNameList
                 );
 
 
@@ -160,7 +160,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                 SpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_Group_Entity> adapter = new ArrayAdapter<Billinvoice_Group_Entity>(
-                        Sales_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,groupNameList
+                        Sales_Report_Summary_Activity.this, android.R.layout.simple_list_item_1,groupNameList
                 );
 
                 SpinnerListView.setAdapter(adapter);
@@ -229,7 +229,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                 SpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_item_Entity> adapter = new ArrayAdapter<Billinvoice_item_Entity>(
-                        Sales_Report_Summary_Activity.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                        Sales_Report_Summary_Activity.this, android.R.layout.simple_list_item_1,itemNameList
                 );
 
                 SpinnerListView.setAdapter(adapter);
@@ -269,30 +269,6 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                 });
             }
         });
-
-
-//        itemName_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Billinvoice_item_Entity  clickedItem = (Billinvoice_item_Entity) parent.getItemAtPosition(position);
-//                item_id =clickedItem.getItem_id();
-//                if(clickedItem.getItem_name().equals("<< Select Item Name >>")){
-//
-//                }else {
-////                    showResult_initList();
-//                    new Result_Task().execute();
-//                    dateSetFROM();
-//                    dateSetTO();
-//                    Toast.makeText(getApplicationContext(),"selected "+clickedItem.getItem_name(),Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
 
 
     }

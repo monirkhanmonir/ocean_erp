@@ -90,7 +90,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                 salesChalanSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_Customer_Entity> salesChalanAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
-                        Sales_Chalan_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
+                        Sales_Chalan_Activity.this, android.R.layout.simple_list_item_1,customerNameList
                 );
 
 
@@ -164,7 +164,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                 salesChalanSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_Group_Entity> salesChalanAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
-                        Sales_Chalan_Activity.this, android.R.layout.simple_spinner_dropdown_item,groupNameList
+                        Sales_Chalan_Activity.this, android.R.layout.simple_list_item_1,groupNameList
                 );
 
 
@@ -236,7 +236,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                 salesChalanSpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_item_Entity> salesChalanAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
-                        Sales_Chalan_Activity.this, android.R.layout.simple_spinner_dropdown_item,itemNameList
+                        Sales_Chalan_Activity.this, android.R.layout.simple_list_item_1,itemNameList
                 );
 
 
