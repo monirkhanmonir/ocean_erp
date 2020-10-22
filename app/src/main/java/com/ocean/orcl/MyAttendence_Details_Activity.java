@@ -2,9 +2,12 @@ package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ocean.orcl.util.BusyDialog;
 import com.ocean.orcl.util.Helper;
+import com.ocean.orcl.util.NetworkHelpers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,7 +35,12 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
     private ArrayList<AttendenceLog_Details_B_Entity> myAttendenceDetiles_b;
     private ArrayList<AttendenceLog_Details_C_Entity> myAttendenceDetiles_c;
     private String late_login_flag;
-    private String early_logout_flag,absence_flag;
+    private String early_logout_flag,absence_flag, userInput, dates;
+
+    private BusyDialog busyDialog;
+    private Context context;
+    private Handler handler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,8 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_my_attendence__details);
         listView =findViewById(R.id.myAttDetails_listView);
         editBtn =findViewById(R.id.edit_Btn);
+        context = getApplicationContext();
+        handler = new Handler();
 
         // ....................For Query (A) ..............
         TextView personID = findViewById(R.id.myAttendanceDetails_id);
@@ -68,11 +80,8 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         }
 
         final Intent intent = getIntent();
-        final String userInput = intent.getStringExtra("login_value");
-        final String dates = intent.getStringExtra("date");
-//        final String lateLoginReason = intent.getStringExtra("late_login_rason");
-//        String ealryLogoutReason = intent.getStringExtra("early_logout_rason");
-//        String absentReason = intent.getStringExtra("absent_reason");
+          userInput = intent.getStringExtra("login_value");
+             dates = intent.getStringExtra("date");
         Log.d("myAttendence","=======My Attndnc==LV======"+userInput.toUpperCase());
 
         date.setText(dates);
@@ -116,12 +125,6 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
 
             while (rs.next()) {
 
-//                myAttendenceDetiles.add(new AttendenceLog_Details_A_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)));
-                Log.d("name", "======name==A======" + rs.getString(1));
-                Log.d("designation", "======designation===A===" + rs.getString(2));
-                Log.d("department", "======department==A===" + rs.getString(3));
-                Log.d("PERSON", "======PERSON NO==A===" + rs.getString(4));
-
                 personName.setText(rs.getString(1));
                 personDepartment.setText(rs.getString(2));
                 personDesignation.setText(rs.getString(3));
@@ -136,6 +139,8 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
+
+
 
         //......................For Query (B) ....................
         try {
@@ -182,22 +187,6 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
                 String holidays = rs.getString(2);
                 late_login_flag= rs.getString(6);
                 early_logout_flag=rs.getString(11);
-//                Log.d("colorTest","=======inTime======"+weekends+","+holidays+","+late_login_flag);
-//                Log.d("colorTest2","=======logOut======"+weekends+","+holidays+","+early_logout_flag);
-//                Log.d("1","======1+Weekend===="+rs.getString(1));
-//                Log.d("2","======2+Holiday===="+rs.getString(2));
-//                Log.d("3","======3===="+rs.getString(3));
-//                Log.d("4","======4===="+rs.getString(4));
-//                Log.d("5","======5===="+rs.getString(5));
-//                Log.d("6","======6+Late loginFlag===="+rs.getString(6));
-//                Log.d("7","======7+Late login reason===="+rs.getString(7));
-//                Log.d("8","======8===="+rs.getString(8));
-//                Log.d("9","======9===="+rs.getString(9));
-//                Log.d("10","======10===="+rs.getString(10));
-//                Log.d("11","======11+early logout flag===="+rs.getString(11));
-//                Log.d("12","======12====+early logout reason"+rs.getString(12));
-//                Log.d("13","======13===="+rs.getString(13));
-//                Log.d("14","======14====+Absent reason"+rs.getString(14));
 
 //                 .............For Login and Logout Time Color................
                 if(weekends.equals("N") && holidays.equals("N") && late_login_flag.equals("Y")){
@@ -221,45 +210,14 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         }
 
         //......................For Query (C) ....................
-        try {
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection", "==========(C)===========Connect===========");
-            if (connection != null) {
-                myAttendenceDetiles_c = new ArrayList<AttendenceLog_Details_C_Entity>();
 
-            }
-            Statement stmt = connection.createStatement();
-
-            // ....................Query C ..............
-
-            ResultSet rs = stmt.executeQuery("select  V_TIME V_TIME1, to_char(V_TIME,'HH12:MI AM') V_TIME , V_MODE, V_OFFICE_LOCATION\n" +
-                    "from VW_HR_EMP_ATTENDANCE\n" +
-                    "where N_PERSON_ID = (select N_PERSON_ID from sec_user where V_USER_NAME = '"+userInput.toUpperCase()+"')\n " +
-                    "and D_DATE=to_date('" + dates.toUpperCase() + "','MON DD,RRRR')\n" +
-                    "order by V_TIME1 asc");
-
-            while (rs.next()) {
-                myAttendenceDetiles_c.add(new AttendenceLog_Details_C_Entity(rs.getString(1),rs.getString(2), rs.getString(3), rs.getString(4)));
-//                Log.d("Col", "========column======" + rs.getRow());
-//                Log.d("time1", "========c======" + rs.getString(1));
-//                Log.d("mode2", "=========c===" + rs.getString(2));
-//                Log.d("location3", "========c===" + rs.getString(3));
-//                Log.d("location3", "========c===" + rs.getString(4));
-//                Log.d("location3", "==========c===================");
-
-
-            }
-            adapter = new CustomAdapter_AttendenceLog_Details(this, myAttendenceDetiles_c);
-            listView.setAdapter(adapter);
-            Helper.getListViewSize(listView);
-
-            connection.close();
-        } catch (Exception e) {
-
-            Toast.makeText(MyAttendence_Details_Activity.this, "" + e,
-                    Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+        if(NetworkHelpers.isNetworkAvailable(context)){
+            new MyAttendenceDetailstask().execute();
+        }else {
+            Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
         }
+
+
 
         if (Login_office_location.equals(null) || Login_office_location.length() == 0 || Login_office_location.equals("")) {
             Login_office_location.setVisibility(View.GONE);
@@ -282,4 +240,58 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
             absent_reason.setVisibility(View.VISIBLE);
         }
     }
+
+
+    private class MyAttendenceDetailstask extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            try {
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                Log.d("connection", "==========(C)===========Connect===========");
+                if (connection != null) {
+                    myAttendenceDetiles_c = new ArrayList<AttendenceLog_Details_C_Entity>();
+
+                }
+                Statement stmt = connection.createStatement();
+                // ....................Query C ..............
+
+                ResultSet rs = stmt.executeQuery("select  V_TIME V_TIME1, to_char(V_TIME,'HH12:MI AM') V_TIME , V_MODE, V_OFFICE_LOCATION\n" +
+                        "from VW_HR_EMP_ATTENDANCE\n" +
+                        "where N_PERSON_ID = (select N_PERSON_ID from sec_user where V_USER_NAME = '"+userInput.toUpperCase()+"')\n " +
+                        "and D_DATE=to_date('" + dates.toUpperCase() + "','MON DD,RRRR')\n" +
+                        "order by V_TIME1 asc");
+
+                while (rs.next()) {
+                    myAttendenceDetiles_c.add(new AttendenceLog_Details_C_Entity(rs.getString(1),rs.getString(2), rs.getString(3), rs.getString(4)));
+
+                }
+                busyDialog.dismis();
+                connection.close();
+            } catch (Exception e) {
+                busyDialog.dismis();
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            busyDialog.dismis();
+            adapter = new CustomAdapter_AttendenceLog_Details(context, myAttendenceDetiles_c);
+            listView.setAdapter(adapter);
+            Helper.getListViewSize(listView);
+        }
+    }
+
+
+
+
 }

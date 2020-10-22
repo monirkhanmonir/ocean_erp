@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -18,6 +20,9 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.ocean.orcl.adapter.CustomEmpInfoAdapter;
+import com.ocean.orcl.util.BusyDialog;
+import com.ocean.orcl.util.Helper;
+import com.ocean.orcl.util.NetworkHelpers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,9 +35,11 @@ public class Emp_info_Activity extends AppCompatActivity implements CustomEmpInf
     private CustomEmpInfoAdapter adapter;
 
     private ArrayList<EmpInfo_Entity> empInfoItems = new ArrayList<EmpInfo_Entity>();
-
     private RecyclerView empView;
     private SearchView search;
+    private BusyDialog busyDialog;
+    private Context context;
+    private Helper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,55 +50,16 @@ public class Emp_info_Activity extends AppCompatActivity implements CustomEmpInf
         jEmp_info_ToolBarId = findViewById(R.id.emp_info_ToolBarId);
         this.setSupportActionBar(jEmp_info_ToolBarId);
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
+        context = Emp_info_Activity.this;
+        helper = new Helper();
+
+
+        if(NetworkHelpers.isNetworkAvailable(context)){
+            new Emp_info_Task().execute();
+        }else {
+            Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
         }
 
-
-        try {
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection", "=============emp_DB========Connect===========");
-            if (connection != null) {
-                empInfoItems = new ArrayList<EmpInfo_Entity>();
-            }
-
-            Statement stmt = connection.createStatement();
-
-            ResultSet rs = stmt.executeQuery("select V_PERSON_NO, V_FNAME, V_LNAME, V_DEPT_NAME, V_DESIG_NAME, V_PHONE_MOBILE, V_EMAIL_OFFICIAL\n" +
-                    "from BAS_PERSON\n" +
-                    "where N_ACTIVE_FLAG=1\n" +
-                    "and N_PERSON_TYPE=0\n" +
-                    "and V_PERSON_NO<>'ADMINISTRATOR'\n" +
-                    "order by v_fname");
-
-            while (rs.next()) {
-
-                empInfoItems.add(new EmpInfo_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)));
-
-            }
-
-            empView.setLayoutManager(new LinearLayoutManager(Emp_info_Activity.this));
-            empView.addItemDecoration(new DividerItemDecoration(Emp_info_Activity.this,DividerItemDecoration.VERTICAL));
-            adapter = new CustomEmpInfoAdapter(empInfoItems, (CustomEmpInfoAdapter.SelectedEmployee) Emp_info_Activity.this);
-            empView.setAdapter(adapter);
-            search.setActivated(true);
-            search.setQueryHint("Search here...");
-            search.onActionViewExpanded();
-            search.setIconified(false);
-            search.setSubmitButtonEnabled(true);
-            search.clearFocus();
-//            search.setIconifiedByDefault(false);
-
-
-            connection.close();
-
-
-        }catch (Exception e) {
-
-            Toast.makeText(Emp_info_Activity.this, "" + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -122,4 +90,66 @@ public class Emp_info_Activity extends AppCompatActivity implements CustomEmpInf
         intent.setData(Uri.parse("tel:"+phone));
         startActivity(intent);
     }
+
+    private class Emp_info_Task extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (android.os.Build.VERSION.SDK_INT > 9) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+            }
+            try {
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                Log.d("connection", "=============emp_DB========Connect===========");
+                if (connection != null) {
+                    empInfoItems = new ArrayList<EmpInfo_Entity>();
+                }
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery("select V_PERSON_NO, V_FNAME, V_LNAME, V_DEPT_NAME, V_DESIG_NAME, V_PHONE_MOBILE, V_EMAIL_OFFICIAL\n" +
+                        "from BAS_PERSON\n" +
+                        "where N_ACTIVE_FLAG=1\n" +
+                        "and N_PERSON_TYPE=0\n" +
+                        "and V_PERSON_NO<>'ADMINISTRATOR'\n" +
+                        "order by v_fname");
+
+                while (rs.next()) {
+                    empInfoItems.add(new EmpInfo_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)));
+
+                }
+                busyDialog.dismis();
+                connection.close();
+
+            }catch (Exception e) {
+                busyDialog.dismis();
+                Toast.makeText(Emp_info_Activity.this, "" + e,Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            busyDialog.dismis();
+            empView.setLayoutManager(new LinearLayoutManager(Emp_info_Activity.this));
+            empView.addItemDecoration(new DividerItemDecoration(Emp_info_Activity.this,DividerItemDecoration.VERTICAL));
+            adapter = new CustomEmpInfoAdapter(empInfoItems, (CustomEmpInfoAdapter.SelectedEmployee) Emp_info_Activity.this);
+            empView.setAdapter(adapter);
+            search.setActivated(true);
+            search.setQueryHint("Search here...");
+            search.onActionViewExpanded();
+            search.setIconified(false);
+            search.setSubmitButtonEnabled(true);
+            search.clearFocus();
+        }
+    }
+
 }

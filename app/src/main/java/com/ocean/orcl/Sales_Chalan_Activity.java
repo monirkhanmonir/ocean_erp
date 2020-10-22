@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +22,9 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ocean.orcl.util.BusyDialog;
+import com.ocean.orcl.util.NetworkHelpers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -45,6 +50,10 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
     private TextView j_salesChalan_customer_spinner, j_salesChalan_Group_spinner, j_salesChalan_item_spinner;
     private Dialog sales_chalan_dailog;
 
+    private BusyDialog busyDialog;
+    private Context context;
+    private Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +66,8 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
         j_salesChalan_Group_spinner = findViewById(R.id.salesChalan_Group_spinner);
         j_salesChalan_item_spinner = findViewById(R.id.salesChalan_item_spinner);
 
+        context = Sales_Chalan_Activity.this;
+        handler = new Handler();
 
         new CustomerName_Task().execute();
         currentDate();
@@ -123,7 +134,13 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                             itemNameList =null;
 
                             customer_id = salesChalanAdapter.getItem(position).getCustomer_Id();
-                            groupName_initList();;
+
+                            if(NetworkHelpers.isNetworkAvailable(context)){
+                                new SalesGroupNameTask().execute();
+                            }else {
+                                Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                            }
+
                             sales_chalan_dailog.dismiss();
                             j_salesChalan_customer_spinner.setText(salesChalanAdapter.getItem(position).getCustomer_Name());
                         }
@@ -196,7 +213,13 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
 
 
                             groupItem_id = salesChalanAdapter.getItem(position).getItemGroup_Id();
-                            itemName_initList();
+
+                            if(NetworkHelpers.isNetworkAvailable(context)){
+                                new SalesChalanNameTask().execute();
+                            }else {
+                                Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                            }
+
                             sales_chalan_dailog.dismiss();
                             j_salesChalan_Group_spinner.setText(salesChalanAdapter.getItem(position).getItemGroup_Name());
                         }
@@ -223,7 +246,6 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                 sales_chalan_dailog.setContentView(R.layout.manufacture_dailog_spinner);
                 sales_chalan_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 sales_chalan_dailog.show();
-
 
                 SearchView salesChalanSpinnerSearchView = sales_chalan_dailog.findViewById(R.id.spinner_search);
                 ListView salesChalanSpinnerListView = sales_chalan_dailog.findViewById(R.id.spinnerItemList);
@@ -274,241 +296,125 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
         });
 
     }
-    private void customerName_initList(){
 
-        try {
-
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection","================Chalan Customer==Connected===========");
-            if(connection != null){
-                customerNameList = new ArrayList<>();
-
-                Statement stmt=connection.createStatement();
-                String query = "select CONTACT_ID,CONTACT_NAME\n" +
-                        "from(\n" +
-                        "select 1 sl,-1 CONTACT_ID,'<< Select Customer >>' CONTACT_NAME\n" +
-                        "from dual\n" +
-                        "union all\n" +
-                        "SELECT 2 sl, CONTACT_ID, CONTACT_NAME\n" +
-                        "FROM INV_CONTACT\n" +
-                        ")\n" +
-                        "order by sl,CONTACT_NAME";
-
-                ResultSet rs=stmt.executeQuery(query);
-
-                while(rs.next()) {
-                    customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1),rs.getString(2)));
-                    Log.d("value1","======Customer====1==========="+rs.getString(1));
-                    Log.d("value2","======Customer====2==========="+rs.getString(2));
-
-                }
-
-            }
-
-
-            connection.close();
-
-        }
-        catch (Exception e) {
-
-            Toast.makeText(Sales_Chalan_Activity.this, " " + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-
-    }
-    private void groupName_initList(){
-
-        try {
-
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection","================Chalan Group==Connected===========");
-            if(connection != null){
-                groupNameList = new ArrayList<>();
-
-                Statement stmt=connection.createStatement();
-                String query = "select ITEMGROUP_ID,ITEMGROUP_NAME\n" +
-                        "from(\n" +
-                        "select 1 sl,-1 ITEMGROUP_ID,'<< Select Group >>' ITEMGROUP_NAME\n" +
-                        "from dual\n" +
-                        "union all\n" +
-                        "SELECT 2 sl, g.ITEMGROUP_ID, g.ITEMGROUP_NAME\n" +
-                        "FROM INV_ITEMGROUP g\n" +
-                        ")\n" +
-                        "order by sl,ITEMGROUP_NAME";
-
-                ResultSet rs=stmt.executeQuery(query);
-
-                while(rs.next()) {
-                    groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1),rs.getString(2)));
-//                    Log.d("value1","======Group==ID====1========="+rs.getString(1));
-//                    Log.d("value2","======Group==Name==2==========="+rs.getString(2));
-
-                }
-
-            }
-
-
-            connection.close();
-
-        }
-        catch (Exception e) {
-
-            Toast.makeText(Sales_Chalan_Activity.this, " " + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-
-    }
-    private void itemName_initList(){
-
-        try {
-
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection","================Chalan Item==Connected===========");
-            if(connection != null){
-                itemNameList = new ArrayList<>();
-
-                Statement stmt=connection.createStatement();
-                String query = "select ITEM_ID,ITEM_NAME\n" +
-                        "from(\n" +
-                        "select 1 sl,-1 ITEM_ID,'<< Select Item Name >>' ITEM_NAME\n" +
-                        "from dual\n" +
-                        "union all\n" +
-                        "SELECT 2 sl, ITEM_ID, ITEM_NAME||' ('||UD_NO||')' ITEM_NAME\n" +
-                        "FROM INV_ITEM\n" +
-                        "WHERE ('"+groupItem_id+"'=-1 or ITEMGROUP_ID='"+groupItem_id+"')\n" +
-                        ")\n" +
-                        "order by sl,ITEM_NAME";
-
-                ResultSet rs=stmt.executeQuery(query);
-
-                while(rs.next()) {
-                    itemNameList.add(new Billinvoice_item_Entity(rs.getString(1),rs.getString(2)));
-                    Log.d("value1","======Item====1==========="+rs.getString(1));
-                    Log.d("value2","======Item====2==========="+rs.getString(2));
-
-                }
-//                item_adapter =new Billinvoice_item_Adapter(getApplication(),itemNameList);
-//                itemName_spinner.setAdapter(item_adapter);
-
-            }
-
-
-            connection.close();
-
-        }
-        catch (Exception e) {
-
-            Toast.makeText(Sales_Chalan_Activity.this, " " + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-
-    }
     private void showResult_initList(){
-
-        try {
-
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-//            Log.d("connection","================Show Result==Connected===========");
-//            Log.d("fromDate","================fromDate==========="+text_formDate.getText());
-//            Log.d("toDate","================toDate==========="+text_toDate.getText());
-//            Log.d("query","=========P_CUSTOMER ="+customer_id+" P_Group_ID ="+groupItem_id+" P_ITEM_ID  ="+item_id);
-            if(connection != null){
-                resultList = new ArrayList<SalesChalan_Result_Entity>();
-
-                Statement stmt=connection.createStatement();
-                String query = "Select m.chalan_ID,chalan_NO,to_char(chalan_DATE,'MON DD,RRRR')chalan_DATE,\n" +
-                        "Sum((Nvl(C.chalan_RATE,0)*Nvl(C.chalan_QTY, 0))+Nvl(C.VAT_AMT,0)-(Nvl(C.DISCOUNT_AMOUNT,0))) amount\n" +
-                        "From vw_Inv_CHALANMst m, vw_Inv_CHALANChd C, Inv_Item I,inv_itemgroup ig,inv_mu u, inv_contact r\n" +
-                        "Where m.chalan_Id = c.chalan_Id\n" +
-                        "And C.ITEM_ID = I.ITEM_ID\n" +
-                        "and  I.MU_ID=u.MU_ID\n" +
-                        "And I.ITEMGROUP_ID = ig.ITEMGROUP_ID\n" +
-                        "and m.CONTACT_ID=r.CONTACT_ID\n" +
-                        "And ('"+customer_id+"' =-1 or m.CONTACT_ID = '"+customer_id+"')\n" +
-                        "And ('"+groupItem_id+"' =-1 or ig.ITEMGROUP_ID = '"+groupItem_id+"')\n" +
-                        "And ('"+item_id+"' =-1 or C.item_Id = '"+item_id+"')\n"+
-                        "AND M.chalan_DATE BETWEEN to_date('"+text_formDate.getText()+"','MON DD,RRRR') AND to_date('"+text_toDate.getText()+"','MON DD,RRRR')\n" +
-                        "Group By m.chalan_ID,chalan_NO,chalan_DATE\n" +
-                        "Order By m.chalan_ID,chalan_NO,chalan_DATE";
-
-                ResultSet rs=stmt.executeQuery(query);
-
-                while(rs.next()) {
-                    resultList.add(new SalesChalan_Result_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)));
-//                    Log.d("value1","======res====1==========="+rs.getString(1));
-//                    Log.d("value2","======res====2==========="+rs.getString(2));
-//                    Log.d("value3","======res====3==========="+rs.getString(3));
-//                    Log.d("value4","======res====4==========="+rs.getString(4));
-
-                }
-
-            }
-
-
-            connection.close();
-
-        }
-        catch (Exception e) {
-
-            Toast.makeText(Sales_Chalan_Activity.this, " " + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
 
     }
     private class CustomerName_Task extends AsyncTask<Void,Void,ArrayList<Billinvoice_Customer_Entity>> {
-        ProgressDialog loadingBar;
+
         @Override
         protected void onPreExecute() {
-            loadingBar = new ProgressDialog(Sales_Chalan_Activity.this);
-//            loadingBar.setTitle("Loading...");
-            loadingBar.setMessage("Please Wait.");
-            loadingBar.setCanceledOnTouchOutside(false);
-            loadingBar.show();
-
+            busyDialog  =new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
         protected ArrayList<Billinvoice_Customer_Entity> doInBackground(Void... voids) {
             customerNameList = new ArrayList<>();
-            customerName_initList();
+
+            try {
+
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                Log.d("connection","================Chalan Customer==Connected===========");
+                if(connection != null){
+                    customerNameList = new ArrayList<>();
+
+                    Statement stmt=connection.createStatement();
+                    String query = "select CONTACT_ID,CONTACT_NAME\n" +
+                            "from(\n" +
+                            "select 1 sl,-1 CONTACT_ID,'<< Select Customer >>' CONTACT_NAME\n" +
+                            "from dual\n" +
+                            "union all\n" +
+                            "SELECT 2 sl, CONTACT_ID, CONTACT_NAME\n" +
+                            "FROM INV_CONTACT\n" +
+                            ")\n" +
+                            "order by sl,CONTACT_NAME";
+
+                    ResultSet rs=stmt.executeQuery(query);
+
+                    while(rs.next()) {
+                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1),rs.getString(2)));
+                        Log.d("value1","======Customer====1==========="+rs.getString(1));
+                        Log.d("value2","======Customer====2==========="+rs.getString(2));
+                    }
+                }
+
+                connection.close();
+
+            }
+            catch (Exception e) {
+
+                Toast.makeText(Sales_Chalan_Activity.this, " " + e,Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
             return customerNameList;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
-            loadingBar.dismiss();
+            busyDialog.dismis();
         }
     }
+
+
+
     private class Result_Task extends AsyncTask<Void,Void,ArrayList<SalesChalan_Result_Entity>> {
-        ProgressDialog loadingBar;
+
         @Override
         protected void onPreExecute() {
-            loadingBar = new ProgressDialog(Sales_Chalan_Activity.this);
-            loadingBar.setTitle("Loading...");
-            loadingBar.setMessage("Please Wait For Results.");
-            loadingBar.setCanceledOnTouchOutside(false);
-            loadingBar.show();
-
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
         protected ArrayList<SalesChalan_Result_Entity> doInBackground(Void... voids) {
             resultList = new ArrayList<SalesChalan_Result_Entity>();
-            showResult_initList();
+            try {
+
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                 if(connection != null){
+                    resultList = new ArrayList<SalesChalan_Result_Entity>();
+
+                    Statement stmt=connection.createStatement();
+                    String query = "Select m.chalan_ID,chalan_NO,to_char(chalan_DATE,'MON DD,RRRR')chalan_DATE,\n" +
+                            "Sum((Nvl(C.chalan_RATE,0)*Nvl(C.chalan_QTY, 0))+Nvl(C.VAT_AMT,0)-(Nvl(C.DISCOUNT_AMOUNT,0))) amount\n" +
+                            "From vw_Inv_CHALANMst m, vw_Inv_CHALANChd C, Inv_Item I,inv_itemgroup ig,inv_mu u, inv_contact r\n" +
+                            "Where m.chalan_Id = c.chalan_Id\n" +
+                            "And C.ITEM_ID = I.ITEM_ID\n" +
+                            "and  I.MU_ID=u.MU_ID\n" +
+                            "And I.ITEMGROUP_ID = ig.ITEMGROUP_ID\n" +
+                            "and m.CONTACT_ID=r.CONTACT_ID\n" +
+                            "And ('"+customer_id+"' =-1 or m.CONTACT_ID = '"+customer_id+"')\n" +
+                            "And ('"+groupItem_id+"' =-1 or ig.ITEMGROUP_ID = '"+groupItem_id+"')\n" +
+                            "And ('"+item_id+"' =-1 or C.item_Id = '"+item_id+"')\n"+
+                            "AND M.chalan_DATE BETWEEN to_date('"+text_formDate.getText()+"','MON DD,RRRR') AND to_date('"+text_toDate.getText()+"','MON DD,RRRR')\n" +
+                            "Group By m.chalan_ID,chalan_NO,chalan_DATE\n" +
+                            "Order By m.chalan_ID,chalan_NO,chalan_DATE";
+
+                    ResultSet rs=stmt.executeQuery(query);
+
+                    while(rs.next()) {
+                        resultList.add(new SalesChalan_Result_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)));
+                    }
+
+                }
+                busyDialog.dismis();
+
+                connection.close();
+
+            }
+            catch (Exception e) {
+              busyDialog.dismis();
+                e.printStackTrace();
+            }
             return resultList;
         }
 
         @Override
         protected void onPostExecute(ArrayList<SalesChalan_Result_Entity> bill_result_entities) {
-            super.onPostExecute(bill_result_entities);
+            busyDialog.dismis();
             result_adapter =new SalesChalan_Results_CustomAdapter(getApplication(),resultList);
             listView.setAdapter(result_adapter);
-
-            loadingBar.dismiss();
         }
 
     }
@@ -599,6 +505,117 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
         String currentDate = new SimpleDateFormat("MMM dd,yyyy",Locale.getDefault()).format(new Date());
         text_formDate.setText(currentDate.toUpperCase());
         text_toDate.setText(currentDate.toUpperCase());
+    }
+
+
+    private class SalesGroupNameTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                Log.d("connection","================Chalan Group==Connected===========");
+                if(connection != null){
+                    groupNameList = new ArrayList<>();
+
+                    Statement stmt=connection.createStatement();
+                    String query = "select ITEMGROUP_ID,ITEMGROUP_NAME\n" +
+                            "from(\n" +
+                            "select 1 sl,-1 ITEMGROUP_ID,'<< Select Group >>' ITEMGROUP_NAME\n" +
+                            "from dual\n" +
+                            "union all\n" +
+                            "SELECT 2 sl, g.ITEMGROUP_ID, g.ITEMGROUP_NAME\n" +
+                            "FROM INV_ITEMGROUP g\n" +
+                            ")\n" +
+                            "order by sl,ITEMGROUP_NAME";
+
+                    ResultSet rs=stmt.executeQuery(query);
+
+                    while(rs.next()) {
+                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1),rs.getString(2)));
+
+                    }
+
+                }
+
+                busyDialog.dismis();
+                connection.close();
+
+            }
+            catch (Exception e) {
+                busyDialog.dismis();
+              e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            busyDialog.dismis();
+        }
+    }
+
+    private class SalesChalanNameTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                Log.d("connection","================Chalan Item==Connected===========");
+                if(connection != null){
+                    itemNameList = new ArrayList<>();
+                    Statement stmt=connection.createStatement();
+                    String query = "select ITEM_ID,ITEM_NAME\n" +
+                            "from(\n" +
+                            "select 1 sl,-1 ITEM_ID,'<< Select Item Name >>' ITEM_NAME\n" +
+                            "from dual\n" +
+                            "union all\n" +
+                            "SELECT 2 sl, ITEM_ID, ITEM_NAME||' ('||UD_NO||')' ITEM_NAME\n" +
+                            "FROM INV_ITEM\n" +
+                            "WHERE ('"+groupItem_id+"'=-1 or ITEMGROUP_ID='"+groupItem_id+"')\n" +
+                            ")\n" +
+                            "order by sl,ITEM_NAME";
+
+                    ResultSet rs=stmt.executeQuery(query);
+
+                    while(rs.next()) {
+                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1),rs.getString(2)));
+                        Log.d("value1","======Item====1==========="+rs.getString(1));
+                        Log.d("value2","======Item====2==========="+rs.getString(2));
+
+                    }
+                }
+                busyDialog.dismis();
+                connection.close();
+            }
+            catch (Exception e) {
+                busyDialog.dismis();
+                    e.printStackTrace();
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            busyDialog.dismis();
+        }
     }
 
 

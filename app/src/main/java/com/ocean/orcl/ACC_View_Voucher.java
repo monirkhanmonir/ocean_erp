@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -27,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ocean.orcl.adapter.CustomACCVoucherResultAdapter;
+import com.ocean.orcl.util.BusyDialog;
+import com.ocean.orcl.util.NetworkHelpers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -53,6 +56,9 @@ public class ACC_View_Voucher extends AppCompatActivity {
     private CustomACCVoucherResultAdapter voucherListadapter;
     private SearchView j_viewVoucher_Reference_search;
 
+    private BusyDialog busyDialog;
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +77,7 @@ public class ACC_View_Voucher extends AppCompatActivity {
         j_viewVoucher_Reference_search.onActionViewExpanded();
         j_viewVoucher_Reference_search.setIconified(false);
         j_viewVoucher_Reference_search.clearFocus();
+        context = ACC_View_Voucher.this;
 
         new Transaction_Task().execute();
         currentDate();
@@ -131,8 +138,13 @@ public class ACC_View_Voucher extends AppCompatActivity {
                             tr_typeVal = adapter.getItem(position).getTr_type_val();
                             dateSetFROM();
                             dateSetTO();
-                            new Result_Task().execute();
 
+
+                            if(NetworkHelpers.isNetworkAvailable(context)){
+                                new Result_Task().execute();
+                            }else {
+                                Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                            }
                             dialog.dismiss();
                             j_acc_view_voucher_spinner.setText(adapter.getItem(position).getTr_type());
                         }
@@ -158,160 +170,107 @@ public class ACC_View_Voucher extends AppCompatActivity {
                 return false;
             }
         });
-
-
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new Result_Task().execute();
-//            }
-//        });
-
-    }
-    private void transaction_initList(){
-
-        try {
-
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection","================View Voucher==Connected===========");
-            if(connection != null){
-                transactionList = new ArrayList<>();
-
-                Statement stmt=connection.createStatement();
-                String query = "select tr_type, tr_type_val\n" +
-                        "from (\n" +
-                        "Select -1 sl, '<< Select Transaction Type >>' tr_type, -1 tr_type_val\n" +
-                        "from dual\n" +
-                        "union all\n" +
-                        "select sl,tr_type, tr_type_val from ACC_TR_TYPE\n" +
-                        ")\n" +
-                        "order by sl";
-
-                ResultSet rs=stmt.executeQuery(query);
-
-                while(rs.next()) {
-                    transactionList.add(new View_Voucher_Entity(rs.getString(1),rs.getString(2)));
-                    Log.d("value1","======view voucher====1==========="+rs.getString(1));
-                    Log.d("value2","======view voucher=====2==========="+rs.getString(2));
-
-                }
-//                view_voucher_adapter =new View_Voucher_Adapter(getApplication(),transactionList);
-//                transation_spinner.setAdapter(view_voucher_adapter);
-
-            }
-
-
-            connection.close();
-
-        }
-        catch (Exception e) {
-
-            Toast.makeText(getApplicationContext(), " " + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-
     }
 
-    private void showResult_initList(){
 
-        try {
-
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection","================View_Voucher Result==Connected===========");
-            Log.d("Date","================fromDate==========="+from_Date.getText()+" toDt"+to_date.getText());
-          //  Log.d("value","=========Tr_typeVal = "+tr_typeVal+" Reference = "+referenceTextView.getText());
-            if(connection != null){
-                voucher_Result = new ArrayList<ACC_View_Voucher_Result_Entity>();
-
-                Statement stmt=connection.createStatement();
-                String query = "select to_char(D_VOUCHER_DT,'MON DD,RRRR') D_VOUCHER_DT, v.V_VOUCHER_NO, V_REF_VOUCHER, TR_TYPE,\n" +
-                        "decode(N_VOUCHER_TYPE,1,'Debit',2,'Credit','Journal') VOUCHER_TYPE,\n" +
-                        "V_NARRATION, sum(N_DR) amount\n" +
-                        "from VW_ACC_VOUCHER_MST v,VW_ACC_VOUCHER_DTL c, ACC_TR_TYPE t\n" +
-                        "where v.N_TR_TYPE = t.TR_TYPE_VAL\n" +
-                        "and v.V_VOUCHER_NO = c.V_VOUCHER_NO\n" +
-                        "and v.n_approved_flag =1\n" +
-                        "and ('"+tr_typeVal+"' = -1 or N_TR_TYPE= '"+tr_typeVal+"')\n" +
-//                        "and D_VOUCHER_DT = to_date('"+text_Date.getText()+"','MON DD,RRRR')\n" +
-//                        "and D_VOUCHER_DT between to_date('"+from_Date.getText()+"','MON DD,RRRR') and to_date("+to_date.getText()+",'MON DD,RRRR')\n" +
-                        "AND D_VOUCHER_DT BETWEEN to_date('"+from_Date.getText()+"','MON DD,RRRR') AND to_date('"+to_date.getText()+"','MON DD,RRRR')\n" +
-                        "group by D_VOUCHER_DT, v.V_VOUCHER_NO, V_REF_VOUCHER, TR_TYPE,N_VOUCHER_TYPE,V_NARRATION\n" +
-                        "order by v.D_VOUCHER_DT desc,V_REF_VOUCHER desc";
-
-                ResultSet rs=stmt.executeQuery(query);
-
-                while(rs.next()) {
-                    voucher_Result.add(new ACC_View_Voucher_Result_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)));
-//                    Log.d("value1","======res====1==========="+rs.getString(1));
-//                    Log.d("value2","======res====2==========="+rs.getString(2));
-//                    Log.d("value3","======res====3==========="+rs.getString(3));
-//                    Log.d("value4","======res====4==========="+rs.getString(4));
-//                    Log.d("value5","======res====5==========="+rs.getString(5));
-//                    Log.d("value6","======res====6==========="+rs.getString(6));
-//                    Log.d("value7","======res====7==========="+rs.getString(7));
-
-                }
-
-            }
-
-
-            connection.close();
-
-        }
-        catch (Exception e) {
-
-            Toast.makeText(getApplicationContext(), " " + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-
-    }
     private class Transaction_Task extends AsyncTask<Void,Void,ArrayList<View_Voucher_Entity>> {
-        ProgressDialog loadingBar;
+
         @Override
         protected void onPreExecute() {
-            loadingBar = new ProgressDialog(ACC_View_Voucher.this);
-//            loadingBar.setTitle("Loading...");
-            loadingBar.setMessage("Please Wait.");
-            loadingBar.setCanceledOnTouchOutside(false);
-            loadingBar.show();
-
+           busyDialog = new BusyDialog(context);
+           busyDialog.show();
         }
 
         @Override
         protected ArrayList<View_Voucher_Entity> doInBackground(Void... voids) {
             transactionList = new ArrayList<>();
-            transaction_initList();
+
+            try {
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                Log.d("connection","================View Voucher==Connected===========");
+                if(connection != null){
+                    transactionList = new ArrayList<>();
+                    Statement stmt=connection.createStatement();
+                    String query = "select tr_type, tr_type_val\n" +
+                            "from (\n" +
+                            "Select -1 sl, '<< Select Transaction Type >>' tr_type, -1 tr_type_val\n" +
+                            "from dual\n" +
+                            "union all\n" +
+                            "select sl,tr_type, tr_type_val from ACC_TR_TYPE\n" +
+                            ")\n" +
+                            "order by sl";
+
+                    ResultSet rs=stmt.executeQuery(query);
+
+                    while(rs.next()) {
+                        transactionList.add(new View_Voucher_Entity(rs.getString(1),rs.getString(2)));
+                        Log.d("value1","======view voucher====1==========="+rs.getString(1));
+                        Log.d("value2","======view voucher=====2==========="+rs.getString(2));
+
+                    }
+                }
+                busyDialog.dismis();
+                connection.close();
+
+            }
+            catch (Exception e) {
+                busyDialog.dismis();
+                e.printStackTrace();
+            }
+
             return transactionList;
         }
 
-
-
-
         @Override
         protected void onPostExecute(ArrayList<View_Voucher_Entity> view_voucher_entities) {
-//            view_voucher_adapter =new View_Voucher_Adapter(getApplication(),transactionList);
-//            transation_spinner.setAdapter(view_voucher_adapter);
-            loadingBar.dismiss();
+            busyDialog.dismis();
         }
     }
     private class Result_Task extends AsyncTask<Void,Void,ArrayList<ACC_View_Voucher_Result_Entity>> {
-        ProgressDialog loadingBar;
+
         @Override
         protected void onPreExecute() {
-            loadingBar = new ProgressDialog(ACC_View_Voucher.this);
-            loadingBar.setTitle("Loading...");
-            loadingBar.setMessage("Please Wait For Results.");
-            loadingBar.setCanceledOnTouchOutside(false);
-            loadingBar.show();
-
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
         protected ArrayList<ACC_View_Voucher_Result_Entity> doInBackground(Void... voids) {
             voucher_Result = new ArrayList<ACC_View_Voucher_Result_Entity>();
-            showResult_initList();
+
+            try {
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                if(connection != null){
+                    voucher_Result = new ArrayList<ACC_View_Voucher_Result_Entity>();
+
+                    Statement stmt=connection.createStatement();
+                    String query = "select to_char(D_VOUCHER_DT,'MON DD,RRRR') D_VOUCHER_DT, v.V_VOUCHER_NO, V_REF_VOUCHER, TR_TYPE,\n" +
+                            "decode(N_VOUCHER_TYPE,1,'Debit',2,'Credit','Journal') VOUCHER_TYPE,\n" +
+                            "V_NARRATION, sum(N_DR) amount\n" +
+                            "from VW_ACC_VOUCHER_MST v,VW_ACC_VOUCHER_DTL c, ACC_TR_TYPE t\n" +
+                            "where v.N_TR_TYPE = t.TR_TYPE_VAL\n" +
+                            "and v.V_VOUCHER_NO = c.V_VOUCHER_NO\n" +
+                            "and v.n_approved_flag =1\n" +
+                            "and ('"+tr_typeVal+"' = -1 or N_TR_TYPE= '"+tr_typeVal+"')\n" +
+//                        "and D_VOUCHER_DT = to_date('"+text_Date.getText()+"','MON DD,RRRR')\n" +
+//                        "and D_VOUCHER_DT between to_date('"+from_Date.getText()+"','MON DD,RRRR') and to_date("+to_date.getText()+",'MON DD,RRRR')\n" +
+                            "AND D_VOUCHER_DT BETWEEN to_date('"+from_Date.getText()+"','MON DD,RRRR') AND to_date('"+to_date.getText()+"','MON DD,RRRR')\n" +
+                            "group by D_VOUCHER_DT, v.V_VOUCHER_NO, V_REF_VOUCHER, TR_TYPE,N_VOUCHER_TYPE,V_NARRATION\n" +
+                            "order by v.D_VOUCHER_DT desc,V_REF_VOUCHER desc";
+
+                    ResultSet rs=stmt.executeQuery(query);
+
+                    while(rs.next()) {
+                        voucher_Result.add(new ACC_View_Voucher_Result_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)));
+                    }busyDialog.dismis();
+                }
+                connection.close();
+
+            }
+            catch (Exception e) {
+                busyDialog.dismis();
+                e.printStackTrace();
+            }
             return voucher_Result;
         }
 
@@ -324,7 +283,7 @@ public class ACC_View_Voucher extends AppCompatActivity {
             voucherListadapter =new CustomACCVoucherResultAdapter(voucher_Result);
             recyclerView.setAdapter(voucherListadapter);
 
-            loadingBar.dismiss();
+            busyDialog.dismis();
         }
 
     }
@@ -365,9 +324,12 @@ public class ACC_View_Voucher extends AppCompatActivity {
                         DateFormat df_medium_us = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
                         String date = df_medium_us.format(chosenDate);
                         from_Date.setText(date.toUpperCase());
-//                        new Sales_Chalan_Activity.Result_Task().execute();
-//                        showResult_initList();
-                        new Result_Task().execute();
+
+                      if(NetworkHelpers.isNetworkAvailable(context)){
+                          new Result_Task().execute();
+                      }else {
+                          Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                      }
 
 
                     }

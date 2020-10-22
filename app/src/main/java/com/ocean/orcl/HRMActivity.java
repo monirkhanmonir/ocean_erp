@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ocean.orcl.util.BusyDialog;
+import com.ocean.orcl.util.NetworkHelpers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -32,6 +36,8 @@ public class HRMActivity extends AppCompatActivity {
     private ArrayList<HRM_AccessPermission_Entity> itemNameList;
     ListView listView;
     TextView name,designation, jHrm_textView;
+    private BusyDialog busyDialog;
+    private Context context;
 //    ImageButton backButton;
     String mTitle[] = {"Attendance Log","My Team's Attendence" ,"My Attendance","Employee Information","Blood Bank"};
 
@@ -50,6 +56,7 @@ public class HRMActivity extends AppCompatActivity {
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/BroshkPlum-YzqJL.ttf");
         jHrm_textView.setTypeface(typeface);
+        context = HRMActivity.this;
 
 
         MyAdapter adapter = new MyAdapter(this,mTitle,imageItem);
@@ -118,7 +125,12 @@ public class HRMActivity extends AppCompatActivity {
         });
 
         getLoginValueShowHeader2();
-        OptionEnableDisable();
+
+        if (NetworkHelpers.isNetworkAvailable(context)){
+            new OptionEnableDisable().execute();
+        }else {
+            Toast.makeText(context, "Please check your internate connection", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -167,58 +179,66 @@ public class HRMActivity extends AppCompatActivity {
 
     private void OptionEnableDisable(){
 
-        try {
+    }
 
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
+    private class OptionEnableDisable extends AsyncTask<Void,Void,Void>{
 
-            if(connection != null){
-                Bundle b = getIntent().getExtras();
-                 userName = b.getString("myName");
-                Log.d("login_valueeee","--------------"+userName);
-                itemNameList = new ArrayList<HRM_AccessPermission_Entity>();
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
 
-                Statement stmt=connection.createStatement();
-                String query = "select a.N_OBJECT_ID position, a.V_OBJECT_NAME name,\n" +
-                        "decode(a.N_ACTIVE_FLAG,0,0,decode(a.N_CAN_ACCESS,0,0,b.N_CAN_ACCESS)) enable_flag\n" +
-                        "from SEC_OBJECT_MOBILE a, SEC_USER_OBJECT_PRIV_MOBILE b\n" +
-                        "where a.N_OBJECT_ID=b.N_OBJECT_ID\n" +
-                        "and b.N_USER_ID = (select N_USER_ID from sec_user where V_USER_NAME='"+userName.toUpperCase()+"')";
+        }
 
-                ResultSet rs=stmt.executeQuery(query);
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                if(connection != null){
+                    Bundle b = getIntent().getExtras();
+                    userName = b.getString("myName");
+                    Log.d("login_valueeee","--------------"+userName);
+                    itemNameList = new ArrayList<HRM_AccessPermission_Entity>();
 
-                while(rs.next()) {
-                    itemNameList.add(new HRM_AccessPermission_Entity(rs.getString(1),rs.getString(2),rs.getString(3)));
+                    Statement stmt=connection.createStatement();
+                    String query = "select a.N_OBJECT_ID position, a.V_OBJECT_NAME name,\n" +
+                            "decode(a.N_ACTIVE_FLAG,0,0,decode(a.N_CAN_ACCESS,0,0,b.N_CAN_ACCESS)) enable_flag\n" +
+                            "from SEC_OBJECT_MOBILE a, SEC_USER_OBJECT_PRIV_MOBILE b\n" +
+                            "where a.N_OBJECT_ID=b.N_OBJECT_ID\n" +
+                            "and b.N_USER_ID = (select N_USER_ID from sec_user where V_USER_NAME='"+userName.toUpperCase()+"')";
 
-                    Log.d("value1","======res====1==========="+rs.getString(1));
-                    Log.d("value2","======res====2==========="+rs.getString(2));
-                    Log.d("value3","======res====3==========="+rs.getString(3));
-                    Log.d("value4","======res====++++=================");
+                    ResultSet rs=stmt.executeQuery(query);
+
+                    while(rs.next()) {
+                        itemNameList.add(new HRM_AccessPermission_Entity(rs.getString(1),rs.getString(2),rs.getString(3)));
+                    }
+                    database_AttendanceLog = itemNameList.get(0).getTitle_name();
+                    database_Team = itemNameList.get(1).getTitle_name();
+                    database_MyAttendance = itemNameList.get(2).getTitle_name();
+                    database_MyAttendance_EmpInfo =itemNameList.get(3).getTitle_name();
+                    database_BloodBank =itemNameList.get(4).getTitle_name();
+                    access_AttendanceLog = itemNameList.get(0).getAccess();
+                    access_Team = itemNameList.get(1).getAccess();
+                    access_MyAttendance = itemNameList.get(2).getAccess();
+                    access_MyAttendance_EmpInfo = itemNameList.get(3).getAccess();
+                    access_BloodBank = itemNameList.get(4).getAccess();
+
+                    busyDialog.dismis();
 
                 }
-                database_AttendanceLog = itemNameList.get(0).getTitle_name();
-                database_Team = itemNameList.get(1).getTitle_name();
-                database_MyAttendance = itemNameList.get(2).getTitle_name();
-                database_MyAttendance_EmpInfo =itemNameList.get(3).getTitle_name();
-                database_BloodBank =itemNameList.get(4).getTitle_name();
-                access_AttendanceLog = itemNameList.get(0).getAccess();
-                access_Team = itemNameList.get(1).getAccess();
-                access_MyAttendance = itemNameList.get(2).getAccess();
-                access_MyAttendance_EmpInfo = itemNameList.get(3).getAccess();
-                access_BloodBank = itemNameList.get(4).getAccess();
+
+                busyDialog.dismis();
+                connection.close();
 
             }
+            catch (Exception e) {
+                busyDialog.dismis();
+                e.printStackTrace();
+            }
 
-
-            connection.close();
-
+            busyDialog.dismis();
+            return null;
         }
-        catch (Exception e) {
-
-            Toast.makeText(HRMActivity.this, " " + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-
     }
 
 }

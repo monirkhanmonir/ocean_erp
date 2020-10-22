@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ocean.orcl.adapter.CustomBloodBankAdapter;
+import com.ocean.orcl.util.BusyDialog;
+import com.ocean.orcl.util.NetworkHelpers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -36,10 +41,11 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
     private static final int REQUEST_CALL =1;
     private ArrayList<Blood_Bank_Entity> bloodBankItems, bloodBankFilterItems;
     CustomBloodBankAdapter adapter;
-    //ListView listView;
     private RecyclerView jbloodBank_recyclerView;
     private SearchView searchBlood;
-   // private Spinner spinner;
+    private BusyDialog busyDialog;
+    private Context context;
+    private Handler handler;
 
     Button jblood_group_button;
 
@@ -51,10 +57,11 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
         setContentView(R.layout.activity_blood_bank);
         jbloodBank_recyclerView =findViewById(R.id.bloodBank_recyclerView);
         jmyBloodBankToolBarId = findViewById(R.id.myBloodBankToolBarId);
-//        callBtn = findViewById(R.id.call_btn);
-//        callText =findViewById(R.id.call_text);
         searchBlood = findViewById(R.id.search_blood);
         jblood_group_button = findViewById(R.id.blood_group_btn);
+
+        context = Blood_Bank_Activity.this;
+        handler = new Handler();
 
         this.setSupportActionBar(jmyBloodBankToolBarId);
 
@@ -91,13 +98,11 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
        // spinner.setAdapter(dataAdapter);
 
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
+        if(NetworkHelpers.isNetworkAvailable(context)){
+            new Blood_Bank_Task().execute();
+        }else {
+            Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
         }
-
-
-        defaultQueryRun();
 
 
         jblood_group_button.setOnClickListener(new View.OnClickListener() {
@@ -128,17 +133,6 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
         });
 
 
-
-
-
-//callBtn.setOnClickListener(new View.OnClickListener() {
-//    @Override
-//    public void onClick(View v) {
-//       makeCall();
-//    }
-//});
-
-
         searchBlood.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -157,45 +151,6 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>When {selected} for ALL Blood Group and DropDown menu set Query>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    public void defaultQueryRun(){
-        try {
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection", "=============BloodBnk_DB========Connect===========");
-            if (connection != null) {
-                bloodBankItems = new ArrayList<Blood_Bank_Entity>();
-
-            }
-
-            Statement stmt = connection.createStatement();
-
-            ResultSet rs = stmt.executeQuery("select V_FNAME, V_LNAME, V_DEPT_NAME, V_DESIG_NAME, V_PHONE_MOBILE,V_BLOOD_GRP\n" +
-                    "from BAS_PERSON\n" +
-                    "where N_ACTIVE_FLAG=1\n" +
-                    "and N_PERSON_TYPE=0\n" +
-                    "and V_PERSON_NO<>'ADMINISTRATOR'\n" +
-                    "order by v_fname");
-
-
-            while (rs.next()) {
-
-                bloodBankItems.add(new Blood_Bank_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
-
-
-            }
-
-             adapter = new CustomBloodBankAdapter(bloodBankItems, (CustomBloodBankAdapter.SelectedBloodDonner) Blood_Bank_Activity.this);
-            jbloodBank_recyclerView.setAdapter(adapter);
-
-            connection.close();
-
-
-        }catch (Exception e) {
-
-            Toast.makeText(Blood_Bank_Activity.this, "" + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-    }
 
     @Override
     public void getSelectedBloodDonner(Blood_Bank_Entity bloodDonnerModel) {
@@ -209,35 +164,6 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
         startActivity(intent);
 
     }
-//public void makeCall(){
-//    String number = callText.getText().toString();
-//    if(number.trim().length() >0){
-//        if(ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
-//            ActivityCompat.requestPermissions(Blood_Bank_Activity.this,
-//                    new String[]{Manifest.permission.CALL_PHONE},REQUEST_CALL);
-//        }else {
-//            String dail = "tel:"+number;
-//            startActivity(new Intent(Intent.ACTION_CALL,Uri.parse(dail)));
-//        }
-//    }else {
-//        Toast.makeText(getApplicationContext(),"Enter Phone Number",Toast.LENGTH_SHORT).show();
-//
-//    }
-//
-//
-//}
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        if(requestCode == REQUEST_CALL){
-//            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                makeCall();
-//            }else {
-//                Toast.makeText(getApplicationContext(),"permission denied",Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
 
 
     private void onSearchBlood(String group){
@@ -252,6 +178,69 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
                }
             }
             adapter = new CustomBloodBankAdapter(bloodBankFilterItems, (CustomBloodBankAdapter.SelectedBloodDonner) Blood_Bank_Activity.this);
+            jbloodBank_recyclerView.setAdapter(adapter);
+        }
+    }
+
+
+
+    private class Blood_Bank_Task extends AsyncTask<Void, Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            try {
+
+                if (android.os.Build.VERSION.SDK_INT > 9) {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                }
+
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                Log.d("connection", "=============BloodBnk_DB========Connect===========");
+                if (connection != null) {
+                    bloodBankItems = new ArrayList<Blood_Bank_Entity>();
+
+                }
+
+                Statement stmt = connection.createStatement();
+
+                ResultSet rs = stmt.executeQuery("select V_FNAME, V_LNAME, V_DEPT_NAME, V_DESIG_NAME, V_PHONE_MOBILE,V_BLOOD_GRP\n" +
+                        "from BAS_PERSON\n" +
+                        "where N_ACTIVE_FLAG=1\n" +
+                        "and N_PERSON_TYPE=0\n" +
+                        "and V_PERSON_NO<>'ADMINISTRATOR'\n" +
+                        "order by v_fname");
+
+
+                while (rs.next()) {
+
+                    bloodBankItems.add(new Blood_Bank_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
+                }
+                busyDialog.dismis();
+                connection.close();
+
+
+            }catch (Exception e) {
+
+               busyDialog.dismis();
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            busyDialog.dismis();
+
+            adapter = new CustomBloodBankAdapter(bloodBankItems, (CustomBloodBankAdapter.SelectedBloodDonner) Blood_Bank_Activity.this);
             jbloodBank_recyclerView.setAdapter(adapter);
         }
     }

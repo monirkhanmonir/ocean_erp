@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ocean.orcl.util.BusyDialog;
+import com.ocean.orcl.util.NetworkHelpers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,6 +42,10 @@ public class INVActivity extends AppCompatActivity {
 
     int [] invimageItem = {R.drawable.ic_stock_inventory, R.drawable.ic_bill_invoice, R.drawable.ic_selse_chalan,R.drawable.ic_loan_chalan,R.drawable.ic_loan_chalan,R.drawable.ic_sales_summary,R.drawable.ic_sales,R.drawable.ic_chalan_report,R.drawable.ic_chalan_report};
 
+    private BusyDialog busyDialog;
+    private Context context;
+    private Handler handler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,8 @@ public class INVActivity extends AppCompatActivity {
         name =findViewById(R.id.inv_p_name);
         designation =findViewById(R.id.inv_p_designation);
         invH_textView =findViewById(R.id.hrm_textView);
+        context = INVActivity.this;
+        handler = new Handler();
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/BroshkPlum-YzqJL.ttf");
         invH_textView.setTypeface(typeface);
@@ -153,7 +164,15 @@ public class INVActivity extends AppCompatActivity {
             }
         });
         getLoginValueShowHeader2();
-        OptionEnableDisable_access();
+
+
+        if(NetworkHelpers.isNetworkAvailable(context)){
+            new OptionEnableDisableTask().execute();
+        }else {
+            Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+        }
+
+
     }
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
@@ -166,11 +185,6 @@ public class INVActivity extends AppCompatActivity {
             this.title =title;
             this.img =imgs;
         }
-//MyAdapter( Context context,String title[]) {
-//    super(context, R.layout.invlistview,R.id.inv_textView,title);
-//    this.context =context;
-//    this.title =title;
-//}
 
         @NonNull
         @Override
@@ -199,72 +213,87 @@ public class INVActivity extends AppCompatActivity {
 //        <<<<<<<<<<<<<<<------ End getting login value -------->>>>>>>>>>>
 
     }
-    private void OptionEnableDisable_access(){
 
-        try {
+    private class OptionEnableDisableTask extends AsyncTask<Void,Void,Void>{
 
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+        }
 
-            if(connection != null){
-                Bundle b = getIntent().getExtras();
-                userName = b.getString("myName");
-                Log.d("login_valueeee","--------------"+userName);
-                itemNameList = new ArrayList<HRM_AccessPermission_Entity>();
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
 
-                Statement stmt=connection.createStatement();
-                String query = "select a.N_OBJECT_ID position, a.V_OBJECT_NAME name,\n" +
-                        "decode(a.N_ACTIVE_FLAG,0,0,decode(a.N_CAN_ACCESS,0,0,b.N_CAN_ACCESS)) enable_flag\n" +
-                        "from SEC_OBJECT_MOBILE a, SEC_USER_OBJECT_PRIV_MOBILE b\n" +
-                        "where a.N_OBJECT_ID=b.N_OBJECT_ID\n" +
-                        "and b.N_USER_ID = (select N_USER_ID from sec_user where V_USER_NAME='"+userName.toUpperCase()+"')";
+                if(connection != null){
+                    Bundle b = getIntent().getExtras();
+                    userName = b.getString("myName");
+                    Log.d("login_valueeee","--------------"+userName);
+                    itemNameList = new ArrayList<HRM_AccessPermission_Entity>();
 
-                ResultSet rs=stmt.executeQuery(query);
+                    Statement stmt=connection.createStatement();
+                    String query = "select a.N_OBJECT_ID position, a.V_OBJECT_NAME name,\n" +
+                            "decode(a.N_ACTIVE_FLAG,0,0,decode(a.N_CAN_ACCESS,0,0,b.N_CAN_ACCESS)) enable_flag\n" +
+                            "from SEC_OBJECT_MOBILE a, SEC_USER_OBJECT_PRIV_MOBILE b\n" +
+                            "where a.N_OBJECT_ID=b.N_OBJECT_ID\n" +
+                            "and b.N_USER_ID = (select N_USER_ID from sec_user where V_USER_NAME='"+userName.toUpperCase()+"')";
 
-                while(rs.next()) {
-                    itemNameList.add(new HRM_AccessPermission_Entity(rs.getString(1),rs.getString(2),rs.getString(3)));
+                    ResultSet rs=stmt.executeQuery(query);
 
-                    Log.d("value1","======res====1==========="+rs.getString(1));
-                    Log.d("value2","======res====2==========="+rs.getString(2));
-                    Log.d("value3","======res====3==========="+rs.getString(3));
-                    Log.d("value4","======res====++++=================");
+                    while(rs.next()) {
+                        itemNameList.add(new HRM_AccessPermission_Entity(rs.getString(1),rs.getString(2),rs.getString(3)));
 
-                }
+                        Log.d("value1","======res====1==========="+rs.getString(1));
+                        Log.d("value2","======res====2==========="+rs.getString(2));
+                        Log.d("value3","======res====3==========="+rs.getString(3));
+                        Log.d("value4","======res====++++=================");
+
+                    }
 //                database_Accounts = itemNameList.get(1).getTitle_name();
-                database_currentStock = itemNameList.get(5).getTitle_name();
-                database_Bill_Invoice =itemNameList.get(6).getTitle_name();
-                database_SalesChalan =itemNameList.get(7).getTitle_name();
+                    database_currentStock = itemNameList.get(5).getTitle_name();
+                    database_Bill_Invoice =itemNameList.get(6).getTitle_name();
+                    database_SalesChalan =itemNameList.get(7).getTitle_name();
 //                database_LoanChalan =itemNameList.get(8).getTitle_name();
-                database_expiry =itemNameList.get(9).getTitle_name();
-                database_salesReport_Summary =itemNameList.get(10).getTitle_name();
-                database_salesReport_Details =itemNameList.get(11).getTitle_name();
-                database_chalanReport_Summary =itemNameList.get(12).getTitle_name();
-                database_chalanReport_Details =itemNameList.get(13).getTitle_name();
+                    database_expiry =itemNameList.get(9).getTitle_name();
+                    database_salesReport_Summary =itemNameList.get(10).getTitle_name();
+                    database_salesReport_Details =itemNameList.get(11).getTitle_name();
+                    database_chalanReport_Summary =itemNameList.get(12).getTitle_name();
+                    database_chalanReport_Details =itemNameList.get(13).getTitle_name();
 
 
-                access_currentStock =itemNameList.get(5).getAccess();
-                access_Bill_Invoice = itemNameList.get(6).getAccess();
-                access_SalesChalan = itemNameList.get(7).getAccess();
+                    access_currentStock =itemNameList.get(5).getAccess();
+                    access_Bill_Invoice = itemNameList.get(6).getAccess();
+                    access_SalesChalan = itemNameList.get(7).getAccess();
 //                access_LoanChalan = itemNameList.get(8).getAccess();
-                access_Expiry = itemNameList.get(9).getAccess();
-                access_SalesReport_Summary = itemNameList.get(10).getAccess();
-                access_SalesReport_Details = itemNameList.get(11).getAccess();
-                access_chalanReport_Summary = itemNameList.get(12).getAccess();
-                access_chalanReport_Details = itemNameList.get(13).getAccess();
+                    access_Expiry = itemNameList.get(9).getAccess();
+                    access_SalesReport_Summary = itemNameList.get(10).getAccess();
+                    access_SalesReport_Details = itemNameList.get(11).getAccess();
+                    access_chalanReport_Summary = itemNameList.get(12).getAccess();
+                    access_chalanReport_Details = itemNameList.get(13).getAccess();
 
 //                access_LedgerPosition = itemNameList.get(17).getAccess();
 
+                }
+                busyDialog.dismis();
+                connection.close();
+
             }
-
-            connection.close();
-
-        }
-        catch (Exception e) {
-
-            Toast.makeText(INVActivity.this, " " + e,Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            catch (Exception e) {
+                busyDialog.dismis();
+                e.printStackTrace();
+            }
+            return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            busyDialog.dismis();
 
+        }
     }
+
+
 
 }

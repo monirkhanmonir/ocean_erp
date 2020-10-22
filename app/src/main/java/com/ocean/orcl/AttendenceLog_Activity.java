@@ -1,7 +1,9 @@
 package com.ocean.orcl;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -22,6 +24,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ocean.orcl.ODBC.Db;
 import com.ocean.orcl.adapter.CustomAttendenceAdapter;
+import com.ocean.orcl.util.BusyDialog;
+import com.ocean.orcl.util.NetworkHelpers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -47,6 +51,9 @@ public class AttendenceLog_Activity extends AppCompatActivity implements SwipeRe
    private SwipeRefreshLayout swipeRefreshL;
    private TextView from_dateFill;
    private String weekend,holiday,late_loginFlag,early_logoutFlag;
+   private BusyDialog busyDialog;
+   private Context context;
+   String dateCurrent2;
 
 
     @Override
@@ -62,85 +69,20 @@ public class AttendenceLog_Activity extends AppCompatActivity implements SwipeRe
 
         TextView loginTime = findViewById(R.id.login_text);
         TextView logoutTime = findViewById(R.id.Logout_text);
+        context = AttendenceLog_Activity.this;
 
         this.setSupportActionBar(jAttendenceToolBarId);
 
         //<<<<<<<<<<<-------------- Filled default set Textview in Current Date ------------->>>>>>>>>>>>>>>>>>>>>>
-        final String dateCurrent2 = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());
+         dateCurrent2 = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());
         from_dateFill.setText(dateCurrent2.toUpperCase());
         Log.d("CurrentDate","======Default======="+dateCurrent2);
         //<<<<<<<<<<<--------------End Filled default set Textview in Current Date ------------->>>>>>>>>>>>>>>>>>>>>>
 
-
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-
-
-        try {
-            connection = com.ocean.orcl.ODBC.Db.createConnection();
-            Log.d("connection", "=====================Connect===========");
-            if (connection != null) {
-               attendenceLogItems = new ArrayList<AttendenceLog_Entity>();
-
-            }
-
-            Statement stmt = connection.createStatement();
-
-            ResultSet rs = stmt.executeQuery("select V_PERSON_NO, V_EMP_NAME, V_DESIGNATION, V_DEPARTMENT, \n" +
-                    "to_char(D_LOGINTIME,'HH12:MI AM') V_LOGINTIME, \n" +
-                    "to_char(D_LOGOUTTIME,'HH12:MI AM') V_LOGOUTTIME,\n" +
-                    "decode(N_WEEKEND_FLAG,0,'N','Y') V_WEEKEND_FLAG,\n" +
-                    "decode(N_HOLIDAY_FLAG,0,'N','Y') V_HOLIDAY_FLAG, \n" +
-                    "decode(N_LATE_LOGIN_FLAG,0,'N','Y') V_LATE_LOGIN_FLAG, \n" +
-                    "decode(N_EARLY_LOGOUT_FLAG,0,'N','Y') V_EARLY_LOGOUT_FLAG \n" +
-                    "from VW_HR_EMP_ATTENDANCE_SUMMARY\n" +
-                    "where D_DATE = to_date('"+dateCurrent2.toUpperCase()+"','MON DD,RRRR')\n" +
-                    "order by V_EMP_NAME asc");
-
-            while (rs.next()) {
-
-                attendenceLogItems.add(new AttendenceLog_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)));
-                Log.d("1","======1===="+rs.getString(1));
-                Log.d("2","======2===="+rs.getString(2));
-                Log.d("3","======3===="+rs.getString(3));
-                Log.d("4","======4===="+rs.getString(4));
-                Log.d("5","======5+Weekend===="+rs.getString(5));
-                Log.d("6","======6+Holiday===="+rs.getString(6));
-                Log.d("7","======7+late login flag===="+rs.getString(7));
-                Log.d("8","======8+early logout flag===="+rs.getString(8));
-                Log.d("9","======9===="+rs.getString(9));
-                Log.d("10","======10===="+rs.getString(10));
-
-
-                weekend =rs.getString(5);
-                holiday =rs.getString(6);
-                late_loginFlag =rs.getString(7);
-                early_logoutFlag =rs.getString(8);
-
-            }
-
-            jAttendenceLogRecyclerView.setLayoutManager(new LinearLayoutManager(AttendenceLog_Activity.this));
-            jAttendenceLogRecyclerView.addItemDecoration(new DividerItemDecoration(AttendenceLog_Activity.this,DividerItemDecoration.VERTICAL));
-
-            attendenceLogAdapter = new CustomAttendenceAdapter(attendenceLogItems,AttendenceLog_Activity.this);
-            jAttendenceLogRecyclerView.setAdapter(attendenceLogAdapter);
-
-            search.setActivated(true);
-            search.setQueryHint("Enter Name Here...");
-            search.onActionViewExpanded();
-            search.setIconified(false);
-            search.clearFocus();
-
-            connection.close();
-
-
-        }catch (Exception e) {
-
-            Toast.makeText(AttendenceLog_Activity.this, "" + e,
-                    Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+        if (NetworkHelpers.isNetworkAvailable(context)){
+            new AttendenceLogTask().execute();
+        }else {
+            Toast.makeText(context, "Please check your internate connection", Toast.LENGTH_SHORT).show();
         }
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -209,52 +151,11 @@ public class AttendenceLog_Activity extends AppCompatActivity implements SwipeRe
                         DateFormat df_medium_us = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
                         String date = df_medium_us.format(chosenDate);
                         from_dateFill.setText(date.toUpperCase());
-
-                        try {
-                            connection = Db.createConnection();
-                            Log.d("connection", "==================Calader Query====Connect===========");
-                            final String fromDate1 = from_dateFill.getText().toString();
-                            Log.d("fromdate","=====picker Formate====="+fromDate1);
-
-                            if (connection != null) {
-                                attendenceLogItems = new ArrayList<AttendenceLog_Entity>();
-
-
-                            }
-
-                            Statement stmt = connection.createStatement();
-
-                            ResultSet rs = stmt.executeQuery("select V_PERSON_NO, V_EMP_NAME, V_DESIGNATION, V_DEPARTMENT, \n" +
-                                    "to_char(D_LOGINTIME,'HH12:MI AM') V_LOGINTIME, \n" +
-                                    "to_char(D_LOGOUTTIME,'HH12:MI AM') V_LOGOUTTIME,\n" +
-                                    "decode(N_WEEKEND_FLAG,0,'N','Y') V_WEEKEND_FLAG,\n" +
-                                    "decode(N_HOLIDAY_FLAG,0,'N','Y') V_HOLIDAY_FLAG, \n" +
-                                    "decode(N_LATE_LOGIN_FLAG,0,'N','Y') V_LATE_LOGIN_FLAG, \n" +
-                                    "decode(N_EARLY_LOGOUT_FLAG,0,'N','Y') V_EARLY_LOGOUT_FLAG \n" +
-                                    "from VW_HR_EMP_ATTENDANCE_SUMMARY\n" +
-                                    "where D_DATE = to_date('"+fromDate1.toUpperCase()+"','MON DD,RRRR')\n" +
-                                    "order by V_EMP_NAME asc");
-
-                            while (rs.next()) {
-                                attendenceLogItems.add(new AttendenceLog_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)));
-
-                            }
-
-                            jAttendenceLogRecyclerView.setLayoutManager(new LinearLayoutManager(AttendenceLog_Activity.this));
-                            jAttendenceLogRecyclerView.addItemDecoration(new DividerItemDecoration(AttendenceLog_Activity.this,DividerItemDecoration.VERTICAL));
-
-                            attendenceLogAdapter = new CustomAttendenceAdapter(attendenceLogItems,AttendenceLog_Activity.this);
-                            jAttendenceLogRecyclerView.setAdapter(attendenceLogAdapter);
-
-                            connection.close();
-
-
-                        }catch (Exception e) {
-
-                            Toast.makeText(AttendenceLog_Activity.this, "" + e,
-                                    Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
+                        dateCurrent2 = from_dateFill.getText().toString();
+                        if(NetworkHelpers.isNetworkAvailable(context)){
+                            new AttendenceDateLogTask().execute();
                         }
+
                     }
                 }, year, month, day);
                 mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -274,6 +175,139 @@ public class AttendenceLog_Activity extends AppCompatActivity implements SwipeRe
         intent.putExtra("personDesignation",person_log.getPersongDesignaton());
         intent.putExtra("person_department",person_log.getPersonDepartment());
         startActivity(intent);
+    }
+
+    private class AttendenceLogTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (android.os.Build.VERSION.SDK_INT > 9) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+            }
+            try {
+                connection = com.ocean.orcl.ODBC.Db.createConnection();
+                Log.d("connection", "=====================Connect===========");
+                if (connection != null) {
+                    attendenceLogItems = new ArrayList<AttendenceLog_Entity>();
+
+                }
+
+                Statement stmt = connection.createStatement();
+
+                ResultSet rs = stmt.executeQuery("select V_PERSON_NO, V_EMP_NAME, V_DESIGNATION, V_DEPARTMENT, \n" +
+                        "to_char(D_LOGINTIME,'HH12:MI AM') V_LOGINTIME, \n" +
+                        "to_char(D_LOGOUTTIME,'HH12:MI AM') V_LOGOUTTIME,\n" +
+                        "decode(N_WEEKEND_FLAG,0,'N','Y') V_WEEKEND_FLAG,\n" +
+                        "decode(N_HOLIDAY_FLAG,0,'N','Y') V_HOLIDAY_FLAG, \n" +
+                        "decode(N_LATE_LOGIN_FLAG,0,'N','Y') V_LATE_LOGIN_FLAG, \n" +
+                        "decode(N_EARLY_LOGOUT_FLAG,0,'N','Y') V_EARLY_LOGOUT_FLAG \n" +
+                        "from VW_HR_EMP_ATTENDANCE_SUMMARY\n" +
+                        "where D_DATE = to_date('"+dateCurrent2.toUpperCase()+"','MON DD,RRRR')\n" +
+                        "order by V_EMP_NAME asc");
+
+                while (rs.next()) {
+                    attendenceLogItems.add(new AttendenceLog_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)));
+
+                    weekend =rs.getString(5);
+                    holiday =rs.getString(6);
+                    late_loginFlag =rs.getString(7);
+                    early_logoutFlag =rs.getString(8);
+
+                }
+
+                busyDialog.dismis();
+                connection.close();
+
+
+            }catch (Exception e) {
+                busyDialog.dismis();
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            busyDialog.dismis();
+            jAttendenceLogRecyclerView.setLayoutManager(new LinearLayoutManager(AttendenceLog_Activity.this));
+            jAttendenceLogRecyclerView.addItemDecoration(new DividerItemDecoration(AttendenceLog_Activity.this,DividerItemDecoration.VERTICAL));
+            attendenceLogAdapter = new CustomAttendenceAdapter(attendenceLogItems,AttendenceLog_Activity.this);
+            jAttendenceLogRecyclerView.setAdapter(attendenceLogAdapter);
+
+            search.setActivated(true);
+            search.setQueryHint("Enter Name Here...");
+            search.onActionViewExpanded();
+            search.setIconified(false);
+            search.clearFocus();
+        }
+    }
+
+    private class AttendenceDateLogTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                connection = Db.createConnection();
+                Log.d("connection", "==================Calader Query====Connect===========");
+
+                if (connection != null) {
+                    attendenceLogItems = new ArrayList<AttendenceLog_Entity>();
+
+
+                }
+
+                Statement stmt = connection.createStatement();
+
+                ResultSet rs = stmt.executeQuery("select V_PERSON_NO, V_EMP_NAME, V_DESIGNATION, V_DEPARTMENT, \n" +
+                        "to_char(D_LOGINTIME,'HH12:MI AM') V_LOGINTIME, \n" +
+                        "to_char(D_LOGOUTTIME,'HH12:MI AM') V_LOGOUTTIME,\n" +
+                        "decode(N_WEEKEND_FLAG,0,'N','Y') V_WEEKEND_FLAG,\n" +
+                        "decode(N_HOLIDAY_FLAG,0,'N','Y') V_HOLIDAY_FLAG, \n" +
+                        "decode(N_LATE_LOGIN_FLAG,0,'N','Y') V_LATE_LOGIN_FLAG, \n" +
+                        "decode(N_EARLY_LOGOUT_FLAG,0,'N','Y') V_EARLY_LOGOUT_FLAG \n" +
+                        "from VW_HR_EMP_ATTENDANCE_SUMMARY\n" +
+                        "where D_DATE = to_date('"+dateCurrent2.toUpperCase()+"','MON DD,RRRR')\n" +
+                        "order by V_EMP_NAME asc");
+
+                while (rs.next()) {
+                    attendenceLogItems.add(new AttendenceLog_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)));
+
+                }
+                busyDialog.dismis();
+                connection.close();
+
+
+            }catch (Exception e) {
+
+               busyDialog.dismis();
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            busyDialog.dismis();
+            jAttendenceLogRecyclerView.setLayoutManager(new LinearLayoutManager(AttendenceLog_Activity.this));
+            jAttendenceLogRecyclerView.addItemDecoration(new DividerItemDecoration(AttendenceLog_Activity.this,DividerItemDecoration.VERTICAL));
+            attendenceLogAdapter = new CustomAttendenceAdapter(attendenceLogItems,AttendenceLog_Activity.this);
+            jAttendenceLogRecyclerView.setAdapter(attendenceLogAdapter);
+        }
     }
 }
 
