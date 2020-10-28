@@ -1,10 +1,12 @@
 package com.ocean.orcl;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -14,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,14 +31,15 @@ import java.util.List;
 public class MenuActivity extends AppCompatActivity {
 
     private Connection connection;
-    GridLayout mainGrid;
+    private CardView j_card_hrm_id,j_card_inventory_id,j_card_sales_id,j_card_account_id,j_card_office_id,j_card_misc_id;
     TextView nameset,depertmentset;
     private ImageSlider imageSlider;
+    private ImageView j_power_id;
 
 
 
    //<<<<<<<<<<<<<<<<<<............. start No back in this method...................>>>>>>>>>>>>>>>>>>>>>>
-      private long backpressed;
+   private long backpressed;
     @Override
     public void onBackPressed() {
 
@@ -60,10 +64,14 @@ public class MenuActivity extends AppCompatActivity {
 
         imageSlider = findViewById(R.id.image_slider_menu);
 
-        mainGrid = (GridLayout) findViewById(R.id.mainGrid);
-        Toolbar toolbar =findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        j_card_hrm_id = findViewById(R.id.card_hrm_id);
+        j_card_inventory_id = findViewById(R.id.card_inventory_id);
+        j_card_sales_id = findViewById(R.id.card_sales_id);
+        j_card_account_id = findViewById(R.id.card_account_id);
+      //  j_card_office_id = findViewById(R.id.card_office_id);
+     //   j_card_misc_id = findViewById(R.id.card_misc_id);
+
+        j_power_id = findViewById(R.id.power_id);
 
 
 
@@ -78,10 +86,121 @@ public class MenuActivity extends AppCompatActivity {
 
         imageSlider.setImageList(slideModels,true);
 
+        j_power_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
+                builder.setIcon(R.drawable.ic_power_color_button);
+                builder.setTitle("Do you want to exit?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(MenuActivity.this,LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+                builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                });
+                builder.show();
+            }
+        });
+
+
+
+        j_card_hrm_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MenuActivity.this,HRMActivity.class);
+                //............>>>>>>>>>>>>>>>>.....Login value pass.................>>>>>
+                Bundle b = getIntent().getExtras();
+                String testsUserName = b.getString("userName");
+                intent.putExtra("myName", testsUserName);
+
+                String person_Name = b.getString("p_name");
+                intent.putExtra("persong_name",person_Name );
+
+                String designation_Dept = b.getString("designation");
+                intent.putExtra("desig_dept",designation_Dept );
+                //............>>>>>>>>>>>>>>>>.....Login value pass.................>>>>>
+                startActivity(intent);
+
+            }
+        });
+
+
+
+        j_card_inventory_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MenuActivity.this,INVActivity.class);
+                Bundle b = getIntent().getExtras();
+                String testsUserName = b.getString("userName");
+                intent.putExtra("myName", testsUserName);
+                String person_Name = b.getString("p_name");
+                intent.putExtra("persong_name",person_Name );
+
+                String designation_Dept = b.getString("designation");
+                intent.putExtra("desig_dept",designation_Dept );
+//                        intent.putExtra("info","This is activity from card item index  "+finalI);
+                startActivity(intent);
+
+            }
+        });
+
+
+        j_card_sales_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MenuActivity.this, "Work in progress" , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        j_card_account_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this,AccActivity.class);
+                Bundle b = getIntent().getExtras();
+                String testsUserName = b.getString("userName");
+                intent.putExtra("myName", testsUserName);
+                String person_Name = b.getString("p_name");
+                intent.putExtra("persong_name",person_Name );
+
+                String designation_Dept = b.getString("designation");
+                intent.putExtra("desig_dept",designation_Dept );
+//                        intent.putExtra("info","This is activity from card item index  "+finalI);
+                startActivity(intent);
+
+            }
+        });
+
+//        j_card_office_id.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(MenuActivity.this, "Work in progress" , Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        j_card_misc_id.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(MenuActivity.this, "Work in progress" , Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
         //Set Event
-        setSingleEvent(mainGrid);
+
 
         getLoginValueShowHeader();
 
@@ -93,82 +212,6 @@ public class MenuActivity extends AppCompatActivity {
         set_userLast_LoginTime();
 
     }
-   
-
-
-    private void setSingleEvent(GridLayout mainGrid) {
-
-        //Loop all child item of Main Grid
-        for (int i = 0; i < mainGrid.getChildCount(); i++) {
-            //You can see , all child item is CardView , so we just cast object to CardView
-            CardView cardView = (CardView) mainGrid.getChildAt(i);
-            final int finalI = i;
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(finalI == 0){
-                        Intent intent = new Intent(MenuActivity.this,HRMActivity.class);
-                        //............>>>>>>>>>>>>>>>>.....Login value pass.................>>>>>
-                        Bundle b = getIntent().getExtras();
-                        String testsUserName = b.getString("userName");
-                        intent.putExtra("myName", testsUserName);
-
-                        String person_Name = b.getString("p_name");
-                        intent.putExtra("persong_name",person_Name );
-
-                        String designation_Dept = b.getString("designation");
-                        intent.putExtra("desig_dept",designation_Dept );
-                        //............>>>>>>>>>>>>>>>>.....Login value pass.................>>>>>
-                        startActivity(intent);
-
-                    } else if(finalI == 1){
-                        Intent intent = new Intent(MenuActivity.this,INVActivity.class);
-                        Bundle b = getIntent().getExtras();
-                        String testsUserName = b.getString("userName");
-                        intent.putExtra("myName", testsUserName);
-                        String person_Name = b.getString("p_name");
-                        intent.putExtra("persong_name",person_Name );
-
-                        String designation_Dept = b.getString("designation");
-                        intent.putExtra("desig_dept",designation_Dept );
-//                        intent.putExtra("info","This is activity from card item index  "+finalI);
-                        startActivity(intent);
-
-                    } else if(finalI == 2){
-                        Toast.makeText(MenuActivity.this, "Work in progress" , Toast.LENGTH_SHORT).show();
-
-                    } else if(finalI == 3){
-                         Intent intent = new Intent(MenuActivity.this,AccActivity.class);
-                        Bundle b = getIntent().getExtras();
-                        String testsUserName = b.getString("userName");
-                        intent.putExtra("myName", testsUserName);
-                        String person_Name = b.getString("p_name");
-                        intent.putExtra("persong_name",person_Name );
-
-                        String designation_Dept = b.getString("designation");
-                        intent.putExtra("desig_dept",designation_Dept );
-//                        intent.putExtra("info","This is activity from card item index  "+finalI);
-                        startActivity(intent);
-
-                    }else if(finalI == 4){
-                        Toast.makeText(MenuActivity.this, "Work in progress" , Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(MenuActivity.this,Test_Activity.class);
-////                        intent.putExtra("info","This is activity from card item index  "+finalI);
-//                        startActivity(intent);
-
-                    }else if(finalI == 5){
-                        Toast.makeText(MenuActivity.this, "Work in progress" , Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Toast.makeText(MenuActivity.this, "Can't Find Item" , Toast.LENGTH_SHORT).show();
-                    }
-
-
-
-                }
-            });
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,19 +220,7 @@ public class MenuActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.item1:
-                         Intent intent = new Intent(MenuActivity.this,LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-            return true;
-                default: return super.onOptionsItemSelected(item);
-        }
 
-    }
     private void getLoginValueShowHeader(){
 //        >>>>>>>>>>>>>>>Start Get passing value login Activity To Menu Activity --<<<<<<<<
         Bundle b = getIntent().getExtras();
@@ -219,13 +250,6 @@ public class MenuActivity extends AppCompatActivity {
             String sql = "BEGIN PKG$SEC.prc$update_mobile_login ('"+userLoginValue+"'); END;";
 
             stmt.executeUpdate(sql);
-//            ResultSet rs = stmt.executeQuery(sql);
-//
-//            while (rs.next()) {
-//                Log.d("test","======= Query success ======");
-//
-//
-//            }
 
             connection.close();
 

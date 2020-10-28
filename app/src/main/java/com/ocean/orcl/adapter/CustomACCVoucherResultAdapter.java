@@ -5,8 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +51,8 @@ public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<Recycler
         viewHolder.j_voucherRes_trType.setText(": "+voucherModel.getTr_type());
         viewHolder.j_voucherRes_voucher.setText(": "+voucherModel.getVoucher());
         viewHolder.j_voucherRes_Note.setText(": "+voucherModel.getNote());
+
+        viewHolder.j_acc_voucher_row_layout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
 
     }
 
@@ -97,7 +101,7 @@ public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<Recycler
 
     private class VoucherViewHolder extends RecyclerView.ViewHolder{
         private TextView j_voucherRes_date, j_voucherRes_voucher,j_voucherRes_ref, j_voucherRes_trType, j_voucherRes_Amount, j_voucherRes_Note ;
-
+        private LinearLayout j_acc_voucher_row_layout;
         public VoucherViewHolder(@NonNull View itemView) {
             super(itemView);
             j_voucherRes_date = itemView.findViewById(R.id.voucherRes_date);
@@ -106,6 +110,7 @@ public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<Recycler
             j_voucherRes_trType = itemView.findViewById(R.id.voucherRes_trType);
             j_voucherRes_Amount = itemView.findViewById(R.id.voucherRes_Amount);
             j_voucherRes_Note = itemView.findViewById(R.id.voucherRes_Note);
+            j_acc_voucher_row_layout = itemView.findViewById(R.id.acc_voucher_row_layout);
 
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override

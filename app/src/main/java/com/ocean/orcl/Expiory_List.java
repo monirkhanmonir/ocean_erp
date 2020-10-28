@@ -41,13 +41,13 @@ public class Expiory_List extends AppCompatActivity {
     private TextView toDate;
     private CustomAdapter_CurrentStock adapter;
     private ArrayList<CurrentStock_Entity_F> expiryItems;
-    private String manufacture_id,itemGroup_Id,item_Id,quantity;
+    private String manufacture_id, itemGroup_Id, item_Id, quantity;
     private ArrayList<CurrentStock_Manufacturer_Entity_A> manufactureList;
     private ArrayList<CurrentStock_Group_Entity_B> groupnameList;
     private ArrayList<CurrentStock_ItemName_Entity_C> itemNameList;
     //    private ArrayList<CurrentStock_UD_No_Entity_D> udNoList;
 
-    private TextView j_Expiry_menufacture_spinner,j_Expiry_group_spinner, j_Expiry_item_spinner;
+    private TextView j_Expiry_menufacture_spinner, j_Expiry_group_spinner, j_Expiry_item_spinner;
     private Dialog dailog;
     private BusyDialog busyDialog;
     private Context context;
@@ -57,8 +57,8 @@ public class Expiory_List extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expiory_list);
-        toDate =findViewById(R.id.expiry_dateTex);
-        listView =findViewById(R.id.expiry_listView);
+        toDate = findViewById(R.id.expiry_dateTex);
+        listView = findViewById(R.id.expiry_listView);
         j_Expiry_menufacture_spinner = findViewById(R.id.Expiry_menufacture_spinner);
         j_Expiry_group_spinner = findViewById(R.id.Expiry_group_spinner);
         j_Expiry_item_spinner = findViewById(R.id.Expiry_item_spinner);
@@ -69,16 +69,16 @@ public class Expiory_List extends AppCompatActivity {
 //        DateSetTO();
 
 
-       if(NetworkHelpers.isNetworkAvailable(context)){
-           new ManufactureInfoTask().execute();
-       }else {
-           Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
-       }
+        if (NetworkHelpers.isNetworkAvailable(context)) {
+            new ManufactureInfoTask().execute();
+        } else {
+            Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+        }
 
         j_Expiry_menufacture_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(manufactureList==null){
+                if (manufactureList == null) {
                     Toast.makeText(Expiory_List.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -99,8 +99,16 @@ public class Expiory_List extends AppCompatActivity {
                 SpinnerSearchView.setIconified(false);
                 SpinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dailog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<CurrentStock_Manufacturer_Entity_A> adapter = new ArrayAdapter<CurrentStock_Manufacturer_Entity_A>(
-                        Expiory_List.this, android.R.layout.simple_list_item_1,manufactureList
+                        Expiory_List.this, android.R.layout.simple_list_item_1, manufactureList
                 );
 
                 SpinnerListView.setAdapter(adapter);
@@ -121,21 +129,21 @@ public class Expiory_List extends AppCompatActivity {
                 SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(adapter.getItem(position).getMenufacture_Name().equals("<< Select Manufacturer >>")){
+                        if (adapter.getItem(position).getMenufacture_Name().equals("<< Select Manufacturer >>")) {
                             Toast.makeText(Expiory_List.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             j_Expiry_group_spinner.setText("Select Group");
                             j_Expiry_item_spinner.setText("Select Item Name");
 
-                            groupnameList =null;
-                            itemNameList =null;
+                            groupnameList = null;
+                            itemNameList = null;
 
                             manufacture_id = adapter.getItem(position).getManufacture_Id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new ExpioryGroupTask().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(Expiory_List.this, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
@@ -151,12 +159,11 @@ public class Expiory_List extends AppCompatActivity {
         });
 
 
-
         j_Expiry_group_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(groupnameList==null){
+                if (groupnameList == null) {
                     Toast.makeText(Expiory_List.this, "please Select manufacturer", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -177,8 +184,16 @@ public class Expiory_List extends AppCompatActivity {
                 spinnerSearchView.setIconified(false);
                 spinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dailog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<CurrentStock_Group_Entity_B> adapter = new ArrayAdapter<CurrentStock_Group_Entity_B>(
-                        Expiory_List.this, android.R.layout.simple_list_item_1,groupnameList
+                        Expiory_List.this, android.R.layout.simple_list_item_1, groupnameList
                 );
 
 
@@ -200,20 +215,20 @@ public class Expiory_List extends AppCompatActivity {
                 SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(adapter.getItem(position).getItem_groupName().equals("<< Select Group >>")){
+                        if (adapter.getItem(position).getItem_groupName().equals("<< Select Group >>")) {
                             Toast.makeText(Expiory_List.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             j_Expiry_item_spinner.setText("Select Item Name");
 
-                            itemNameList =null;
+                            itemNameList = null;
 
 
                             itemGroup_Id = adapter.getItem(position).getItem_Id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new ExpioryItemNameTask().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(Expiory_List.this, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
@@ -228,12 +243,11 @@ public class Expiory_List extends AppCompatActivity {
         });
 
 
-
         j_Expiry_item_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(itemNameList==null){
+                if (itemNameList == null) {
                     Toast.makeText(Expiory_List.this, "Please Select group", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -254,8 +268,16 @@ public class Expiory_List extends AppCompatActivity {
                 spinnerSearchView.setIconified(false);
                 spinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dailog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<CurrentStock_ItemName_Entity_C> adapter = new ArrayAdapter<CurrentStock_ItemName_Entity_C>(
-                        Expiory_List.this, android.R.layout.simple_list_item_1,itemNameList
+                        Expiory_List.this, android.R.layout.simple_list_item_1, itemNameList
                 );
 
                 SpinnerListView.setAdapter(adapter);
@@ -277,21 +299,21 @@ public class Expiory_List extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        if(adapter.getItem(position).getItem_Name().equals("<< Select Group >>")){
+                        if (adapter.getItem(position).getItem_Name().equals("<< Select Group >>")) {
                             Toast.makeText(Expiory_List.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             item_Id = adapter.getItem(position).getItem_Id();
 
-                             DateSetTO();
+                            DateSetTO();
 
-                             if(NetworkHelpers.isNetworkAvailable(context)){
-                                 new Result_Task().execute();
-                             }else {
-                                 Toast.makeText(Expiory_List.this, R.string.alertInternet, Toast.LENGTH_SHORT).show();
-                             }
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
+                                new Result_Task().execute();
+                            } else {
+                                Toast.makeText(Expiory_List.this, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                            }
 
-                             dailog.dismiss();
+                            dailog.dismiss();
                             j_Expiry_item_spinner.setText(adapter.getItem(position).getItem_Name());
                         }
 
@@ -304,25 +326,25 @@ public class Expiory_List extends AppCompatActivity {
         });
 
     }
-    private void DateSetTO(){
+
+    private void DateSetTO() {
 
         toDate.setOnClickListener(new View.OnClickListener() {
-            final Calendar cal=Calendar.getInstance();
-            int year=0,month=0,day=0;
+            final Calendar cal = Calendar.getInstance();
+            int year = 0, month = 0, day = 0;
+
             @Override
             public void onClick(View v) {
                 if (year == 0 || month == 0 || day == 0) {
 
-                    year =cal.get(Calendar.YEAR);
-                    month=cal.get(Calendar.MONTH);
-                    day =cal.get(Calendar.DAY_OF_MONTH);
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
                 }
 
-                DatePickerDialog mDatePicker=new DatePickerDialog(Expiory_List.this, new DatePickerDialog.OnDateSetListener()
-                {
+                DatePickerDialog mDatePicker = new DatePickerDialog(Expiory_List.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday)
-                    {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
 //
                         year = selectedyear;
                         month = selectedmonth;
@@ -346,18 +368,19 @@ public class Expiory_List extends AppCompatActivity {
             }
         });
     }
-    private void CurrentDate(){
-        String currentDate = new SimpleDateFormat("MMM dd,yyyy",Locale.getDefault()).format(new Date());
+
+    private void CurrentDate() {
+        String currentDate = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());
         toDate.setText(currentDate.toUpperCase());
         toDate.setText(currentDate.toUpperCase());
     }
 
-    private class ManufactureInfoTask  extends AsyncTask<Void,Void,ArrayList<CurrentStock_Manufacturer_Entity_A>> {
+    private class ManufactureInfoTask extends AsyncTask<Void, Void, ArrayList<CurrentStock_Manufacturer_Entity_A>> {
 
         @Override
         protected void onPreExecute() {
-           busyDialog = new BusyDialog(context);
-           busyDialog.show();
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
 
         }
 
@@ -366,10 +389,10 @@ public class Expiory_List extends AppCompatActivity {
             manufactureList = new ArrayList<>();
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================Expiry query==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================Expiry query==Connected===========");
+                if (connection != null) {
                     manufactureList = new ArrayList<>();
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select MANUFACTURER_ID,MANUFACTURER_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 MANUFACTURER_ID,'<< Select Manufacturer >>' MANUFACTURER_NAME\n" +
@@ -379,10 +402,10 @@ public class Expiory_List extends AppCompatActivity {
                             "From INV_MANUFACTURER)\n" +
                             "order by sl,MANUFACTURER_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        manufactureList.add(new CurrentStock_Manufacturer_Entity_A(rs.getString(1),rs.getString(2)));
+                    while (rs.next()) {
+                        manufactureList.add(new CurrentStock_Manufacturer_Entity_A(rs.getString(1), rs.getString(2)));
                     }
                     busyDialog.dismis();
                 }
@@ -390,8 +413,7 @@ public class Expiory_List extends AppCompatActivity {
 
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
 
                 busyDialog.dismis();
                 e.printStackTrace();
@@ -407,12 +429,13 @@ public class Expiory_List extends AppCompatActivity {
         }
 
     }
-    private class Result_Task extends AsyncTask<Void,Void,ArrayList<CurrentStock_Entity_F>> {
+
+    private class Result_Task extends AsyncTask<Void, Void, ArrayList<CurrentStock_Entity_F>> {
 
         @Override
         protected void onPreExecute() {
-         busyDialog = new BusyDialog(context);
-         busyDialog.show();
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
@@ -421,41 +444,40 @@ public class Expiory_List extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================Query Final==Connected===========");
-                Log.d("R_query","================date=========== "+toDate.getText());
-                Log.d("R_query","================item id=========== "+item_Id);
+                Log.d("connection", "================Query Final==Connected===========");
+                Log.d("R_query", "================date=========== " + toDate.getText());
+                Log.d("R_query", "================item id=========== " + item_Id);
 
-                if(connection != null){
+                if (connection != null) {
                     expiryItems = new ArrayList<CurrentStock_Entity_F>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "Select LOT_NO,to_char(EXP_DATE,'MON DD,RRRR') EXP_DATE,sum(CURR_STOCK) ||' '||MU_NAME CURR_STOCK\n" +
                             "From INV_ITEMSTOCK_SUMMARY@inv_core s \n" +
-                            "where ITEM_ID='"+item_Id+"' \n" +
+                            "where ITEM_ID='" + item_Id + "' \n" +
 //                        "and EXP_DATE <='"+toDate.getText()+"' \n" +
-                            "and EXP_DATE <= to_date('"+toDate.getText()+"','MON DD,RRRR') \n" +
+                            "and EXP_DATE <= to_date('" + toDate.getText() + "','MON DD,RRRR') \n" +
                             "group by LOT_NO,EXP_DATE, MU_NAME \n" +
-                            "having Sum(Curr_Stock)>0 \n"+
+                            "having Sum(Curr_Stock)>0 \n" +
                             "Order By LOT_NO";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        expiryItems.add(new CurrentStock_Entity_F(rs.getString(1),rs.getString(2),rs.getString(3)));
+                    while (rs.next()) {
+                        expiryItems.add(new CurrentStock_Entity_F(rs.getString(1), rs.getString(2), rs.getString(3)));
 
-                        Log.d("value1","==========1==========="+rs.getString(1));
-                        Log.d("value2","==========2==========="+rs.getString(2));
-                        Log.d("value2","==========2==========="+rs.getString(3));
+                        Log.d("value1", "==========1===========" + rs.getString(1));
+                        Log.d("value2", "==========2===========" + rs.getString(2));
+                        Log.d("value2", "==========2===========" + rs.getString(3));
 
                     }
                     busyDialog.dismis();
                 }
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
 
-               busyDialog.dismis();
+                busyDialog.dismis();
                 e.printStackTrace();
             }
 
@@ -465,7 +487,7 @@ public class Expiory_List extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<CurrentStock_Entity_F> currentStock_manufacturer_entity_as) {
             busyDialog.dismis();
-            adapter = new CustomAdapter_CurrentStock(Expiory_List.this,expiryItems);
+            adapter = new CustomAdapter_CurrentStock(Expiory_List.this, expiryItems);
             listView.setAdapter(adapter);
 
 
@@ -473,12 +495,12 @@ public class Expiory_List extends AppCompatActivity {
 
     }
 
-    private class ExpioryGroupTask extends AsyncTask<Void,Void,Void>{
+    private class ExpioryGroupTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
-             busyDialog = new BusyDialog(context);
-             busyDialog.show();
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
@@ -488,11 +510,11 @@ public class Expiory_List extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================Expiry query==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================Expiry query==Connected===========");
+                if (connection != null) {
                     groupnameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select ITEMGROUP_ID,ITEMGROUP_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 ITEMGROUP_ID,'<< Select Group >>' ITEMGROUP_NAME\n" +
@@ -501,16 +523,16 @@ public class Expiory_List extends AppCompatActivity {
                             "SELECT distinct 2 sl, g.ITEMGROUP_ID, g.ITEMGROUP_NAME\n" +
                             "FROM INV_ITEMGROUP g, inv_item i\n" +
                             "where g.ITEMGROUP_ID=i.ITEMGROUP_ID \n" +
-                            "and ('"+manufacture_id+"'=-1 or i.MANUFACTURER_ID='"+manufacture_id+"')\n" +
+                            "and ('" + manufacture_id + "'=-1 or i.MANUFACTURER_ID='" + manufacture_id + "')\n" +
                             ")\n" +
                             "order by sl,ITEMGROUP_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        groupnameList.add(new CurrentStock_Group_Entity_B(rs.getString(1),rs.getString(2)));
-                        Log.d("value1","======Group====1==========="+rs.getString(1));
-                        Log.d("value2","======Group====2==========="+rs.getString(2));
+                    while (rs.next()) {
+                        groupnameList.add(new CurrentStock_Group_Entity_B(rs.getString(1), rs.getString(2)));
+                        Log.d("value1", "======Group====1===========" + rs.getString(1));
+                        Log.d("value2", "======Group====2===========" + rs.getString(2));
 
                     }
                     busyDialog.dismis();
@@ -518,8 +540,7 @@ public class Expiory_List extends AppCompatActivity {
 
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
 
                 busyDialog.dismis();
                 e.printStackTrace();
@@ -534,7 +555,7 @@ public class Expiory_List extends AppCompatActivity {
         }
     }
 
-    private class ExpioryItemNameTask extends AsyncTask<Void, Void, Void>{
+    private class ExpioryItemNameTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -548,13 +569,13 @@ public class Expiory_List extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================Expiry item_Name query==Connected===========");
-                Log.d("item_id_nested","=====Group id====="+itemGroup_Id);
-                Log.d("manufacture_id_nested","=====manufacture id====="+manufacture_id);
-                if(connection != null){
+                Log.d("connection", "================Expiry item_Name query==Connected===========");
+                Log.d("item_id_nested", "=====Group id=====" + itemGroup_Id);
+                Log.d("manufacture_id_nested", "=====manufacture id=====" + manufacture_id);
+                if (connection != null) {
                     itemNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select ITEM_ID,ITEM_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 ITEM_ID,'<< Select Item Name >>' ITEM_NAME\n" +
@@ -562,25 +583,24 @@ public class Expiory_List extends AppCompatActivity {
                             "union all\n" +
                             "SELECT distinct 2 sl, ITEM_ID, ITEM_NAME||' ('||UD_NO||')' ITEM_NAME\n" +
                             "FROM INV_ITEM\n" +
-                            "WHERE ('"+manufacture_id+"'=-1 or MANUFACTURER_ID='"+manufacture_id+"') \n" +
-                            "and ('"+itemGroup_Id+"'=-1 or ITEMGROUP_ID='"+itemGroup_Id+"')\n" +
+                            "WHERE ('" + manufacture_id + "'=-1 or MANUFACTURER_ID='" + manufacture_id + "') \n" +
+                            "and ('" + itemGroup_Id + "'=-1 or ITEMGROUP_ID='" + itemGroup_Id + "')\n" +
                             ")\n" +
                             "order by sl,ITEM_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                       Log.d("value1","==========1==========="+rs.getString(1));
-                        Log.d("value2","==========2==========="+rs.getString(2));
-                        itemNameList.add(new CurrentStock_ItemName_Entity_C(rs.getString(1),rs.getString(2)));
+                    while (rs.next()) {
+                        Log.d("value1", "==========1===========" + rs.getString(1));
+                        Log.d("value2", "==========2===========" + rs.getString(2));
+                        itemNameList.add(new CurrentStock_ItemName_Entity_C(rs.getString(1), rs.getString(2)));
                     }
                     busyDialog.dismis();
                 }
 
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }

@@ -43,8 +43,6 @@ public class MyAttencence_Activity extends AppCompatActivity implements CustomMy
     private RecyclerView jmy_Attendence_listView;
     private CustomMyAttendenceAdapter adapter;
     private TextView textViewDateFrom,textViewDateTo;
-    private ImageButton searchDate;
-    private DatePickerDialog.OnDateSetListener mDateSetListener,mDateSetListener2;
 
     private ArrayList<MyAttendence_Entity> myAttendenceItems;
     private Toolbar jMyAttendenceToolBarId;
@@ -66,7 +64,6 @@ public class MyAttencence_Activity extends AppCompatActivity implements CustomMy
 
         textViewDateFrom = findViewById(R.id.From_date1);
         textViewDateTo = findViewById(R.id.To_date2);
-        searchDate =findViewById(R.id.search_btn);
         jMyAttendenceToolBarId = findViewById(R.id.myAttendenceToolBarId);
         handler = new Handler();
         context = MyAttencence_Activity.this;
@@ -103,19 +100,6 @@ public class MyAttencence_Activity extends AppCompatActivity implements CustomMy
         }
 
 
-        searchDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-                if(NetworkHelpers.isNetworkAvailable(context)){
-                    new MyAttendenceDateTask().execute();
-                }else {
-                    Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         dateSetFROM();
         dateSetTO();
 
@@ -154,6 +138,12 @@ public class MyAttencence_Activity extends AppCompatActivity implements CustomMy
                         DateFormat df_medium_us = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
                         String date = df_medium_us.format(chosenDate);
                         textViewDateFrom.setText(date.toUpperCase());
+
+                        if(NetworkHelpers.isNetworkAvailable(context)){
+                            new MyAttendenceDateTask().execute();
+                        }else {
+                            Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 }, year, month, day);
@@ -196,6 +186,11 @@ public class MyAttencence_Activity extends AppCompatActivity implements CustomMy
                         DateFormat df_medium_us = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
                         String date = df_medium_us.format(chosenDate);
                         textViewDateTo.setText(date.toUpperCase());
+                       if(NetworkHelpers.isNetworkAvailable(context)){
+                           new MyAttendenceDateTask().execute();
+                       }else {
+                           Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                       }
 
                     }
                 }, year, month, day);

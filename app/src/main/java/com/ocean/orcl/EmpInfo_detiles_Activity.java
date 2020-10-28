@@ -73,6 +73,24 @@ public class EmpInfo_detiles_Activity extends AppCompatActivity {
             Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
         }
 
+        mbl_personal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+empInfoDetiles.getPhone_mobile()));
+                startActivity(intent);
+            }
+        });
+
+        mbl_emergency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+empInfoDetiles.getPhone_home()));
+                startActivity(intent);
+            }
+        });
+
 
    }
 

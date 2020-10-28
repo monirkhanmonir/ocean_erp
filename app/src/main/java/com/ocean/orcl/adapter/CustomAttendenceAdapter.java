@@ -5,8 +5,10 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,6 +54,9 @@ public class CustomAttendenceAdapter extends RecyclerView.Adapter<RecyclerView.V
         viewHolder.depertment.setText(personAttendence.getPersonDepartment());
         viewHolder.loginTime.setText(personAttendence.getPersongLoginTime());
         viewHolder.logoutTime.setText(personAttendence.getPersonLogoutTime());
+
+        viewHolder.j_attendence_log_row_layout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
+
         if(personAttendence.getWeekend().equals("N")  && personAttendence.getHoliday().equals("N") && personAttendence.getLateLogin_Flag().equals("Y")){
             viewHolder.loginTime.setTextColor(Color.RED);
         }else {
@@ -86,7 +91,7 @@ public class CustomAttendenceAdapter extends RecyclerView.Adapter<RecyclerView.V
                     String searchChr = constraint.toString().toLowerCase();
                     List<AttendenceLog_Entity> resultData = new ArrayList<>();
                     for (AttendenceLog_Entity attendenceModel: attendenceFilterList){
-                        if(attendenceModel.getPersongName().toLowerCase().contains(searchChr)| attendenceModel.getPersonDepartment().toLowerCase().contains(searchChr) | attendenceModel.getPersongDesignaton().toLowerCase().contains(searchChr)){
+                        if(attendenceModel.getPersongName().toLowerCase().contains(searchChr)| attendenceModel.getPersonDepartment().toLowerCase().contains(searchChr) | attendenceModel.getPersongDesignaton().toLowerCase().contains(searchChr) | attendenceModel.getPersongID().toLowerCase().contains(searchChr)){
                             resultData.add(attendenceModel);
                         }
                     }
@@ -112,6 +117,7 @@ public class CustomAttendenceAdapter extends RecyclerView.Adapter<RecyclerView.V
     private class AttendenceLogViewHolder extends RecyclerView.ViewHolder{
 
          private  TextView personName, empID, designation,depertment,loginTime,logoutTime;
+         private LinearLayout j_attendence_log_row_layout;
 
         public AttendenceLogViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -121,6 +127,7 @@ public class CustomAttendenceAdapter extends RecyclerView.Adapter<RecyclerView.V
             depertment = itemView.findViewById(R.id.department_text);
             loginTime = itemView.findViewById(R.id.login_text);
             logoutTime = itemView.findViewById(R.id.Logout_text);
+            j_attendence_log_row_layout = itemView.findViewById(R.id.attendence_log_row_layout);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

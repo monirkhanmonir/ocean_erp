@@ -304,6 +304,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Designation name"
                                 android:textSize="16sp"
+                                android:textIsSelectable="true"
                                 android:textColor="@color/colorPrimary"
                                 />
                         </LinearLayout>
@@ -363,6 +364,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Designation name"
                                 android:textSize="16sp"
+                                android:textIsSelectable="true"
                                 android:textColor="@color/colorPrimary"
                                 />
                         </LinearLayout>

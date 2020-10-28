@@ -8,6 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
+        android:id="@+id/my_Attendence_row_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -90,42 +91,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="5dp"
-          android:paddingTop="5dp"
+            android:paddingTop="5dp"
             android:orientation="vertical">
         <LinearLayout
             android:id="@+id/myAttendence_let_login_Reason_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="5">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Let In: "/>
+                android:text="Let In "/>
             <TextView
                 android:id="@+id/myAttendence_let_login_Reason"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="Resune: "/>
+                android:layout_weight="4"
+                android:text="Resune "/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/myAttendence_early_logout_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="5">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Early Out: "/>
+                android:text="Early Out "/>
             <TextView
                 android:id="@+id/myAttendence_early_logout_reason"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:text="Resune: "/>
         </LinearLayout>
         <LinearLayout
@@ -133,17 +134,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="5">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Absent: "/>
+                android:text="Absent "/>
             <TextView
                 android:id="@+id/myAttendence_absence_reason"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:text="Resune: "/>
             </LinearLayout>
         </LinearLayout>

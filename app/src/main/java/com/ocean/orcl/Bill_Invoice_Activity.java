@@ -40,8 +40,8 @@ import java.util.Locale;
 
 public class Bill_Invoice_Activity extends AppCompatActivity {
     private Connection connection;
-    TextView text_formDate,text_toDate;
-    String groupItem_id,item_id,customer_id,customer_contact;
+    TextView text_formDate, text_toDate;
+    String groupItem_id, item_id, customer_id, customer_contact;
     private ListView listView;
     private ArrayList<Billinvoice_Group_Entity> groupNameList;
     private ArrayList<Billinvoice_Customer_Entity> customerNameList;
@@ -60,20 +60,17 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill__invoice);
         //group_spinner =findViewById(R.id.bill_Group_spinner);
-       // customerName_spinner =findViewById(R.id.bill_customer_spinner);
-        text_formDate =findViewById(R.id.bill_from_date);
-        text_toDate =findViewById(R.id.bill_to_date);
-        listView =findViewById(R.id.bill_result_listView);
+        // customerName_spinner =findViewById(R.id.bill_customer_spinner);
+        text_formDate = findViewById(R.id.bill_from_date);
+        text_toDate = findViewById(R.id.bill_to_date);
+        listView = findViewById(R.id.bill_result_listView);
 
         context = Bill_Invoice_Activity.this;
         handler = new Handler();
 
         j_bill_customer_dropdown_btn = findViewById(R.id.bill_customer_dropdown_btn);
         j_bill_group_dropdown_btn = findViewById(R.id.bill_group_dropdown_btn);
-        j_bill_item_dropdown_btn  = findViewById(R.id.bill_item_dropdown_btn);
-
-
-
+        j_bill_item_dropdown_btn = findViewById(R.id.bill_item_dropdown_btn);
 
 
         j_bill_customer_dropdown_btn.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +78,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                if(customerNameList==null){
+                if (customerNameList == null) {
                     Toast.makeText(Bill_Invoice_Activity.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -102,10 +99,17 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 customerNameSpinnerSearchView.setIconified(false);
                 customerNameSpinnerSearchView.clearFocus();
 
-                final ArrayAdapter<Billinvoice_Customer_Entity> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
-                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1,customerNameList
-                );
+                ImageView calcen_btn = bill_customer_dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bill_customer_dailog.dismiss();
+                    }
+                });
 
+                final ArrayAdapter<Billinvoice_Customer_Entity> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
+                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1, customerNameList
+                );
 
 
                 customerNameSpinnerListView.setAdapter(customerAdapter);
@@ -127,32 +131,31 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 customerNameSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(customerAdapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")){
+                        if (customerAdapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")) {
                             Toast.makeText(Bill_Invoice_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             j_bill_group_dropdown_btn.setText("Select Group");
                             j_bill_item_dropdown_btn.setText("Select Item Name");
 //                            j_stock_quentity_dropdown_btn.setText("Select Quentity");
 
-                            groupNameList =null;
-                            itemNameList =null;
+                            groupNameList = null;
+                            itemNameList = null;
 //                            qtyList = null;
 
 
                             customer_id = customerAdapter.getItem(position).getCustomer_Id();
                             bill_customer_dailog.dismiss();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new BillInvoiceGroupTask().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
 
                             j_bill_customer_dropdown_btn.setText(customerAdapter.getItem(position).getCustomer_Name());
                         }
-
 
 
                         //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
@@ -163,12 +166,11 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         });
 
 
-
         j_bill_group_dropdown_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(groupNameList==null){
+                if (groupNameList == null) {
                     Toast.makeText(Bill_Invoice_Activity.this, "Please select customer name.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -190,10 +192,17 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 groupSpinnerSearchView.setIconified(false);
                 groupSpinnerSearchView.clearFocus();
 
-                final ArrayAdapter<Billinvoice_Group_Entity> itemGroupAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
-                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1,groupNameList
-                );
+                ImageView calcen_btn = bill_customer_dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bill_customer_dailog.dismiss();
+                    }
+                });
 
+                final ArrayAdapter<Billinvoice_Group_Entity> itemGroupAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
+                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1, groupNameList
+                );
 
 
                 groupSpinnerListView.setAdapter(itemGroupAdapter);
@@ -214,21 +223,21 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 groupSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(itemGroupAdapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")){
+                        if (itemGroupAdapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")) {
                             Toast.makeText(Bill_Invoice_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
 
                             j_bill_item_dropdown_btn.setText("Select Item Name");
 //                            j_stock_quentity_dropdown_btn.setText("Select Quentity");
-                            itemNameList =null;
+                            itemNameList = null;
 //                            qtyList = null;
 
                             groupItem_id = itemGroupAdapter.getItem(position).getItemGroup_Id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new BillInvoicItemNametask().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
@@ -245,13 +254,12 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         });
 
 
-
         j_bill_item_dropdown_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-                if(itemNameList==null){
+                if (itemNameList == null) {
                     Toast.makeText(Bill_Invoice_Activity.this, "Please select group.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -273,10 +281,17 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 itemSpinnerSearchView.setIconified(false);
                 itemSpinnerSearchView.clearFocus();
 
-                final ArrayAdapter<Billinvoice_item_Entity> billItemAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
-                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1,itemNameList
-                );
+                ImageView calcen_btn = bill_customer_dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bill_customer_dailog.dismiss();
+                    }
+                });
 
+                final ArrayAdapter<Billinvoice_item_Entity> billItemAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
+                        Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1, itemNameList
+                );
 
 
                 itemSpinnerListView.setAdapter(billItemAdapter);
@@ -297,9 +312,9 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 itemSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(billItemAdapter.getItem(position).getItem_name().equals("<< Select Item Name >>")){
+                        if (billItemAdapter.getItem(position).getItem_name().equals("<< Select Item Name >>")) {
                             Toast.makeText(Bill_Invoice_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             item_id = billItemAdapter.getItem(position).getItem_id();
 
@@ -326,16 +341,16 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
     }
 
 
-    private void showResult_initList(){
+    private void showResult_initList() {
 
     }
 
-    private class CustomerName_Task extends AsyncTask<Void,Void,ArrayList<Billinvoice_Customer_Entity>> {
+    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Entity>> {
 
         @Override
         protected void onPreExecute() {
-                busyDialog = new BusyDialog(context);
-                busyDialog.show();
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
@@ -343,11 +358,11 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
             customerNameList = new ArrayList<>();
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================Bill Customer==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================Bill Customer==Connected===========");
+                if (connection != null) {
                     customerNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select CONTACT_ID,CONTACT_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 CONTACT_ID,'<< Select Customer >>' CONTACT_NAME\n" +
@@ -358,12 +373,12 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                             ")\n" +
                             "order by sl,CONTACT_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1),rs.getString(2)));
-                        Log.d("value1","======Customer====1==========="+rs.getString(1));
-                        Log.d("value2","======Customer====2==========="+rs.getString(2));
+                    while (rs.next()) {
+                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1), rs.getString(2)));
+                        Log.d("value1", "======Customer====1===========" + rs.getString(1));
+                        Log.d("value2", "======Customer====2===========" + rs.getString(2));
 
                     }
 
@@ -372,10 +387,9 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
 
-                Toast.makeText(Bill_Invoice_Activity.this, " " + e,Toast.LENGTH_SHORT).show();
+                Toast.makeText(Bill_Invoice_Activity.this, " " + e, Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 
@@ -384,18 +398,17 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
-          busyDialog.dismis();
+            busyDialog.dismis();
         }
     }
 
 
-
-    private class Result_Task extends AsyncTask<Void,Void,ArrayList<Bill_Result_Entity>> {
+    private class Result_Task extends AsyncTask<Void, Void, ArrayList<Bill_Result_Entity>> {
 
         @Override
         protected void onPreExecute() {
-        busyDialog = new BusyDialog(context);
-        busyDialog.show();
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
@@ -404,10 +417,10 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                  if(connection != null){
+                if (connection != null) {
                     resultList = new ArrayList<Bill_Result_Entity>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "Select m.INVOICE_ID,INVOICE_NO,to_char(INVOICE_DATE,'MON DD,RRRR')INVOICE_DATE,\n" +
                             "Sum((Nvl(C.Invoice_RATE,0)*Nvl(C.Invoice_QTY, 0))+Nvl(C.VAT_AMT,0)-(Nvl(C.DISCOUNT_AMOUNT,0))) amount\n" +
                             "From vw_Inv_InvoiceMst m, vw_Inv_InvoiceChd C, Inv_Item I,inv_itemgroup ig,inv_mu u, inv_contact r\n" +
@@ -416,33 +429,32 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                             "and  I.MU_ID=u.MU_ID\n" +
                             "And I.ITEMGROUP_ID = ig.ITEMGROUP_ID\n" +
                             "and m.CONTACT_ID=r.CONTACT_ID\n" +
-                            "And ('"+customer_id+"' =-1 or m.CONTACT_ID = '"+customer_id+"')\n" +
-                            "And ('"+groupItem_id+"' =-1 or ig.ITEMGROUP_ID = '"+groupItem_id+"')\n" +
-                            "And ('"+item_id+"' =-1 or C.item_Id = '"+item_id+"')\n"+
+                            "And ('" + customer_id + "' =-1 or m.CONTACT_ID = '" + customer_id + "')\n" +
+                            "And ('" + groupItem_id + "' =-1 or ig.ITEMGROUP_ID = '" + groupItem_id + "')\n" +
+                            "And ('" + item_id + "' =-1 or C.item_Id = '" + item_id + "')\n" +
 //                        "And ('"+item_id+"' =-1 or C.item_Id = C.item_Id)\n" +
 //                        "AND M.Invoice_DATE BETWEEN '"+text_formDate+"' AND '"+text_toDate+"'\n" +
-                            "AND M.Invoice_DATE BETWEEN to_date('"+text_formDate.getText()+"','MON DD,RRRR') AND to_date('"+text_toDate.getText()+"','MON DD,RRRR')\n" +
+                            "AND M.Invoice_DATE BETWEEN to_date('" + text_formDate.getText() + "','MON DD,RRRR') AND to_date('" + text_toDate.getText() + "','MON DD,RRRR')\n" +
                             "Group By m.INVOICE_ID,INVOICE_NO,INVOICE_DATE\n" +
                             "Order By m.INVOICE_ID,INVOICE_NO,INVOICE_DATE";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        resultList.add(new Bill_Result_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)));
-                        Log.d("value1","======res====1==========="+rs.getString(1));
-                        Log.d("value2","======res====2==========="+rs.getString(2));
-                        Log.d("value3","======res====3==========="+rs.getString(3));
-                        Log.d("value4","======res====4==========="+rs.getString(4));
+                    while (rs.next()) {
+                        resultList.add(new Bill_Result_Entity(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+                        Log.d("value1", "======res====1===========" + rs.getString(1));
+                        Log.d("value2", "======res====2===========" + rs.getString(2));
+                        Log.d("value3", "======res====3===========" + rs.getString(3));
+                        Log.d("value4", "======res====4===========" + rs.getString(4));
 
                     }
 
                 }
-            busyDialog.dismis();
+                busyDialog.dismis();
 
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }
@@ -454,31 +466,31 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Bill_Result_Entity> bill_result_entities) {
             busyDialog.dismis();
-            result_adapter =new Bill_Results_CustomAdapter(getApplication(),resultList);
+            result_adapter = new Bill_Results_CustomAdapter(getApplication(), resultList);
             listView.setAdapter(result_adapter);
             Helper.getListViewSize(listView);
         }
 
     }
-    private void dateSetFROM(){
+
+    private void dateSetFROM() {
 
         text_formDate.setOnClickListener(new View.OnClickListener() {
-            final Calendar cal=Calendar.getInstance();
-            int year=0,month=0,day=0;
+            final Calendar cal = Calendar.getInstance();
+            int year = 0, month = 0, day = 0;
+
             @Override
             public void onClick(View v) {
                 if (year == 0 || month == 0 || day == 0) {
 
-                    year =cal.get(Calendar.YEAR);
-                    month=cal.get(Calendar.MONTH);
-                    day =cal.get(Calendar.DAY_OF_MONTH);
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
                 }
 
-                DatePickerDialog mDatePicker=new DatePickerDialog(Bill_Invoice_Activity.this, new DatePickerDialog.OnDateSetListener()
-                {
+                DatePickerDialog mDatePicker = new DatePickerDialog(Bill_Invoice_Activity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday)
-                    {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
 //
                         year = selectedyear;
                         month = selectedmonth;
@@ -501,25 +513,25 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
             }
         });
     }
-    private void dateSetTO(){
+
+    private void dateSetTO() {
 
         text_toDate.setOnClickListener(new View.OnClickListener() {
-            final Calendar cal=Calendar.getInstance();
-            int year=0,month=0,day=0;
+            final Calendar cal = Calendar.getInstance();
+            int year = 0, month = 0, day = 0;
+
             @Override
             public void onClick(View v) {
                 if (year == 0 || month == 0 || day == 0) {
 
-                    year =cal.get(Calendar.YEAR);
-                    month=cal.get(Calendar.MONTH);
-                    day =cal.get(Calendar.DAY_OF_MONTH);
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
                 }
 
-                DatePickerDialog mDatePicker=new DatePickerDialog(Bill_Invoice_Activity.this, new DatePickerDialog.OnDateSetListener()
-                {
+                DatePickerDialog mDatePicker = new DatePickerDialog(Bill_Invoice_Activity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday)
-                    {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
 //
                         year = selectedyear;
                         month = selectedmonth;
@@ -543,14 +555,15 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
             }
         });
     }
-    private void currentDate(){
-        String currentDate = new SimpleDateFormat("MMM dd,yyyy",Locale.getDefault()).format(new Date());
+
+    private void currentDate() {
+        String currentDate = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());
         text_formDate.setText(currentDate.toUpperCase());
         text_toDate.setText(currentDate.toUpperCase());
     }
 
 
-    private class BillInvoiceGroupTask extends AsyncTask<Void, Void, Void>{
+    private class BillInvoiceGroupTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -562,11 +575,11 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================Bill Group==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================Bill Group==Connected===========");
+                if (connection != null) {
                     groupNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select ITEMGROUP_ID,ITEMGROUP_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 ITEMGROUP_ID,'<< Select Group >>' ITEMGROUP_NAME\n" +
@@ -577,9 +590,9 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                             ")\n" +
                             "order by sl,ITEMGROUP_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
+                    while (rs.next()) {
                         groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1), rs.getString(2)));
 
                     }
@@ -588,8 +601,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }
@@ -604,7 +616,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         }
     }
 
-    private class BillInvoicItemNametask extends AsyncTask<Void, Void, Void>{
+    private class BillInvoicItemNametask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
 
@@ -616,11 +628,11 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================Bill Item==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================Bill Item==Connected===========");
+                if (connection != null) {
                     itemNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select ITEM_ID,ITEM_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 ITEM_ID,'<< Select Item Name >>' ITEM_NAME\n" +
@@ -628,13 +640,13 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                             "union all\n" +
                             "SELECT 2 sl, ITEM_ID, ITEM_NAME||' ('||UD_NO||')' ITEM_NAME\n" +
                             "FROM INV_ITEM\n" +
-                            "WHERE ('"+groupItem_id+"'=-1 or ITEMGROUP_ID='"+groupItem_id+"')\n" +
+                            "WHERE ('" + groupItem_id + "'=-1 or ITEMGROUP_ID='" + groupItem_id + "')\n" +
                             ")\n" +
                             "order by sl,ITEM_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
+                    while (rs.next()) {
                         itemNameList.add(new Billinvoice_item_Entity(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Item====1===========" + rs.getString(1));
                         Log.d("value2", "======Item====2===========" + rs.getString(2));
@@ -645,8 +657,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                 busyDialog.dismis();
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
 
                 busyDialog.dismis();
                 e.printStackTrace();

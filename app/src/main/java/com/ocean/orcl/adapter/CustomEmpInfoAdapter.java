@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
@@ -54,6 +55,14 @@ public class CustomEmpInfoAdapter extends RecyclerView.Adapter<RecyclerView.View
         viewHolder.emp_mobile_number.setText(employeeModel.getPhone_mobile());
         viewHolder.emp_email_id.setText(employeeModel.getEmail_office());
 
+        viewHolder.j_emp_info_row_layout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
+
+        if(employeeModel.getEmail_office()==null){
+            viewHolder.j_imp_email_layout.setVisibility(View.GONE);
+        }else {
+            viewHolder.j_imp_email_layout.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -101,7 +110,7 @@ public class CustomEmpInfoAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private class EmployeeViewHolder extends RecyclerView.ViewHolder{
         private TextView jPerson_no_text,jEmp_name,jEmp_info_desig_name,emp_dept_name,emp_mobile_number,emp_email_id;
-        private LinearLayout jCallDialerLayout;
+        private LinearLayout jCallDialerLayout, j_emp_info_row_layout, j_imp_email_layout;
         public EmployeeViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -112,6 +121,8 @@ public class CustomEmpInfoAdapter extends RecyclerView.Adapter<RecyclerView.View
             emp_mobile_number=itemView.findViewById(R.id.emp_mobile_number);
             emp_email_id=itemView.findViewById(R.id.emp_email_id);
             jCallDialerLayout = itemView.findViewById(R.id.callDialerLayout);
+            j_emp_info_row_layout = itemView.findViewById(R.id.emp_info_row_layout);
+            j_imp_email_layout = itemView.findViewById(R.id.imp_email_layout);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

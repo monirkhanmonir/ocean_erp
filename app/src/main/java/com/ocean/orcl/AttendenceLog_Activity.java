@@ -3,6 +3,8 @@ package com.ocean.orcl;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -39,7 +41,6 @@ import java.util.Locale;
 
 public class AttendenceLog_Activity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, CustomAttendenceAdapter.SelectedAttendenceLog {
     private Connection connection;
-    private Toolbar jAttendenceToolBarId;
 
     private ArrayList<AttendenceLog_Entity> attendenceLogItems;
     private DatePickerDialog.OnDateSetListener mDateSetListener,mDateSetListener2;
@@ -65,13 +66,21 @@ public class AttendenceLog_Activity extends AppCompatActivity implements SwipeRe
         swipeRefreshL = findViewById(R.id.swipeRefresh);
         jAttendenceLogRecyclerView = findViewById(R.id.attendenceLogRecyclerView);
         from_dateFill = findViewById(R.id.fromDate_Alog);
-        jAttendenceToolBarId = findViewById(R.id.attendenceToolBarId);
 
         TextView loginTime = findViewById(R.id.login_text);
         TextView logoutTime = findViewById(R.id.Logout_text);
         context = AttendenceLog_Activity.this;
 
-        this.setSupportActionBar(jAttendenceToolBarId);
+
+        getSupportActionBar().setTitle("Attendance Log");
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setBackgroundDrawable(
+                    new ColorDrawable(this.getResources().getColor(R.color.colorHeader)));
+        }
+
+//        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //<<<<<<<<<<<-------------- Filled default set Textview in Current Date ------------->>>>>>>>>>>>>>>>>>>>>>
          dateCurrent2 = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());

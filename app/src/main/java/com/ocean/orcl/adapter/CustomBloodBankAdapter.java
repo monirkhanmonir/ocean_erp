@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -50,6 +51,8 @@ public class CustomBloodBankAdapter  extends RecyclerView.Adapter<RecyclerView.V
         viewHolder.jdonner_desig_name.setText(bloodBankModel.getDesig_name());
         viewHolder.jdonner_dept_name.setText(bloodBankModel.getDept_name());
         viewHolder.jblood_donner_number.setText(bloodBankModel.getPhone_mobile());
+
+        viewHolder.j_blood_bank_row_layout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
 
         if(bloodBankModel.getBlood_Grp().equals("A+")){
             viewHolder.jdonner_blood_group.setTextColor(Color.parseColor("#5B6FE6"));
@@ -127,7 +130,7 @@ public class CustomBloodBankAdapter  extends RecyclerView.Adapter<RecyclerView.V
 
        private TextView jdonner_blood_group,jblood_donner_name,jdonner_desig_name,jdonner_dept_name,jblood_donner_number;
        private ImageView jcall_donner;
-       private LinearLayout call_layout;
+       private LinearLayout call_layout, j_blood_bank_row_layout;
 
         public BloodBankViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -138,6 +141,7 @@ public class CustomBloodBankAdapter  extends RecyclerView.Adapter<RecyclerView.V
             jdonner_dept_name = itemView.findViewById(R.id.donner_dept_name);
             jblood_donner_number = itemView.findViewById(R.id.blood_donner_number);
             call_layout =itemView.findViewById(R.id.call_btn_linerLayout);
+            j_blood_bank_row_layout = itemView.findViewById(R.id.blood_bank_row_layout);
 
             jcall_donner = itemView.findViewById(R.id.call_donner);
 

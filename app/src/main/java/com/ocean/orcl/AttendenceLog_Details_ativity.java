@@ -12,6 +12,8 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
     private Handler handler;
     private Context context;
     private String id, date;
+    private LinearLayout j_attendence_log_details_layout;
 
 
     @Override
@@ -45,6 +48,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attendence_log__details_ativity);
         listView = findViewById(R.id.attendenceDetails_listView);
+        j_attendence_log_details_layout = findViewById(R.id.attendence_log_details_layout);
 
         // ....................For Query (A) ..............
         TextView personID = findViewById(R.id.aDetiles_id);
@@ -73,11 +77,12 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
 
         handler = new Handler();
         context = AttendenceLog_Details_ativity.this;
+        //  j_attendence_log_details_layout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition_animation));
 
 
         Intent intent = getIntent();
-         id = intent.getStringExtra("person_id");
-         date = intent.getStringExtra("current_date");
+        id = intent.getStringExtra("person_id");
+        date = intent.getStringExtra("current_date");
         String name = intent.getStringExtra("personName");
         String designation = intent.getStringExtra("personDesignation");
         String department = intent.getStringExtra("person_department");
@@ -154,7 +159,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
             while (rs.next()) {
 //                myAttendenceDetiles.add(new AttendenceLog_Details_A_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)));
 
-                weekend_holyday.setText("Weekend= "+rs.getString(1)+", Holiday= "+rs.getString(2));
+                weekend_holyday.setText("Weekend= " + rs.getString(1) + ", Holiday= " + rs.getString(2));
                 //holiday.setText(rs.getString(2));
 
                 //...............2nd line......
@@ -171,17 +176,18 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
                 String weekends = rs.getString(1);
                 String holidays = rs.getString(2);
                 String late_login_flag = rs.getString(6);
-                String early_logout_flag =rs.getString(11);
-                Log.d("colorTest","=======inTime======"+weekends+","+holidays+","+late_login_flag);
-                Log.d("colorTest2","=======logOut======"+weekends+","+holidays+","+early_logout_flag);
+                String early_logout_flag = rs.getString(11);
+                Log.d("colorTest", "=======inTime======" + weekends + "," + holidays + "," + late_login_flag);
+                Log.d("colorTest2", "=======logOut======" + weekends + "," + holidays + "," + early_logout_flag);
 
-                if(weekends.equals("N") && holidays.equals("N") && late_login_flag.equals("Y")){
+                if (weekends.equals("N") && holidays.equals("N") && late_login_flag.equals("Y")) {
                     inTime.setTextColor(Color.RED);
-                }else {
+                } else {
                     inTime.setTextColor(Color.parseColor("#4D850D"));
-                }if(weekends.equals("N") && holidays.equals("N") && early_logout_flag.equals("Y")){
+                }
+                if (weekends.equals("N") && holidays.equals("N") && early_logout_flag.equals("Y")) {
                     office_LogoutTime.setTextColor(Color.RED);
-                }else {
+                } else {
                     office_LogoutTime.setTextColor(Color.parseColor("#4D850D"));
                 }
 
@@ -197,9 +203,9 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
 
         //......................For Query (C) ....................
 
-        if(NetworkHelpers.isNetworkAvailable(context)){
+        if (NetworkHelpers.isNetworkAvailable(context)) {
             new AttendenceLoginDetailsC().execute();
-        }else {
+        } else {
             Toast.makeText(context, "Please check your internate connection", Toast.LENGTH_SHORT).show();
         }
 
@@ -217,8 +223,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
     }
 
 
-
-    private class AttendenceLoginDetailsC extends AsyncTask<Void,Void,Void> {
+    private class AttendenceLoginDetailsC extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -247,7 +252,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
                         "order by V_TIME1 asc");
 
                 while (rs.next()) {
-                    myAttendenceDetiles_c.add(new AttendenceLog_Details_C_Entity(rs.getString(1),rs.getString(2), rs.getString(3), rs.getString(4)));
+                    myAttendenceDetiles_c.add(new AttendenceLog_Details_C_Entity(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
                 }
 
                 busyDialog.dismis();

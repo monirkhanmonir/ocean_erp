@@ -37,8 +37,8 @@ import java.util.Locale;
 
 public class Chalan_Report_Details_Activity extends AppCompatActivity {
     private Connection connection;
-    TextView text_formDate,text_toDate;
-    String groupItem_id,item_id,customer_id,customer_contact;
+    TextView text_formDate, text_toDate;
+    String groupItem_id, item_id, customer_id, customer_contact;
     private ListView listView;
     private ArrayList<Billinvoice_Group_Entity> groupNameList;
     private ArrayList<Billinvoice_Customer_Entity> customerNameList;
@@ -48,7 +48,7 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
 
     private Dialog dailog;
     private TextView j_chalanReportDetails_customer_spinner, j_chalanReportDetails_Group_spinner,
-                j_chalanReportDetails_item_spinner;
+            j_chalanReportDetails_item_spinner;
     private BusyDialog busyDialog;
     private Context context;
 
@@ -57,19 +57,19 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chalan_report_details);
 
-        text_formDate =findViewById(R.id.chalanReportDetails_from_date);
-        text_toDate =findViewById(R.id.chalanReportDetails_to_date);
-        listView =findViewById(R.id.chalanReportDetails_result_listView);
+        text_formDate = findViewById(R.id.chalanReportDetails_from_date);
+        text_toDate = findViewById(R.id.chalanReportDetails_to_date);
+        listView = findViewById(R.id.chalanReportDetails_result_listView);
 
         j_chalanReportDetails_customer_spinner = findViewById(R.id.chalanReportDetails_customer_spinner);
         j_chalanReportDetails_Group_spinner = findViewById(R.id.chalanReportDetails_Group_spinner);
-        j_chalanReportDetails_item_spinner  = findViewById(R.id.chalanReportDetails_item_spinner);
+        j_chalanReportDetails_item_spinner = findViewById(R.id.chalanReportDetails_item_spinner);
 
         context = Chalan_Report_Details_Activity.this;
 
-        if(NetworkHelpers.isNetworkAvailable(context)){
+        if (NetworkHelpers.isNetworkAvailable(context)) {
             new CustomerName_Task().execute();
-        }else {
+        } else {
             Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
         }
 
@@ -80,7 +80,7 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(customerNameList==null){
+                if (customerNameList == null) {
                     Toast.makeText(Chalan_Report_Details_Activity.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -101,7 +101,7 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                 SpinnerSearchView.clearFocus();
 
                 final ArrayAdapter<Billinvoice_Customer_Entity> adapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
-                        Chalan_Report_Details_Activity.this, android.R.layout.simple_list_item_1,customerNameList
+                        Chalan_Report_Details_Activity.this, android.R.layout.simple_list_item_1, customerNameList
                 );
 
                 SpinnerListView.setAdapter(adapter);
@@ -122,21 +122,21 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                 SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(adapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")){
+                        if (adapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")) {
                             Toast.makeText(Chalan_Report_Details_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             j_chalanReportDetails_Group_spinner.setText("Select Group");
                             j_chalanReportDetails_item_spinner.setText("Select Item Name");
 
-                            groupNameList =null;
-                            itemNameList =null;
+                            groupNameList = null;
+                            itemNameList = null;
 
                             customer_id = adapter.getItem(position).getCustomer_Id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new ChalanReportGroupNameTask().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
@@ -154,7 +154,7 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
         j_chalanReportDetails_Group_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(groupNameList==null){
+                if (groupNameList == null) {
                     Toast.makeText(Chalan_Report_Details_Activity.this, "Select Customer", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -174,8 +174,16 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                 SpinnerSearchView.setIconified(false);
                 SpinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dailog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<Billinvoice_Group_Entity> adapter = new ArrayAdapter<Billinvoice_Group_Entity>(
-                        Chalan_Report_Details_Activity.this, android.R.layout.simple_list_item_1,groupNameList
+                        Chalan_Report_Details_Activity.this, android.R.layout.simple_list_item_1, groupNameList
                 );
 
                 SpinnerListView.setAdapter(adapter);
@@ -196,21 +204,21 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                 SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(adapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")){
+                        if (adapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")) {
                             Toast.makeText(Chalan_Report_Details_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             j_chalanReportDetails_item_spinner.setText("Select Item Name");
 
-                            itemNameList =null;
+                            itemNameList = null;
 
                             groupItem_id = adapter.getItem(position).getItemGroup_Id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
-                               new ChalanReportItemNameTask().execute();
-                           }else {
-                               Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
-                           }
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
+                                new ChalanReportItemNameTask().execute();
+                            } else {
+                                Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                            }
 
                             dailog.dismiss();
                             j_chalanReportDetails_Group_spinner.setText(adapter.getItem(position).getItemGroup_Name());
@@ -223,7 +231,7 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
         j_chalanReportDetails_item_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(itemNameList==null){
+                if (itemNameList == null) {
                     Toast.makeText(Chalan_Report_Details_Activity.this, "Select Customer", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -243,8 +251,16 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                 SpinnerSearchView.setIconified(false);
                 SpinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dailog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<Billinvoice_item_Entity> adapter = new ArrayAdapter<Billinvoice_item_Entity>(
-                        Chalan_Report_Details_Activity.this, android.R.layout.simple_list_item_1,itemNameList
+                        Chalan_Report_Details_Activity.this, android.R.layout.simple_list_item_1, itemNameList
                 );
 
                 SpinnerListView.setAdapter(adapter);
@@ -265,19 +281,19 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                 SpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(adapter.getItem(position).getItem_name().equals("<< Select Item Name >>")){
+                        if (adapter.getItem(position).getItem_name().equals("<< Select Item Name >>")) {
                             Toast.makeText(Chalan_Report_Details_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             item_id = adapter.getItem(position).getItem_id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new Result_Task().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
-                              dateSetFROM();
+                            dateSetFROM();
                             dateSetTO();
                             dailog.dismiss();
                             j_chalanReportDetails_item_spinner.setText(adapter.getItem(position).getItem_name());
@@ -292,25 +308,24 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
     }
 
 
-    private void dateSetTO(){
+    private void dateSetTO() {
 
         text_toDate.setOnClickListener(new View.OnClickListener() {
-            final Calendar cal=Calendar.getInstance();
-            int year=0,month=0,day=0;
+            final Calendar cal = Calendar.getInstance();
+            int year = 0, month = 0, day = 0;
+
             @Override
             public void onClick(View v) {
                 if (year == 0 || month == 0 || day == 0) {
 
-                    year =cal.get(Calendar.YEAR);
-                    month=cal.get(Calendar.MONTH);
-                    day =cal.get(Calendar.DAY_OF_MONTH);
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
                 }
 
-                DatePickerDialog mDatePicker=new DatePickerDialog(Chalan_Report_Details_Activity.this, new DatePickerDialog.OnDateSetListener()
-                {
+                DatePickerDialog mDatePicker = new DatePickerDialog(Chalan_Report_Details_Activity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday)
-                    {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
 //
                         year = selectedyear;
                         month = selectedmonth;
@@ -334,25 +349,25 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
             }
         });
     }
-    private void dateSetFROM(){
+
+    private void dateSetFROM() {
 
         text_formDate.setOnClickListener(new View.OnClickListener() {
-            final Calendar cal=Calendar.getInstance();
-            int year=0,month=0,day=0;
+            final Calendar cal = Calendar.getInstance();
+            int year = 0, month = 0, day = 0;
+
             @Override
             public void onClick(View v) {
                 if (year == 0 || month == 0 || day == 0) {
 
-                    year =cal.get(Calendar.YEAR);
-                    month=cal.get(Calendar.MONTH);
-                    day =cal.get(Calendar.DAY_OF_MONTH);
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
                 }
 
-                DatePickerDialog mDatePicker=new DatePickerDialog(Chalan_Report_Details_Activity.this, new DatePickerDialog.OnDateSetListener()
-                {
+                DatePickerDialog mDatePicker = new DatePickerDialog(Chalan_Report_Details_Activity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday)
-                    {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
 //
                         year = selectedyear;
                         month = selectedmonth;
@@ -375,19 +390,20 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
             }
         });
     }
-    private void CurrentDate(){
-        String currentDate = new SimpleDateFormat("MMM dd,yyyy",Locale.getDefault()).format(new Date());
+
+    private void CurrentDate() {
+        String currentDate = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());
         text_formDate.setText(currentDate.toUpperCase());
         text_toDate.setText(currentDate.toUpperCase());
     }
 
 
-    private class CustomerName_Task extends AsyncTask<Void,Void,ArrayList<Billinvoice_Customer_Entity>> {
+    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Entity>> {
 
         @Override
         protected void onPreExecute() {
-           busyDialog = new BusyDialog(context);
-           busyDialog.show();
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
@@ -397,11 +413,11 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================salesReport Customer==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================salesReport Customer==Connected===========");
+                if (connection != null) {
                     customerNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select CONTACT_ID,CONTACT_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 CONTACT_ID,'<< Select Customer >>' CONTACT_NAME\n" +
@@ -412,16 +428,15 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                             ")\n" +
                             "order by sl,CONTACT_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1),rs.getString(2)));
+                    while (rs.next()) {
+                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1), rs.getString(2)));
                     }
                     busyDialog.dismis();
                 }
                 connection.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }
@@ -434,7 +449,8 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
             busyDialog.dismis();
         }
     }
-    private class Result_Task extends AsyncTask<Void,Void,ArrayList<SalesReport_DetailsResult_Entity>> {
+
+    private class Result_Task extends AsyncTask<Void, Void, ArrayList<SalesReport_DetailsResult_Entity>> {
 
         @Override
         protected void onPreExecute() {
@@ -448,10 +464,10 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
 
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                if(connection != null){
+                if (connection != null) {
                     resultList = new ArrayList<SalesReport_DetailsResult_Entity>();
-                    Statement stmt=connection.createStatement();
-                    String query="Select I.Item_Name,Sum(Fnc$Convert_Mu(C.ITEM_ID,C.chalan_Qty,C.Mu_Id)) Sell_Qty,u.MU_NAME,\n" +
+                    Statement stmt = connection.createStatement();
+                    String query = "Select I.Item_Name,Sum(Fnc$Convert_Mu(C.ITEM_ID,C.chalan_Qty,C.Mu_Id)) Sell_Qty,u.MU_NAME,\n" +
                             "Fnc$ContactName(M.Contact_Id) Contact_Name,m.chalan_DATE, m.chalan_NO,\n" +
                             "sum((Nvl(C.chalan_RATE,0)*Nvl(C.chalan_QTY, 0))+Nvl(C.VAT_AMT,0)-(Nvl(C.DISCOUNT_AMOUNT,0))) sales_amount\n" +
                             "From vw_Inv_chalanMst M,vw_Inv_chalanChd C,Inv_Item I,inv_itemgroup ig,Inv_MU U, inv_contact r\n" +
@@ -461,23 +477,22 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                             "And I.ITEMGROUP_ID(+) = ig.ITEMGROUP_ID\n" +
                             "and m.CONTACT_ID=r.CONTACT_ID\n" +
                             "and c.chalan_QTY>0 and c.chalan_RATE>0\n" +
-                            "And ('"+customer_id+"' = -1 or m.CONTACT_ID = '"+customer_id+"')\n" +
-                            "And ('"+groupItem_id+"' = -1 or ig.ITEMGROUP_ID = '"+groupItem_id+"')\n" +
-                            "And ('"+item_id+"' = -1 or C.item_Id ='"+item_id+"')\n" +
-                            "AND M.chalan_DATE BETWEEN to_date('"+text_formDate.getText()+"','MON DD,RRRR') AND to_date('"+text_toDate.getText()+"','MON DD,RRRR')\n" +
+                            "And ('" + customer_id + "' = -1 or m.CONTACT_ID = '" + customer_id + "')\n" +
+                            "And ('" + groupItem_id + "' = -1 or ig.ITEMGROUP_ID = '" + groupItem_id + "')\n" +
+                            "And ('" + item_id + "' = -1 or C.item_Id ='" + item_id + "')\n" +
+                            "AND M.chalan_DATE BETWEEN to_date('" + text_formDate.getText() + "','MON DD,RRRR') AND to_date('" + text_toDate.getText() + "','MON DD,RRRR')\n" +
                             "group by I.Item_Name,u.MU_NAME,Fnc$ContactName(M.Contact_Id),m.chalan_NO, m.chalan_DATE\n" +
                             "Order By m.chalan_NO, m.chalan_DATE, Fnc$ContactName(M.Contact_Id)";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        resultList.add(new SalesReport_DetailsResult_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)));
+                    while (rs.next()) {
+                        resultList.add(new SalesReport_DetailsResult_Entity(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7)));
                     }
                     busyDialog.dismis();
                 }
                 connection.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }
@@ -487,13 +502,13 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<SalesReport_DetailsResult_Entity> salesReport_detailsResult_entities) {
             super.onPostExecute(salesReport_detailsResult_entities);
-            result_adapter =new Sales_Report_DetailsResult_Customadapter(getApplication(),resultList);
+            result_adapter = new Sales_Report_DetailsResult_Customadapter(getApplication(), resultList);
             listView.setAdapter(result_adapter);
             busyDialog.dismis();
         }
     }
 
-    private class ChalanReportGroupNameTask extends AsyncTask<Void, Void, Void>{
+    private class ChalanReportGroupNameTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -506,10 +521,10 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
 
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================salesReport Group==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================salesReport Group==Connected===========");
+                if (connection != null) {
                     groupNameList = new ArrayList<>();
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select ITEMGROUP_ID,ITEMGROUP_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 ITEMGROUP_ID,'<< Select Group >>' ITEMGROUP_NAME\n" +
@@ -520,16 +535,15 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                             ")\n" +
                             "order by sl,ITEMGROUP_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
-                    while(rs.next()) {
-                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1),rs.getString(2)));
+                    ResultSet rs = stmt.executeQuery(query);
+                    while (rs.next()) {
+                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1), rs.getString(2)));
                     }
                     busyDialog.dismis();
                 }
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }
@@ -543,7 +557,7 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
         }
     }
 
-    private class ChalanReportItemNameTask extends AsyncTask<Void, Void, Void>{
+    private class ChalanReportItemNameTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
 
@@ -556,11 +570,11 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================salesReport Item==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================salesReport Item==Connected===========");
+                if (connection != null) {
                     itemNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select ITEM_ID,ITEM_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 ITEM_ID,'<< Select Item Name >>' ITEM_NAME\n" +
@@ -568,22 +582,21 @@ public class Chalan_Report_Details_Activity extends AppCompatActivity {
                             "union all\n" +
                             "SELECT 2 sl, ITEM_ID, ITEM_NAME||' ('||UD_NO||')' ITEM_NAME\n" +
                             "FROM INV_ITEM\n" +
-                            "WHERE ('"+groupItem_id+"'=-1 or ITEMGROUP_ID='"+groupItem_id+"')\n" +
+                            "WHERE ('" + groupItem_id + "'=-1 or ITEMGROUP_ID='" + groupItem_id + "')\n" +
                             ")\n" +
                             "order by sl,ITEM_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1),rs.getString(2)));
+                    while (rs.next()) {
+                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1), rs.getString(2)));
                     }
 
                     busyDialog.dismis();
                 }
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }

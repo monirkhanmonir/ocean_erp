@@ -10,28 +10,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ToolBar"
-            android:background="@color/colorHeader"
-            android:id="@+id/attendenceToolBarId">
-            <TextView
-                android:id="@+id/hrm_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                 android:text="Attendance Log"
-                android:textColor="@android:color/white"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </androidx.appcompat.widget.Toolbar>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:background="@color/appBackground"
         android:weightSum="2"
         android:orientation="horizontal">
@@ -73,7 +51,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/attendenceLogRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

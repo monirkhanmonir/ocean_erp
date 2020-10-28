@@ -37,8 +37,8 @@ import java.util.Locale;
 
 public class Chalan_Report_Summary_Activity extends AppCompatActivity {
     private Connection connection;
-    TextView text_formDate,text_toDate;
-    String groupItem_id,item_id,customer_id,customer_contact;
+    TextView text_formDate, text_toDate;
+    String groupItem_id, item_id, customer_id, customer_contact;
     private ListView listView;
     private ArrayList<Billinvoice_Group_Entity> groupNameList;
     private ArrayList<Billinvoice_Customer_Entity> customerNameList;
@@ -57,9 +57,9 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chalan_report_summary);
 
-        text_formDate =findViewById(R.id.chalanReportSummary_from_date);
-        text_toDate =findViewById(R.id.chalanReportSummary_to_date);
-        listView =findViewById(R.id.chalanReportSummary_result_listView);
+        text_formDate = findViewById(R.id.chalanReportSummary_from_date);
+        text_toDate = findViewById(R.id.chalanReportSummary_to_date);
+        listView = findViewById(R.id.chalanReportSummary_result_listView);
 
         j_chalan_customer_dropdown_btn = findViewById(R.id.chalan_customer_dropdown_btn);
         j_chalanReportSummary_Group_spinner = findViewById(R.id.chalanReportSummary_Group_spinner);
@@ -68,9 +68,9 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         context = Chalan_Report_Summary_Activity.this;
 
 
-        if(NetworkHelpers.isNetworkAvailable(context)){
+        if (NetworkHelpers.isNetworkAvailable(context)) {
             new CustomerName_Task().execute();
-        }else {
+        } else {
             Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
         }
 
@@ -80,7 +80,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(customerNameList==null){
+                if (customerNameList == null) {
                     Toast.makeText(Chalan_Report_Summary_Activity.this, "Check your internate connection", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -101,8 +101,16 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                 customerSpinnerSearchView.setIconified(false);
                 customerSpinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = chalan_report_customer_dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chalan_report_customer_dailog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<Billinvoice_Customer_Entity> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
-                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1,customerNameList
+                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, customerNameList
                 );
 
                 customerSpinnerListView.setAdapter(customerAdapter);
@@ -124,9 +132,9 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                 customerSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(customerAdapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")){
+                        if (customerAdapter.getItem(position).getCustomer_Name().equals("<< Select Customer >>")) {
                             Toast.makeText(Chalan_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             j_chalanReportSummary_Group_spinner.setText("Select Group");
                             j_chalanReportSummary_itemName_spinner.setText("Select Item Name");
@@ -136,9 +144,9 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
 
                             customer_id = customerAdapter.getItem(position).getCustomer_Id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new ChalanReportSummaryGriuoTask().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
@@ -157,7 +165,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         j_chalanReportSummary_Group_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(groupNameList==null){
+                if (groupNameList == null) {
                     Toast.makeText(Chalan_Report_Summary_Activity.this, "Please select customer name.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -178,8 +186,16 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                 groupSpinnerSearchView.setIconified(false);
                 groupSpinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = chalan_report_customer_dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chalan_report_customer_dailog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<Billinvoice_Group_Entity> groupAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
-                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1,groupNameList
+                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, groupNameList
                 );
 
                 groupSpinnerListView.setAdapter(groupAdapter);
@@ -201,9 +217,9 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                 groupSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(groupAdapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")){
+                        if (groupAdapter.getItem(position).getItemGroup_Name().equals("<< Select Group >>")) {
                             Toast.makeText(Chalan_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             j_chalanReportSummary_itemName_spinner.setText("Select Item Name");
 
@@ -211,9 +227,9 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
 
                             groupItem_id = groupAdapter.getItem(position).getItemGroup_Id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new ChalanReportSummaryItemNameTask().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
@@ -229,12 +245,11 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         });
 
 
-
         j_chalanReportSummary_itemName_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(itemNameList==null){
+                if (itemNameList == null) {
                     Toast.makeText(Chalan_Report_Summary_Activity.this, "Select Item Group.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -255,8 +270,16 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                 itemNameSpinnerSearchView.setIconified(false);
                 itemNameSpinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = chalan_report_customer_dailog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chalan_report_customer_dailog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<Billinvoice_item_Entity> itemNameAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
-                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1,itemNameList
+                        Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, itemNameList
                 );
 
                 itemNameSpinnerListView.setAdapter(itemNameAdapter);
@@ -277,15 +300,15 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                 itemNameSpinnerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(itemNameAdapter.getItem(position).getItem_name().equals("<< Select Item Name >>")){
+                        if (itemNameAdapter.getItem(position).getItem_name().equals("<< Select Item Name >>")) {
                             Toast.makeText(Chalan_Report_Summary_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
 
                             item_id = itemNameAdapter.getItem(position).getItem_id();
 
-                            if(NetworkHelpers.isNetworkAvailable(context)){
+                            if (NetworkHelpers.isNetworkAvailable(context)) {
                                 new Result_Task().execute();
-                            }else {
+                            } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
@@ -304,26 +327,24 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
     }
 
 
-
-    private void dateSetTO(){
+    private void dateSetTO() {
 
         text_toDate.setOnClickListener(new View.OnClickListener() {
-            final Calendar cal=Calendar.getInstance();
-            int year=0,month=0,day=0;
+            final Calendar cal = Calendar.getInstance();
+            int year = 0, month = 0, day = 0;
+
             @Override
             public void onClick(View v) {
                 if (year == 0 || month == 0 || day == 0) {
 
-                    year =cal.get(Calendar.YEAR);
-                    month=cal.get(Calendar.MONTH);
-                    day =cal.get(Calendar.DAY_OF_MONTH);
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
                 }
 
-                DatePickerDialog mDatePicker=new DatePickerDialog(Chalan_Report_Summary_Activity.this, new DatePickerDialog.OnDateSetListener()
-                {
+                DatePickerDialog mDatePicker = new DatePickerDialog(Chalan_Report_Summary_Activity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday)
-                    {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
 //
                         year = selectedyear;
                         month = selectedmonth;
@@ -347,25 +368,25 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
             }
         });
     }
-    private void dateSetFROM(){
+
+    private void dateSetFROM() {
 
         text_formDate.setOnClickListener(new View.OnClickListener() {
-            final Calendar cal=Calendar.getInstance();
-            int year=0,month=0,day=0;
+            final Calendar cal = Calendar.getInstance();
+            int year = 0, month = 0, day = 0;
+
             @Override
             public void onClick(View v) {
                 if (year == 0 || month == 0 || day == 0) {
 
-                    year =cal.get(Calendar.YEAR);
-                    month=cal.get(Calendar.MONTH);
-                    day =cal.get(Calendar.DAY_OF_MONTH);
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
                 }
 
-                DatePickerDialog mDatePicker=new DatePickerDialog(Chalan_Report_Summary_Activity.this, new DatePickerDialog.OnDateSetListener()
-                {
+                DatePickerDialog mDatePicker = new DatePickerDialog(Chalan_Report_Summary_Activity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday)
-                    {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
 //
                         year = selectedyear;
                         month = selectedmonth;
@@ -388,17 +409,19 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
             }
         });
     }
-    private void CurrentDate(){
-        String currentDate = new SimpleDateFormat("MMM dd,yyyy",Locale.getDefault()).format(new Date());
+
+    private void CurrentDate() {
+        String currentDate = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());
         text_formDate.setText(currentDate.toUpperCase());
         text_toDate.setText(currentDate.toUpperCase());
     }
-    private class CustomerName_Task extends AsyncTask<Void,Void,ArrayList<Billinvoice_Customer_Entity>> {
+
+    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Entity>> {
 
         @Override
         protected void onPreExecute() {
-          busyDialog = new BusyDialog(context);
-          busyDialog.show();
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
         }
 
         @Override
@@ -407,11 +430,11 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================salesReport Customer==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================salesReport Customer==Connected===========");
+                if (connection != null) {
                     customerNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select CONTACT_ID,CONTACT_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 CONTACT_ID,'<< Select Customer >>' CONTACT_NAME\n" +
@@ -422,19 +445,18 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                             ")\n" +
                             "order by sl,CONTACT_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1),rs.getString(2)));
-                        Log.d("value1","======Customer====1==========="+rs.getString(1));
-                        Log.d("value2","======Customer====2==========="+rs.getString(2));
+                    while (rs.next()) {
+                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1), rs.getString(2)));
+                        Log.d("value1", "======Customer====1===========" + rs.getString(1));
+                        Log.d("value2", "======Customer====2===========" + rs.getString(2));
                     }
                     busyDialog.dismis();
                 }
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }
@@ -447,7 +469,8 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
             busyDialog.dismis();
         }
     }
-    private class Result_Task extends AsyncTask<Void,Void,ArrayList<Chalan_Report_Summary_Entity>> {
+
+    private class Result_Task extends AsyncTask<Void, Void, ArrayList<Chalan_Report_Summary_Entity>> {
 
         @Override
         protected void onPreExecute() {
@@ -461,10 +484,10 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
             resultList = new ArrayList<Chalan_Report_Summary_Entity>();
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                 if(connection != null){
+                if (connection != null) {
                     resultList = new ArrayList<Chalan_Report_Summary_Entity>();
-                    Statement stmt=connection.createStatement();
-                    String query="Select I.Item_Name,Sum(Fnc$Convert_Mu(C.ITEM_ID,C.chalan_Qty,C.Mu_Id)) Sell_Qty,u.MU_NAME,\n" +
+                    Statement stmt = connection.createStatement();
+                    String query = "Select I.Item_Name,Sum(Fnc$Convert_Mu(C.ITEM_ID,C.chalan_Qty,C.Mu_Id)) Sell_Qty,u.MU_NAME,\n" +
                             "Sum((Nvl(C.chalan_RATE,0)*Nvl(C.chalan_QTY, 0))+Nvl(C.VAT_AMT,0)-(Nvl(C.DISCOUNT_AMOUNT,0))) sale_amount\n" +
                             "From vw_Inv_chalanMst m, vw_Inv_chalanChd C, Inv_Item I,inv_itemgroup ig,inv_mu u, inv_contact r\n" +
                             "Where m.chalan_Id = c.chalan_Id\n" +
@@ -473,25 +496,23 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                             "And I.ITEMGROUP_ID = ig.ITEMGROUP_ID\n" +
                             "and m.CONTACT_ID=r.CONTACT_ID\n" +
                             "and c.chalan_QTY>0 and c.chalan_RATE>0\n" +
-                            "And ('"+customer_id+"' = -1 or m.CONTACT_ID = '"+customer_id+"')\n" +
-                            "And ('"+groupItem_id+"' = -1 or ig.ITEMGROUP_ID = '"+groupItem_id+"')\n" +
-                            "And ('"+item_id+"' = -1 or C.item_Id ='"+item_id+"')\n" +
-                            "AND M.chalan_DATE BETWEEN to_date('"+text_formDate.getText()+"','MON DD,RRRR') AND to_date('"+text_toDate.getText()+"','MON DD,RRRR')\n" +
+                            "And ('" + customer_id + "' = -1 or m.CONTACT_ID = '" + customer_id + "')\n" +
+                            "And ('" + groupItem_id + "' = -1 or ig.ITEMGROUP_ID = '" + groupItem_id + "')\n" +
+                            "And ('" + item_id + "' = -1 or C.item_Id ='" + item_id + "')\n" +
+                            "AND M.chalan_DATE BETWEEN to_date('" + text_formDate.getText() + "','MON DD,RRRR') AND to_date('" + text_toDate.getText() + "','MON DD,RRRR')\n" +
                             "Group By C.ITEM_ID,I.ITEM_Name,i.UD_NO,ig.ITEMGROUP_NAME,u.MU_NAME\n" +
                             "Order By I.Item_Name";
 
-                    ResultSet rs=stmt.executeQuery(query);
-
-                    while(rs.next()) {
-                        resultList.add(new Chalan_Report_Summary_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)));
+                    ResultSet rs = stmt.executeQuery(query);
+                    while (rs.next()) {
+                        resultList.add(new Chalan_Report_Summary_Entity(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
                     }
 
                     busyDialog.dismis();
                 }
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }
@@ -501,13 +522,13 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Chalan_Report_Summary_Entity> chalan_report_summary_entities) {
             busyDialog.dismis();
-            result_adapter =new Chalan_Report_SummaryResult_Customadapter(getApplication(),resultList);
+            result_adapter = new Chalan_Report_SummaryResult_Customadapter(getApplication(), resultList);
             listView.setAdapter(result_adapter);
         }
     }
 
 
-    private class ChalanReportSummaryGriuoTask extends AsyncTask<Void, Void, Void>{
+    private class ChalanReportSummaryGriuoTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -520,11 +541,11 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================salesReport Group==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================salesReport Group==Connected===========");
+                if (connection != null) {
                     groupNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select ITEMGROUP_ID,ITEMGROUP_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 ITEMGROUP_ID,'<< Select Group >>' ITEMGROUP_NAME\n" +
@@ -535,10 +556,10 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                             ")\n" +
                             "order by sl,ITEMGROUP_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1),rs.getString(2)));
+                    while (rs.next()) {
+                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1), rs.getString(2)));
 
                     }
 
@@ -548,10 +569,9 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
 
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
-                 e.printStackTrace();
+                e.printStackTrace();
             }
             return null;
         }
@@ -563,7 +583,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
     }
 
 
-    private class ChalanReportSummaryItemNameTask extends AsyncTask<Void, Void, Void>{
+    private class ChalanReportSummaryItemNameTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -577,11 +597,11 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
             try {
 
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-                Log.d("connection","================salesReport Item==Connected===========");
-                if(connection != null){
+                Log.d("connection", "================salesReport Item==Connected===========");
+                if (connection != null) {
                     itemNameList = new ArrayList<>();
 
-                    Statement stmt=connection.createStatement();
+                    Statement stmt = connection.createStatement();
                     String query = "select ITEM_ID,ITEM_NAME\n" +
                             "from(\n" +
                             "select 1 sl,-1 ITEM_ID,'<< Select Item Name >>' ITEM_NAME\n" +
@@ -589,16 +609,16 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                             "union all\n" +
                             "SELECT 2 sl, ITEM_ID, ITEM_NAME||' ('||UD_NO||')' ITEM_NAME\n" +
                             "FROM INV_ITEM\n" +
-                            "WHERE ('"+groupItem_id+"'=-1 or ITEMGROUP_ID='"+groupItem_id+"')\n" +
+                            "WHERE ('" + groupItem_id + "'=-1 or ITEMGROUP_ID='" + groupItem_id + "')\n" +
                             ")\n" +
                             "order by sl,ITEM_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs = stmt.executeQuery(query);
 
-                    while(rs.next()) {
-                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1),rs.getString(2)));
-                        Log.d("value1","======Item====1==========="+rs.getString(1));
-                        Log.d("value2","======Item====2==========="+rs.getString(2));
+                    while (rs.next()) {
+                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1), rs.getString(2)));
+                        Log.d("value1", "======Item====1===========" + rs.getString(1));
+                        Log.d("value2", "======Item====2===========" + rs.getString(2));
 
                     }
 
@@ -606,8 +626,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                 busyDialog.dismis();
                 connection.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 busyDialog.dismis();
                 e.printStackTrace();
             }

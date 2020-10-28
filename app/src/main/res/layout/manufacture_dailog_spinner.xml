@@ -13,7 +13,8 @@
         <RelativeLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/bg_custom_row">
+            android:background="@drawable/bg_custom_row"
+            android:backgroundTint="@color/rowColor">
 
             <ImageView
                 android:id="@+id/spinner_icon_img"
@@ -22,6 +23,7 @@
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_sales_summary"/>
         </RelativeLayout>
+
 
         <TextView
             android:id="@+id/spinner_textView"
@@ -32,6 +34,20 @@
             android:textStyle="bold"
             android:layout_centerVertical="true"
             android:textSize="18dp" />
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_custom_row">
+
+            <ImageView
+                android:id="@+id/spinner_close_icon_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_cancel"/>
+        </RelativeLayout>
     </RelativeLayout>
 
     <SearchView

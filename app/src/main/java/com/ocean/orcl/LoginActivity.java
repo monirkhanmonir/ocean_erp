@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if(NetworkHelpers.isNetworkAvailable(LoginActivity.this)){
                             new LoginTask().execute();
+                            storeLoginUserName();
                         }else {
                             Toast.makeText(LoginActivity.this, "Please Check Your Internate.", Toast.LENGTH_SHORT).show();
                         }
@@ -121,9 +122,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-
-
-
     private class LoginTask extends AsyncTask<Void, Void,Void>{
 
 

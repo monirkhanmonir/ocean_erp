@@ -2,6 +2,7 @@ package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -26,7 +28,12 @@ import com.ocean.orcl.util.NetworkHelpers;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Party_Due_Statement_Activity extends AppCompatActivity {
     private Connection connection;
@@ -37,6 +44,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
     private ACC_PartyDueResult_Adapter result_adapter;
 
     private ListView listView;
+    private TextView toDate;
 
     private TextView j_partyDue_statement_spinner;
     private Dialog dialog;
@@ -50,8 +58,10 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
         //customer_spinner =findViewById(R.id.partyDue_statement_spinner);
         listView = findViewById(R.id.partyDueStatement_result_listView);
         j_partyDue_statement_spinner = findViewById(R.id.partyDue_statement_spinner);
+        toDate = findViewById(R.id.partyDue_dateTex);
         context = Party_Due_Statement_Activity.this;
-
+        CurrentDate();
+        DateSetTO();
         j_partyDue_statement_spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +86,14 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
                 SpinnerSearchView.onActionViewExpanded();
                 SpinnerSearchView.setIconified(false);
                 SpinnerSearchView.clearFocus();
+
+                ImageView calcen_btn = dialog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
                 final ArrayAdapter<ACC_partyDueStatement_Entity> adapter = new ArrayAdapter<ACC_partyDueStatement_Entity>(
                         Party_Due_Statement_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
@@ -108,6 +126,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
 
                             if(NetworkHelpers.isNetworkAvailable(context)){
                                 new Result_Task().execute();
+                                DateSetTO();
                             }else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
@@ -189,8 +208,6 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
           //  busyDialog.dismis();
         }
     }
-
-
     private class Result_Task extends AsyncTask<Void,Void,ArrayList<Acc_PartyDueStatement_Result_Entity>> {
 
         @Override
@@ -210,15 +227,20 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
                     resultList = new ArrayList<Acc_PartyDueStatement_Result_Entity>();
 
                     Statement stmt=connection.createStatement();
-                    String query = "select s.UD_NO, s.V_SUB_HEAD_NAME, s.ANALYZER, s.ROCHE, s.SYSMEX\n" +
+                    String query1,query2;
+
+                    query1="select fnc$dateto(to_date('"+toDate.getText()+"','MON DD,RRRR')) from dual";
+                    stmt.executeUpdate(query1);
+
+                    query2 = "select T_DATE,s.UD_NO, s.V_SUB_HEAD_NAME, s.ANALYZER, s.ROCHE, s.SYSMEX\n" +
                             "from VW_ACC_DUE_STATEMENT s\n" +
                             "where ('"+sub_header_code+"' ='-1' or s.UD_NO like '%'||'"+sub_header_code+"'||'%')\n" +
                             "order by s.V_SUB_HEAD_NAME";
 
-                    ResultSet rs=stmt.executeQuery(query);
+                    ResultSet rs=stmt.executeQuery(query2);
 
                     while(rs.next()) {
-                        resultList.add(new Acc_PartyDueStatement_Result_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)));
+                        resultList.add(new Acc_PartyDueStatement_Result_Entity(rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
                     }
                     busyDialog.dismis();
                 }
@@ -241,6 +263,51 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
             listView.setAdapter(result_adapter);
 
         }
+    }
+    private void DateSetTO(){
+
+        toDate.setOnClickListener(new View.OnClickListener() {
+            final Calendar cal=Calendar.getInstance();
+            int year=0,month=0,day=0;
+            @Override
+            public void onClick(View v) {
+                if (year == 0 || month == 0 || day == 0) {
+
+                    year =cal.get(Calendar.YEAR);
+                    month=cal.get(Calendar.MONTH);
+                    day =cal.get(Calendar.DAY_OF_MONTH);
+                }
+
+                DatePickerDialog mDatePicker=new DatePickerDialog(Party_Due_Statement_Activity.this, new DatePickerDialog.OnDateSetListener()
+                {
+                    @Override
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday)
+                    {
+//
+                        year = selectedyear;
+                        month = selectedmonth;
+                        day = selectedday;
+
+                        cal.setTimeInMillis(0);
+                        cal.set(year, month, day, 0, 0, 0);
+                        Date chosenDate = cal.getTime();
+
+                        // Format the date using style medium and US locale
+                        DateFormat df_medium_us = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
+                        String date = df_medium_us.format(chosenDate);
+                        toDate.setText(date.toUpperCase());
+                        new Result_Task().execute();
+//
+                    }
+                }, year, month, day);
+                mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
+                mDatePicker.show();
+            }
+        });
+    }
+    private void CurrentDate(){
+        String currentDate = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());
+        toDate.setText(currentDate.toUpperCase());
     }
 
 }

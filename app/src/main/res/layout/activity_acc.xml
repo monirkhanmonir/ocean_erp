@@ -31,16 +31,6 @@
             android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-        <!--       <ImageButton-->
-        <!--           android:id="@+id/back_btn"-->
-        <!--           android:layout_width="wrap_content"-->
-        <!--           android:layout_height="35dp"-->
-        <!--           android:background="#39F3EDED"-->
-        <!--           android:src="@drawable/logout"-->
-        <!--           android:layout_alignParentRight="true"-->
-        <!--           />-->
-
     </RelativeLayout>
 
     <LinearLayout

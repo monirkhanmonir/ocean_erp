@@ -412,28 +412,61 @@
             android:background="@color/rowColor"
             android:layout_height="1dp"/>
 
+        <LinearLayout
+            android:id="@+id/my_Att_Detailes_lateLoginReason_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Let in "/>
+            <TextView
+                android:id="@+id/my_Att_Detailes_lateLoginReason"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="Resune: "/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/my_Att_Detailes_earlyLogoutReason_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Early out "/>
+            <TextView
+                android:id="@+id/my_Att_Detailes_earlyLogoutReason"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="Resune: "/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/my_Att_Detailes_absentReason_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Early out "/>
+            <TextView
+                android:id="@+id/my_Att_Detailes_absentReason"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="Resune: "/>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/my_Att_Detailes_absentReason"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text=""/>
-        <TextView
-            android:id="@+id/my_Att_Detailes_lateLoginReason"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text=""/>
-        <TextView
-            android:id="@+id/my_Att_Detailes_earlyLogoutReason"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text=""/>
 
 
         <!--    <LinearLayout-->

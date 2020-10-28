@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
-    app:cardElevation="5dp"
+    app:cardElevation="3dp"
     app:cardUseCompatPadding="true"
     android:clickable="false">
     <LinearLayout
+        android:id="@+id/emp_info_row_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -82,7 +83,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
             android:weightSum="7">
 
             <LinearLayout
@@ -112,6 +112,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/imp_email_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -130,6 +131,7 @@
                     android:paddingLeft="5dp"
                     android:textSize="14dp"
                     android:text="Email"
+                    android:textIsSelectable="true"
                     android:textColor="@color/colorPrimary"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     />

@@ -12,6 +12,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 
 public class MyAttendence_Details_Activity extends AppCompatActivity {
     private Connection connection;
-    private TextView lateLogin_reason,absent_reason;
+    private TextView lateLogin_reason, absent_reason;
     private Button editBtn;
     private ListView listView;
     private CustomAdapter_AttendenceLog_Details adapter;
@@ -35,7 +36,9 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
     private ArrayList<AttendenceLog_Details_B_Entity> myAttendenceDetiles_b;
     private ArrayList<AttendenceLog_Details_C_Entity> myAttendenceDetiles_c;
     private String late_login_flag;
-    private String early_logout_flag,absence_flag, userInput, dates;
+    private String early_logout_flag, absence_flag, userInput, dates;
+    private LinearLayout j_my_Att_Detailes_lateLoginReason_layout, j_my_Att_Detailes_earlyLogoutReason_layout,
+             j_my_Att_Detailes_absentReason_layout;
 
     private BusyDialog busyDialog;
     private Context context;
@@ -46,8 +49,8 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_attendence__details);
-        listView =findViewById(R.id.myAttDetails_listView);
-        editBtn =findViewById(R.id.edit_Btn);
+        listView = findViewById(R.id.myAttDetails_listView);
+        editBtn = findViewById(R.id.edit_Btn);
         context = getApplicationContext();
         handler = new Handler();
 
@@ -57,6 +60,10 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         TextView personName = findViewById(R.id.myAttendanceDetails_name);
         TextView personDesignation = findViewById(R.id.myAttendanceDetails_designation);
         TextView personDepartment = findViewById(R.id.myAttendanceDetails_dept);
+
+        j_my_Att_Detailes_lateLoginReason_layout = findViewById(R.id.my_Att_Detailes_lateLoginReason_layout);
+        j_my_Att_Detailes_earlyLogoutReason_layout = findViewById(R.id.my_Att_Detailes_earlyLogoutReason_layout);
+        j_my_Att_Detailes_absentReason_layout = findViewById(R.id.my_Att_Detailes_absentReason_layout);
 
         // ....................For Query (B) ..............
         final TextView weekend = findViewById(R.id.myAttendanceDetails_weekend);
@@ -71,8 +78,8 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         TextView logOut_Locaton = findViewById(R.id.my_Att_Detailes_logOutOffice_Location);
         final TextView require_LogOutTime = findViewById(R.id.my_Att_Detailes_requireLogOutTime);
         final TextView earlyLogoutReason = findViewById(R.id.my_Att_Detailes_earlyLogoutReason);
-        lateLogin_reason= findViewById(R.id.my_Att_Detailes_lateLoginReason);
-        absent_reason= findViewById(R.id.my_Att_Detailes_absentReason);
+        lateLogin_reason = findViewById(R.id.my_Att_Detailes_lateLoginReason);
+        absent_reason = findViewById(R.id.my_Att_Detailes_absentReason);
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -80,31 +87,31 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         }
 
         final Intent intent = getIntent();
-          userInput = intent.getStringExtra("login_value");
-             dates = intent.getStringExtra("date");
-        Log.d("myAttendence","=======My Attndnc==LV======"+userInput.toUpperCase());
+        userInput = intent.getStringExtra("login_value");
+        dates = intent.getStringExtra("date");
+        Log.d("myAttendence", "=======My Attndnc==LV======" + userInput.toUpperCase());
 
         date.setText(dates);
 
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MyAttendence_DetailsUpdate_Activity.class);
-                intent.putExtra("date",dates);
-                intent.putExtra("weekend",weekend.getText());
-                intent.putExtra("holiday",holiday.getText());
-                intent.putExtra("late_login_flag",late_login_flag);
-                intent.putExtra("early_logout_flag",early_logout_flag);
-                intent.putExtra("absent_reason",absent_reason.getText());
-                intent.putExtra("late_loginReason",lateLogin_reason.getText());
-                intent.putExtra("early_logoutreaason",earlyLogoutReason.getText());
-                intent.putExtra("login_time",inTime.getText());
-                intent.putExtra("due_loginTime",require_LoginTime.getText());
-                intent.putExtra("logout_time",office_LogoutTime.getText());
-                intent.putExtra("due_logout_time",require_LogOutTime.getText());
-                intent.putExtra("dept",Login_office_location.getText());
-                intent.putExtra("absence",absence_flag);
-                intent.putExtra("userInput",userInput);
+                Intent intent = new Intent(getApplicationContext(), MyAttendence_DetailsUpdate_Activity.class);
+                intent.putExtra("date", dates);
+                intent.putExtra("weekend", weekend.getText());
+                intent.putExtra("holiday", holiday.getText());
+                intent.putExtra("late_login_flag", late_login_flag);
+                intent.putExtra("early_logout_flag", early_logout_flag);
+                intent.putExtra("absent_reason", absent_reason.getText());
+                intent.putExtra("late_loginReason", lateLogin_reason.getText());
+                intent.putExtra("early_logoutreaason", earlyLogoutReason.getText());
+                intent.putExtra("login_time", inTime.getText());
+                intent.putExtra("due_loginTime", require_LoginTime.getText());
+                intent.putExtra("logout_time", office_LogoutTime.getText());
+                intent.putExtra("due_logout_time", require_LogOutTime.getText());
+                intent.putExtra("dept", Login_office_location.getText());
+                intent.putExtra("absence", absence_flag);
+                intent.putExtra("userInput", userInput);
                 startActivity(intent);
             }
         });
@@ -121,7 +128,7 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
 
             ResultSet rs = stmt.executeQuery("select PKG$HRM.fnc$emp_name2(V_SALUTATION,V_FNAME, V_LNAME) V_EMP_NAME, V_DEPT_NAME, V_DESIG_NAME,V_PERSON_NO \n" +
                     " from BAS_PERSON\n" +
-                    " where  N_PERSON_ID = (select N_PERSON_ID from sec_user where V_USER_NAME='"+userInput.toUpperCase()+"')");
+                    " where  N_PERSON_ID = (select N_PERSON_ID from sec_user where V_USER_NAME='" + userInput.toUpperCase() + "')");
 
             while (rs.next()) {
 
@@ -141,7 +148,6 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         }
 
 
-
         //......................For Query (B) ....................
         try {
             connection = com.ocean.orcl.ODBC.Db.createConnection();
@@ -159,7 +165,7 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
                     "to_char(D_LOGOUTTIME,'HH12:MI AM') V_LOGOUTTIME,V_LOGOUT_OFFICE_LOCATION,V_REQUIRED_LOGOUT_TIME, decode(N_EARLY_LOGOUT_FLAG,0,'N','Y') V_EARLY_LOGOUT_FLAG,V_EARLY_LOGOUT_REASON,\n" +
                     "N_ABSENT_FLAG, V_ABSENT_REASON\n" +
                     "from VW_HR_EMP_ATTENDANCE_SUMMARY\n" +
-                    "where  N_PERSON_ID = (select N_PERSON_ID from sec_user where V_USER_NAME='"+userInput.toUpperCase()+"') \n" +
+                    "where  N_PERSON_ID = (select N_PERSON_ID from sec_user where V_USER_NAME='" + userInput.toUpperCase() + "') \n" +
                     "and D_DATE=to_date('" + dates.toUpperCase() + "','MON DD,RRRR')");
 
 
@@ -181,21 +187,22 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
                 logOut_Locaton.setText(rs.getString(9));
                 require_LogOutTime.setText(rs.getString(10));
                 earlyLogoutReason.setText(rs.getString(12));
-                absence_flag =rs.getString(13);
+                absence_flag = rs.getString(13);
 
                 String weekends = rs.getString(1);
                 String holidays = rs.getString(2);
-                late_login_flag= rs.getString(6);
-                early_logout_flag=rs.getString(11);
+                late_login_flag = rs.getString(6);
+                early_logout_flag = rs.getString(11);
 
 //                 .............For Login and Logout Time Color................
-                if(weekends.equals("N") && holidays.equals("N") && late_login_flag.equals("Y")){
+                if (weekends.equals("N") && holidays.equals("N") && late_login_flag.equals("Y")) {
                     inTime.setTextColor(Color.RED);
-                }else {
+                } else {
                     inTime.setTextColor(Color.parseColor("#4D850D"));
-                }if(weekends.equals("N") && holidays.equals("N") && early_logout_flag.equals("Y")){
+                }
+                if (weekends.equals("N") && holidays.equals("N") && early_logout_flag.equals("Y")) {
                     office_LogoutTime.setTextColor(Color.RED);
-                }else {
+                } else {
                     office_LogoutTime.setTextColor(Color.parseColor("#4D850D"));
                 }
 
@@ -211,12 +218,11 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
 
         //......................For Query (C) ....................
 
-        if(NetworkHelpers.isNetworkAvailable(context)){
+        if (NetworkHelpers.isNetworkAvailable(context)) {
             new MyAttendenceDetailstask().execute();
-        }else {
+        } else {
             Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
         }
-
 
 
         if (Login_office_location.equals(null) || Login_office_location.length() == 0 || Login_office_location.equals("")) {
@@ -224,25 +230,28 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         } else {
             Login_office_location.setVisibility(View.VISIBLE);
         }
+
         if (earlyLogoutReason.equals(null) || earlyLogoutReason.length() == 0 || earlyLogoutReason.equals("")) {
-            earlyLogoutReason.setVisibility(View.GONE);
+            j_my_Att_Detailes_earlyLogoutReason_layout.setVisibility(View.GONE);
         } else {
-            earlyLogoutReason.setVisibility(View.VISIBLE);
+            j_my_Att_Detailes_earlyLogoutReason_layout.setVisibility(View.VISIBLE);
         }
+
         if (lateLogin_reason.getText().equals(null) || lateLogin_reason.getText().length() == 0 || lateLogin_reason.getText().equals("")) {
-            lateLogin_reason.setVisibility(View.GONE);
+            j_my_Att_Detailes_lateLoginReason_layout.setVisibility(View.GONE);
         } else {
-            lateLogin_reason.setVisibility(View.VISIBLE);
+            j_my_Att_Detailes_lateLoginReason_layout.setVisibility(View.VISIBLE);
         }
         if (absent_reason.getText().equals(null) || absent_reason.getText().length() == 0 || absent_reason.getText().equals("")) {
-            absent_reason.setVisibility(View.GONE);
+            j_my_Att_Detailes_absentReason_layout.setVisibility(View.GONE);
         } else {
-            absent_reason.setVisibility(View.VISIBLE);
+            j_my_Att_Detailes_absentReason_layout.setVisibility(View.VISIBLE);
         }
+
     }
 
 
-    private class MyAttendenceDetailstask extends AsyncTask<Void,Void,Void>{
+    private class MyAttendenceDetailstask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             busyDialog = new BusyDialog(context);
@@ -264,12 +273,12 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
 
                 ResultSet rs = stmt.executeQuery("select  V_TIME V_TIME1, to_char(V_TIME,'HH12:MI AM') V_TIME , V_MODE, V_OFFICE_LOCATION\n" +
                         "from VW_HR_EMP_ATTENDANCE\n" +
-                        "where N_PERSON_ID = (select N_PERSON_ID from sec_user where V_USER_NAME = '"+userInput.toUpperCase()+"')\n " +
+                        "where N_PERSON_ID = (select N_PERSON_ID from sec_user where V_USER_NAME = '" + userInput.toUpperCase() + "')\n " +
                         "and D_DATE=to_date('" + dates.toUpperCase() + "','MON DD,RRRR')\n" +
                         "order by V_TIME1 asc");
 
                 while (rs.next()) {
-                    myAttendenceDetiles_c.add(new AttendenceLog_Details_C_Entity(rs.getString(1),rs.getString(2), rs.getString(3), rs.getString(4)));
+                    myAttendenceDetiles_c.add(new AttendenceLog_Details_C_Entity(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
 
                 }
                 busyDialog.dismis();
@@ -290,8 +299,4 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
             Helper.getListViewSize(listView);
         }
     }
-
-
-
-
 }

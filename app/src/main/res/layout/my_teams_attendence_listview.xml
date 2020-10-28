@@ -100,12 +100,34 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Arrival"
+                    android:text="Login"
                     android:textColor="#4d4d4d"
                     android:gravity="center"/>
 
                 <TextView
                     android:id="@+id/login_team"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="00:00h"
+                    android:textSize="11sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#4d4d4d"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Late in"
+                    android:textColor="#4d4d4d"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/lateLogin_team"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -123,7 +145,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Departure"
+                    android:text="Logout"
                     android:textColor="#4d4d4d"
                     android:gravity="center"/>
 
@@ -146,7 +168,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Extras"
+                    android:text="Early out"
                     android:textColor="#4d4d4d"
                     android:gravity="center"/>
 
@@ -161,28 +183,7 @@
                     android:textColor="#4d4d4d"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Late"
-                    android:textColor="#4d4d4d"
-                    android:gravity="center"/>
 
-                <TextView
-                    android:id="@+id/lateLogin_team"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="00:00h"
-                    android:textSize="11sp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#4d4d4d"/>
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

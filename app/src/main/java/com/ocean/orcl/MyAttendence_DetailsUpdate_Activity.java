@@ -210,7 +210,6 @@ update_btn.setOnClickListener(new View.OnClickListener() {
 
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
-
                 if (connection != null) {
 
                 }
@@ -224,11 +223,11 @@ update_btn.setOnClickListener(new View.OnClickListener() {
 
                 stmt.executeUpdate(sql);
                 connection.commit();
-             //   busyDialog.dismis();
+              busyDialog.dismis();
                 connection.close();
             } catch (Exception e) {
 
-             //  busyDialog.dismis();
+               busyDialog.dismis();
                 e.printStackTrace();
             }
 
@@ -238,7 +237,7 @@ update_btn.setOnClickListener(new View.OnClickListener() {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            //busyDialog.dismis();
+            busyDialog.dismis();
             Intent intent = new Intent(getApplicationContext(),MyAttendence_Details_Activity.class);
             intent.putExtra("login_value",userInput);
             intent.putExtra("date",dates);

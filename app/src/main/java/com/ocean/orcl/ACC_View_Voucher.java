@@ -107,6 +107,14 @@ public class ACC_View_Voucher extends AppCompatActivity {
                 SpinnerSearchView.setIconified(false);
                 SpinnerSearchView.clearFocus();
 
+                ImageView calcen_btn = dialog.findViewById(R.id.spinner_close_icon_img);
+                calcen_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
                 final ArrayAdapter<View_Voucher_Entity> adapter = new ArrayAdapter<View_Voucher_Entity>(
                         ACC_View_Voucher.this, android.R.layout.simple_spinner_dropdown_item,transactionList
                 );

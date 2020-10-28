@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
@@ -89,9 +90,12 @@ public class CustomMyAttendenceAdapter extends RecyclerView.Adapter<RecyclerView
         viewHolder.jMyAttendence_logout_time.setText(attendenceModel.getLOGOUTTIME());
 
 
-        viewHolder.jMyAttendence_let_login_Reason.setText(attendenceModel.getLATE_LOGIN_REASON());
-        viewHolder.jMyAttendence_early_logout_reason.setText(attendenceModel.getEARLY_LOGOUT_REASON());
-        viewHolder.jMyAttendence_absence_reason.setText(attendenceModel.getABSENT_REASON());
+        viewHolder.jMyAttendence_let_login_Reason.setText(" :"+attendenceModel.getLATE_LOGIN_REASON());
+        viewHolder.jMyAttendence_early_logout_reason.setText(" :"+attendenceModel.getEARLY_LOGOUT_REASON());
+        viewHolder.jMyAttendence_absence_reason.setText(" :"+attendenceModel.getABSENT_REASON());
+
+        viewHolder.j_my_Attendence_row_layout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
+
 
         if(attendenceModel.getLATE_LOGIN_REASON()==null)
         {
@@ -133,7 +137,8 @@ public class CustomMyAttendenceAdapter extends RecyclerView.Adapter<RecyclerView
     private class MyAttendenceViewHolder extends RecyclerView.ViewHolder{
         private TextView jMyAttendence_date, jMyAttendence_login_time, jMyAttendence_logout_time,
                 jMyAttendence_let_login_Reason, jMyAttendence_early_logout_reason,jMyAttendence_absence_reason;
-        private LinearLayout jMyAttendence_let_login_Reason_layout, jMyAttendence_logout_reson_layout, jMyAttendence_absence_layout;
+        private LinearLayout jMyAttendence_let_login_Reason_layout, jMyAttendence_logout_reson_layout,
+                jMyAttendence_absence_layout, j_my_Attendence_row_layout;
 
         public MyAttendenceViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -147,6 +152,7 @@ public class CustomMyAttendenceAdapter extends RecyclerView.Adapter<RecyclerView
             jMyAttendence_let_login_Reason_layout = itemView.findViewById(R.id.myAttendence_let_login_Reason_layout);
             jMyAttendence_logout_reson_layout = itemView.findViewById(R.id.myAttendence_early_logout_layout);
             jMyAttendence_absence_layout = itemView.findViewById(R.id.myAttendence_absence_layout);
+            j_my_Attendence_row_layout = itemView.findViewById(R.id.my_Attendence_row_layout);
 
 
 
