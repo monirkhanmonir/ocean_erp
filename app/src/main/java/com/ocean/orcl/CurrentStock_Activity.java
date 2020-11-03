@@ -1,17 +1,24 @@
 package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfDocument;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -24,9 +31,13 @@ import com.ocean.orcl.util.BusyDialog;
 import com.ocean.orcl.util.Helper;
 import com.ocean.orcl.util.NetworkHelpers;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class CurrentStock_Activity extends AppCompatActivity {
@@ -44,11 +55,20 @@ public class CurrentStock_Activity extends AppCompatActivity {
 
 
     //for search
-    private TextView manufacture_dropdown, j_stock_group_dropdown_btn, j_stock_item_dropdown_btn, j_stock_quentity_dropdown_btn;
+    private TextView manufacture_dropdown, j_stock_group_dropdown_btn, j_stock_item_dropdown_btn,
+            j_stock_quentity_dropdown_btn, j_currentStock_textView;
     private Dialog manufacture_dailog;
     private BusyDialog busyDialog;
     private Context context;
     private Handler handler;
+
+
+    private String datePatern ="dd-MM-yyyy";
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePatern);
+
+    private String timePattern = "hh:mm a";
+    private SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +76,7 @@ public class CurrentStock_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_current_stock);
 
 //        udNo_spinner = (Spinner) findViewById(R.id.ud_no_spinner);
+//        j_currentStock_textView = findViewById(R.id.currentStock_textView);
 
         listView = findViewById(R.id.qty_listView);
         manufacture_dropdown = findViewById(R.id.manufacture_dropdown_btn);
@@ -65,6 +86,22 @@ public class CurrentStock_Activity extends AppCompatActivity {
 
         context = CurrentStock_Activity.this;
         handler = new Handler();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.currentStockToolBarId);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+//        getSupportActionBar().setTitle("Current Stock");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         //for manufacture group dropdown option
@@ -728,6 +765,65 @@ public class CurrentStock_Activity extends AppCompatActivity {
             listView.setAdapter(adapter);
             Helper.getListViewSize(listView);
         }
+    }
+
+
+    private void getPDFInvoice(){
+        PdfDocument pdfDocument = new PdfDocument();
+        Paint paint = new Paint();
+        String[] column = {"Lot no","Expery no","Quentity"};
+
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1000,900,1).create();
+        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+
+        paint.setTextSize(80);
+        canvas.drawText("Excellence ICT",30,80,paint);
+
+        paint.setTextSize(30);
+        canvas.drawText("A simple pager adapter that represents 5 ScreenSlidePageFragment objects",30,120,paint);
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Invoice No ",canvas.getWidth()-40,40,paint);
+        canvas.drawText(String.valueOf(currentStockItems.size()),canvas.getWidth()-40,80,paint);
+        paint.setTextAlign(Paint.Align.LEFT);
+
+        paint.setColor(Color.rgb(150,150,150));
+        canvas.drawRect(30,150,canvas.getWidth()-30,160,paint);
+
+        paint.setColor(Color.BLACK);
+        canvas.drawText("Date",50, 200, paint);
+        canvas.drawText("1/1/2020",250,200,paint);
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Time",620, 200, paint);
+        canvas.drawText("05:50 pm",250,200,paint);
+        paint.setTextAlign(Paint.Align.LEFT);
+
+        paint.setColor(Color.rgb(150,150,150));
+        canvas.drawRect(30,400,canvas.getWidth()-40, 350,paint);
+
+        paint.setColor(Color.WHITE);
+        canvas.drawText("Lot NO", 50,435,paint);
+        canvas.drawText("Expire no", 50,435,paint);
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Quentity", canvas.getWidth()-40,435,paint);
+        paint.setTextAlign(Paint.Align.LEFT);
+
+        pdfDocument.finishPage(page);
+        File file = new File(this.getExternalFilesDir("/"),"ChalanReport.pdf");
+
+        try {
+            pdfDocument.writeTo(new FileOutputStream(file));
+            Toast.makeText(context, "Succecc", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        pdfDocument.close();
+
+
+
     }
 
 }

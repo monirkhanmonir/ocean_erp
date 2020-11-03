@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,7 +47,7 @@ public class MyAttencence_Activity extends AppCompatActivity implements CustomMy
     private TextView textViewDateFrom,textViewDateTo;
 
     private ArrayList<MyAttendence_Entity> myAttendenceItems;
-    private Toolbar jMyAttendenceToolBarId;
+    private Toolbar toolbar;
 
     private String userInput, crntManthFstday, dateCurrent2;
     private Context context;
@@ -64,21 +66,36 @@ public class MyAttencence_Activity extends AppCompatActivity implements CustomMy
 
         textViewDateFrom = findViewById(R.id.From_date1);
         textViewDateTo = findViewById(R.id.To_date2);
-        jMyAttendenceToolBarId = findViewById(R.id.myAttendenceToolBarId);
+        toolbar = findViewById(R.id.myAttendenceToolBarId);
         handler = new Handler();
         context = MyAttencence_Activity.this;
 
 
-        this.setSupportActionBar(jMyAttendenceToolBarId);
+        //control toolbar
+        this.setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
                     //<<<<<<<<<<<<<<<<<..........value pass Login to this Activity................>>>>>>>>>>>>>>>>>
-                            Bundle b = getIntent().getExtras();
-                             userInput = b.getString("userInputName");
+        Bundle b = getIntent().getExtras();
+        userInput = b.getString("userInputName");
 
-                            Log.d("Your_Login_value","====================="+userInput.toUpperCase());
+        Log.d("Your_Login_value","====================="+userInput.toUpperCase());
 
 
-         dateCurrent2 = new SimpleDateFormat("MMM dd,yyyy",Locale.getDefault()).format(new Date());
+        dateCurrent2 = new SimpleDateFormat("MMM dd,yyyy",Locale.getDefault()).format(new Date());
         textViewDateTo.setText(dateCurrent2.toUpperCase());
         Log.d("CurrentDate","======TO======="+dateCurrent2);
 

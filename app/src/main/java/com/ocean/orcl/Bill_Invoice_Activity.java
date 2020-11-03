@@ -1,13 +1,16 @@
 package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -71,6 +74,23 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         j_bill_customer_dropdown_btn = findViewById(R.id.bill_customer_dropdown_btn);
         j_bill_group_dropdown_btn = findViewById(R.id.bill_group_dropdown_btn);
         j_bill_item_dropdown_btn = findViewById(R.id.bill_item_dropdown_btn);
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.billInvoiceToolBarId);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+//        getSupportActionBar().setTitle("Current Stock");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         j_bill_customer_dropdown_btn.setOnClickListener(new View.OnClickListener() {

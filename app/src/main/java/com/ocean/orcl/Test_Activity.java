@@ -23,16 +23,19 @@ import java.sql.Statement;
 public class Test_Activity extends AppCompatActivity {
     private Connection connection;
     private static final int REQUEST_CALL =1;
-    EditText callText;
-    Button callBtn;
+    EditText callText,test_editText;
+    Button callBtn,test_btn;
     private static final int PERMISSION_READ_STATE =123;
     String strPhoneType;
+    private  String checkNumber="0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         callBtn = findViewById(R.id.call_btn);
+        test_btn=findViewById(R.id.testBtn_id);
+        test_editText = findViewById(R.id.test_id);
         callText =findViewById(R.id.call_text);
         callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,8 +44,12 @@ public class Test_Activity extends AppCompatActivity {
             }
         });
 //        start();
-
-        Test_initList();
+        test_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Test_initList();
+            }
+        });
 
     }
 
@@ -74,38 +81,9 @@ public class Test_Activity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"permission denied",Toast.LENGTH_SHORT).show();
             }
         }
-//        ---------for phone number Ime sim serial number --------------
-//        switch (requestCode){
-//            case PERMISSION_READ_STATE:
-//                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                    start();
-//                }else {
-//                    Toast.makeText(getApplicationContext(),"You don't have permission ",Toast.LENGTH_SHORT).show();
-//                }
-//        }
     }
 
-//---------for phone number Ime sim serial number --------------
-//    private void start(){
-//        int permissionCheck = ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.READ_PHONE_STATE);
-//        if(permissionCheck != PackageManager.PERMISSION_GRANTED){
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.READ_PHONE_STATE},PERMISSION_READ_STATE);
-//        }else {
-//            TelephonyManager telephonyManager= (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//        String getSimSerialNumber = telephonyManager.getSimSerialNumber();
-//            String getSimNumber =telephonyManager.getLine1Number();
-//            String telNumber = telephonyManager.getLine1Number();
-//            String telNumber2 = telephonyManager.getDeviceId();
-//            String telNumbe3 = telephonyManager.getDeviceSoftwareVersion();
-//            if (telNumber != null)
-//                Toast.makeText(this, "Phone number: " + telNumber+"\n"+" Version "+telNumbe3+" Ime nmber"+telNumber2,
-//                        Toast.LENGTH_LONG).show();
-//            Log.d("number ","=============number"+getSimNumber+"========"+"emi= "+telNumber2);
-//
-//        }
-//    }
+
 private void Test_initList(){
 
     try {
@@ -116,30 +94,19 @@ private void Test_initList(){
 //            groupNameList = new ArrayList<>();
 
             Statement stmt=connection.createStatement();
-            String query = "select V_SALUTATION, V_FNAME, V_LNAME, V_DEGREE, V_DOCTOR_SPECIALITY, N_OPD_1ST_FEE, N_OPD_2ND_FEE, B_PHOTO_IMAGE \n"+
-                    "from VW_DOCTOR \n" +
-                    "where V_ORGANIZATION_NAME = 'Sono Diagnostic Centre Ltd.'\n" +
-                    "and V_BRANCH_NAME = 'Sono Tower - 2' \n" +
-                    "order by V_DOCTOR_SPECIALITY, V_SALUTATION, V_FNAME, V_LNAME, V_DEGREE";
+            String query = "select pkg$sec.fnc$check_otp_log ('"+test_editText.getText().toString()+"') a from dual";
 
             ResultSet rs=stmt.executeQuery(query);
 
             while(rs.next()) {
-//                groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1),rs.getString(2)));
                     Log.d("value1","==========1========="+rs.getString(1));
-                    Log.d("value2","========2==========="+rs.getString(2));
-                    Log.d("value3","========3==========="+rs.getString(3));
-                    Log.d("value4","========4==========="+rs.getString(4));
-                    Log.d("value5","========5==========="+rs.getString(5));
-                    Log.d("value6","========6==========="+rs.getString(6));
-                    Log.d("value7","========7==========="+rs.getString(7));
-
-
-
-
+                    checkNumber =rs.getString(1);
+                    if (checkNumber.equals("0")){
+                        UsernumberInsert();
+                    }else {
+                        Toast.makeText(this, "already get your number", Toast.LENGTH_SHORT).show();
+                    }
             }
-//            group_adapter =new Billinvoice_Group_Adapter(getApplication(),groupNameList);
-//            group_spinner.setAdapter(group_adapter);
         }
 
 
@@ -153,6 +120,22 @@ private void Test_initList(){
     }
 
 
+}
+private void UsernumberInsert(){
+    try {
+        connection = com.ocean.orcl.ODBC.Db.createConnection();
+        if (connection != null) {
+        }
+        Statement stmt = connection.createStatement();
+        String sql = "begin pkg$sec.prc$insert_otp_log ('"+test_editText.getText().toString()+"'); end;";
+        stmt.executeUpdate(sql);
+        Log.d("success","======Success Insert number========");
+        connection.commit();
+        connection.close();
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
 }
 
 }

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 
 public class Emp_info_Activity extends AppCompatActivity implements CustomEmpInfoAdapter.SelectedEmployee {
     private Connection connection;
-    private Toolbar jEmp_info_ToolBarId;
+    private Toolbar toolbar;
     private CustomEmpInfoAdapter adapter;
 
     private ArrayList<EmpInfo_Entity> empInfoItems = new ArrayList<EmpInfo_Entity>();
@@ -41,14 +43,33 @@ public class Emp_info_Activity extends AppCompatActivity implements CustomEmpInf
     private Context context;
     private Helper helper;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emp_info);
         empView = findViewById(R.id.empInfo_listView);
         search = findViewById(R.id.search_empInfo);
-        jEmp_info_ToolBarId = findViewById(R.id.emp_info_ToolBarId);
-        this.setSupportActionBar(jEmp_info_ToolBarId);
+        toolbar = findViewById(R.id.emp_info_ToolBarId);
+
+
+        //controll toolbar
+        this.setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         context = Emp_info_Activity.this;
         helper = new Helper();

@@ -1,13 +1,16 @@
 package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +53,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
     private Dialog dialog;
     private BusyDialog busyDialog;
     private Context context;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,27 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
         listView = findViewById(R.id.partyDueStatement_result_listView);
         j_partyDue_statement_spinner = findViewById(R.id.partyDue_statement_spinner);
         toDate = findViewById(R.id.partyDue_dateTex);
+        toolbar = findViewById(R.id.partyDueStatementToolBarId);
         context = Party_Due_Statement_Activity.this;
+
+        //controll toolbar
+        //controll toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+//        getSupportActionBar().setTitle("Current Stock");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         CurrentDate();
         DateSetTO();
         j_partyDue_statement_spinner.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +252,6 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
 
                     Statement stmt=connection.createStatement();
                     String query1,query2;
-
                     query1="select fnc$dateto(to_date('"+toDate.getText()+"','MON DD,RRRR')) from dual";
                     stmt.executeUpdate(query1);
 

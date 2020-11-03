@@ -21,13 +21,12 @@
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ToolBar"
                 android:background="@color/colorHeader"
-                android:id="@+id/myTeamAttendenceToolBarId">
+                android:id="@+id/employeeInfoDetailsToolBarId">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Employee Details"
                     android:textColor="@android:color/white"
-                    android:textAlignment="center"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </androidx.appcompat.widget.Toolbar>

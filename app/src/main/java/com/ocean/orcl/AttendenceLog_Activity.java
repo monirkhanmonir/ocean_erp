@@ -4,7 +4,9 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -55,6 +57,7 @@ public class AttendenceLog_Activity extends AppCompatActivity implements SwipeRe
    private BusyDialog busyDialog;
    private Context context;
    String dateCurrent2;
+   private Toolbar toolbar;
 
 
     @Override
@@ -66,21 +69,27 @@ public class AttendenceLog_Activity extends AppCompatActivity implements SwipeRe
         swipeRefreshL = findViewById(R.id.swipeRefresh);
         jAttendenceLogRecyclerView = findViewById(R.id.attendenceLogRecyclerView);
         from_dateFill = findViewById(R.id.fromDate_Alog);
+        toolbar = findViewById(R.id.attendenceLogToolBarId);
 
         TextView loginTime = findViewById(R.id.login_text);
         TextView logoutTime = findViewById(R.id.Logout_text);
         context = AttendenceLog_Activity.this;
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        getSupportActionBar().setTitle("Attendance Log");
-        if(getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setBackgroundDrawable(
-                    new ColorDrawable(this.getResources().getColor(R.color.colorHeader)));
-        }
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-//        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //<<<<<<<<<<<-------------- Filled default set Textview in Current Date ------------->>>>>>>>>>>>>>>>>>>>>>
          dateCurrent2 = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());

@@ -163,6 +163,8 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MenuActivity.this, "Work in progress" , Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(),Test_Activity.class);
+                startActivity(intent);
             }
         });
 

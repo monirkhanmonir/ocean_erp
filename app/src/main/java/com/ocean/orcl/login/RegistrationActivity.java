@@ -1,9 +1,12 @@
 package com.ocean.orcl.login;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -25,20 +28,33 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
+import com.ocean.orcl.Billinvoice_item_Entity;
+import com.ocean.orcl.HRM_AccessPermission_Entity;
 import com.ocean.orcl.LoginActivity;
 import com.ocean.orcl.R;
+import com.ocean.orcl.Test_Activity;
 import com.ocean.orcl.localdb.OceanPreference;
+import com.ocean.orcl.util.BusyDialog;
+import com.ocean.orcl.util.NetworkHelpers;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class RegistrationActivity extends AppCompatActivity {
 
     private static String TAG ="RegistrationActivity";
+    private BusyDialog busyDialog;
+    private Context context;
+    private Connection connection;
 
     private CountryCodePicker ccp;
     private EditText phoneText, codeText;
     private Button continueNextButton;
-    private String checker="", phoneNumber="";
+    private String checker="", phoneNumber="",otpPhoneNUmber;
     RelativeLayout relativeLayout;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private FirebaseAuth mAuth;
@@ -49,6 +65,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private WebView jUpdateNewsReg;
 
     private OceanPreference preference;
+    private String checkNumberUser;
 
 
     @Override
@@ -66,6 +83,8 @@ public class RegistrationActivity extends AppCompatActivity {
         phoneText = findViewById(R.id.phoneText);
         jCompLogoName = findViewById(R.id.compLogoName);
         jUpdateNewsReg = findViewById(R.id.updateNewsReg);
+
+        context = RegistrationActivity.this;
 
         preference = new OceanPreference(RegistrationActivity.this);
 
@@ -94,6 +113,13 @@ public class RegistrationActivity extends AppCompatActivity {
         continueNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                otpPhoneNUmber = phoneText.getText().toString();
+
+
+
+
                 if (continueNextButton.getText().equals("Submit") || checker.equals("Code Sent")) {
 
                     String verificationCode = codeText.getText().toString();
@@ -181,7 +207,18 @@ public class RegistrationActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             loadingBar.dismiss();
                             Toast.makeText(RegistrationActivity.this, "Congratulations", Toast.LENGTH_SHORT).show();
-                            sendUserToMainActivityes();
+                            //sendUserToMainActivityes();
+
+                            if(NetworkHelpers.isNetworkAvailable(context)){
+                                new UserPhoneNumberStore().execute();
+//                                check_UserNumber();
+
+                            }else {
+                                Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+                            }
+
+
+
                         } else {
                             loadingBar.dismiss();
                             String e  = task.getException().toString();
@@ -193,7 +230,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-
     private void sendUserToMainActivityes(){
 
         preference.setRegistrationStatusInPrefarence(true);
@@ -202,5 +238,95 @@ public class RegistrationActivity extends AppCompatActivity {
         finish();
 
     }
+    private void check_UserNumber(){
 
+        try {
+
+            connection = com.ocean.orcl.ODBC.Db.createConnection();
+            Log.d("connection","================Test DB==Connected==========="+otpPhoneNUmber);
+
+            if(connection != null){
+
+                Statement stmt=connection.createStatement();
+                String query = "select pkg$sec.fnc$check_otp_log ('"+otpPhoneNUmber+"') a from dual";
+
+                ResultSet rs=stmt.executeQuery(query);
+
+                while(rs.next()) {
+                    Log.d("value1","==========1========="+rs.getString(1));
+                    checkNumberUser =rs.getString(1);
+//                    if (checkNumberUser.equals("0")){
+//                        UserNumberInsert();
+//                        sendUserToMainActivityes();
+//                        loadingBar.dismiss();
+//                    }else {
+//                        sendUserToMainActivityes();
+//                        loadingBar.dismiss();
+//                        Toast.makeText(context, "already get your number", Toast.LENGTH_SHORT).show();
+//                    }
+
+                }
+            }
+
+            connection.close();
+
+        }
+        catch (Exception e) {
+
+            Toast.makeText(RegistrationActivity.this, " " + e,Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+
+    }
+    private void UserNumberInsert(){
+        try {
+            connection = com.ocean.orcl.ODBC.Db.createConnection();
+            if (connection != null) {
+            }
+            Statement stmt = connection.createStatement();
+            String sql = "begin pkg$sec.prc$insert_otp_log ('"+otpPhoneNUmber+"'); end;";
+            stmt.executeUpdate(sql);
+            Log.d("success","======Success Insert number========");
+            connection.commit();
+            connection.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    private class UserPhoneNumberStore extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected void onPreExecute() {
+            busyDialog = new BusyDialog(context);
+            busyDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            check_UserNumber();
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (checkNumberUser.equals("0")){
+                UserNumberInsert();
+                sendUserToMainActivityes();
+                loadingBar.dismiss();
+            }else {
+                sendUserToMainActivityes();
+                loadingBar.dismiss();
+//                Toast.makeText(context, "already get your number", Toast.LENGTH_SHORT).show();
+            }
+            busyDialog.dismis();
+        }
+    }
 }

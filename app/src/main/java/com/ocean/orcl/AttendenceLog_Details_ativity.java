@@ -1,10 +1,13 @@
 package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +44,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
     private Context context;
     private String id, date;
     private LinearLayout j_attendence_log_details_layout;
+    private Toolbar toolbar;
 
 
     @Override
@@ -49,6 +53,7 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
         setContentView(R.layout.attendence_log__details_ativity);
         listView = findViewById(R.id.attendenceDetails_listView);
         j_attendence_log_details_layout = findViewById(R.id.attendence_log_details_layout);
+        toolbar = findViewById(R.id.AttendenceDetailsToolBarId);
 
         // ....................For Query (A) ..............
         TextView personID = findViewById(R.id.aDetiles_id);
@@ -78,6 +83,24 @@ public class AttendenceLog_Details_ativity extends AppCompatActivity {
         handler = new Handler();
         context = AttendenceLog_Details_ativity.this;
         //  j_attendence_log_details_layout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition_animation));
+
+
+        //control toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
 
         Intent intent = getIntent();

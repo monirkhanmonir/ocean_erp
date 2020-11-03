@@ -1,6 +1,7 @@
 package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,7 +11,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +61,7 @@ public class ACC_View_Voucher extends AppCompatActivity {
 
     private BusyDialog busyDialog;
     private Context context;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,24 @@ public class ACC_View_Voucher extends AppCompatActivity {
 
         j_acc_view_voucher_spinner = findViewById(R.id.acc_view_voucher_spinner);
         j_viewVoucher_Reference_search = findViewById(R.id.viewVoucher_Reference_search);
+        toolbar = findViewById(R.id.accViewVoucherToolBarId);
+
+        //controll toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+//        getSupportActionBar().setTitle("Current Stock");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
 
         j_viewVoucher_Reference_search.setActivated(true);

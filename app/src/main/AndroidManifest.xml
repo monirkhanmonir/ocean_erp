@@ -48,10 +48,7 @@
         <activity android:name=".AttendenceLog_Details_ativity" /> <!-- android:theme="@style/Theme.AppCompat.Dialog.Alert" -->
         <activity android:name=".MyAttencence_Activity" />
         <activity android:name=".MyTeamsAttendence_Activity" /> <!-- android:theme="@style/Theme.AppCompat.Light.DarkActionBar" -->
-        <activity android:name=".AttendenceLog_Activity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        </activity>
+        <activity android:name=".AttendenceLog_Activity"></activity>
         <activity android:name=".MiscActivity" />
         <activity android:name=".AccActivity" />
         <activity android:name=".INVActivity" />

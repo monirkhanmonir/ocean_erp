@@ -1,6 +1,7 @@
 package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.app.AlertDialog;
@@ -8,6 +9,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +43,7 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
     private Context context;
     private Handler handler;
     private BusyDialog busyDialog;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,26 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
         logoutTime =findViewById(R.id.updateOutTime);
         dueLogOutTime =findViewById(R.id.updateLogOutDueTime);
         dept =findViewById(R.id.updateDept);
+        toolbar = findViewById(R.id.myTeamAttendenceReasonUpdateToolBarId);
+
+
+        //controll toolbar
+        this.setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         context = MyAttendence_DetailsUpdate_Activity.this;
         handler = new Handler();
@@ -211,8 +235,8 @@ update_btn.setOnClickListener(new View.OnClickListener() {
             try {
                 connection = com.ocean.orcl.ODBC.Db.createConnection();
                 if (connection != null) {
-
                 }
+
                 Statement stmt = connection.createStatement();
                 String sql = "update hrm_attendance_mst\n" +
                         "set V_LATE_LOGIN_REASON = '"+lateLogin_reason.getText()+"',\n" +
@@ -223,7 +247,7 @@ update_btn.setOnClickListener(new View.OnClickListener() {
 
                 stmt.executeUpdate(sql);
                 connection.commit();
-              busyDialog.dismis();
+                busyDialog.dismis();
                 connection.close();
             } catch (Exception e) {
 

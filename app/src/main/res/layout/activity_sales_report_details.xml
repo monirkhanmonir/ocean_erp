@@ -13,15 +13,16 @@
         android:gravity="center">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/myTeamAttendenceToolBarId"
+            android:id="@+id/salesReportD_ToolBarId"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorHeader"
             android:theme="@style/ToolBar">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="Sales Report(Details)"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"

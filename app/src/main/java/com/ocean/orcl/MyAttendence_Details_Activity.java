@@ -1,10 +1,13 @@
 package com.ocean.orcl;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +46,7 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
     private BusyDialog busyDialog;
     private Context context;
     private Handler handler;
+    private Toolbar toolbar;
 
 
     @Override
@@ -53,6 +57,7 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         editBtn = findViewById(R.id.edit_Btn);
         context = getApplicationContext();
         handler = new Handler();
+        toolbar = findViewById(R.id.myTeamAttendenceDetailsToolBarId);
 
         // ....................For Query (A) ..............
         TextView personID = findViewById(R.id.myAttendanceDetails_id);
@@ -80,6 +85,26 @@ public class MyAttendence_Details_Activity extends AppCompatActivity {
         final TextView earlyLogoutReason = findViewById(R.id.my_Att_Detailes_earlyLogoutReason);
         lateLogin_reason = findViewById(R.id.my_Att_Detailes_lateLoginReason);
         absent_reason = findViewById(R.id.my_Att_Detailes_absentReason);
+
+
+        //controll toolbar
+        this.setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

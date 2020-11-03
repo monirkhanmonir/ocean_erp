@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -41,7 +43,7 @@ public class MyTeamsAttendence_Activity extends AppCompatActivity {
     private TextView fromDate,toDate;
     private RecyclerView recyclerView;
 
-    private Toolbar jMyTeamAttendenceToolBarId;
+    private Toolbar toolbar;
     private BusyDialog busyDialog;
     private Context context;
     private Helper helper;
@@ -59,8 +61,23 @@ public class MyTeamsAttendence_Activity extends AppCompatActivity {
 
          helper = new Helper();
          context  = MyTeamsAttendence_Activity.this;
-         jMyTeamAttendenceToolBarId = findViewById(R.id.myTeamAttendenceToolBarId);
-         this.setSupportActionBar(jMyTeamAttendenceToolBarId);
+
+         //contraol toolbar
+         toolbar = findViewById(R.id.myTeamAttendenceToolBarId);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         //<<<<<<<<<<<<<<<<<..........value pass Login to this Activity................>>>>>>>>>>>>>>>>>
@@ -252,6 +269,7 @@ public class MyTeamsAttendence_Activity extends AppCompatActivity {
 
             try {
                 connection = Db.createConnection();
+
 
                 final String toSelectDate = toDate.getText().toString();
                 Bundle b = getIntent().getExtras();

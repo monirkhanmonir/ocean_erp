@@ -8,6 +8,31 @@
     tools:context=".AttendenceLog_Activity">
 
     <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/attendenceLogToolBarId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorHeader"
+            >
+            <!--            android:theme="@style/ToolBar"-->
+            <TextView
+                android:id="@+id/currentStock_textView"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attendance log"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/appBackground"

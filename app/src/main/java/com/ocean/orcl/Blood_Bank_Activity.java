@@ -10,6 +10,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,6 +48,7 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
     private BusyDialog busyDialog;
     private Context context;
     private Handler handler;
+    private Toolbar toolbar;
 
     Button jblood_group_button;
 
@@ -59,11 +62,28 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
         jmyBloodBankToolBarId = findViewById(R.id.myBloodBankToolBarId);
         searchBlood = findViewById(R.id.search_blood);
         jblood_group_button = findViewById(R.id.blood_group_btn);
+        toolbar = findViewById(R.id.myBloodBankToolBarId);
 
         context = Blood_Bank_Activity.this;
         handler = new Handler();
 
-        this.setSupportActionBar(jmyBloodBankToolBarId);
+        //control toolbar
+        this.setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_back);
+        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         searchBlood.setActivated(true);
         searchBlood.setQueryHint("Search blood...");

@@ -21,7 +21,6 @@
                 android:layout_height="wrap_content"
                 android:text="My Attendance"
                 android:textColor="@android:color/white"
-                android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
