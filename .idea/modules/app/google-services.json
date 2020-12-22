@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "313371205057",
+    "firebase_url": "https://oceanerp-c21d1.firebaseio.com",
+    "project_id": "oceanerp-c21d1",
+    "storage_bucket": "oceanerp-c21d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313371205057:android:598a235a21fd3c3da66340",
+        "android_client_info": {
+          "package_name": "com.excellenceict.ocean"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313371205057-ktl2ud3pfdvhghvjl08ite76h179a24v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.excellenceict.ocean",
+            "certificate_hash": "3c7e0fc0e634c6ac0deded51fa228f8a8f8ee3d7"
+          }
+        },
+        {
+          "client_id": "313371205057-40oij8vs1v51qa2ob8q4mms43jafn09o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYH1ItfLsAvkmKtKp_PhOVKES6jzOjRkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313371205057-40oij8vs1v51qa2ob8q4mms43jafn09o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

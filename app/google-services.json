@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "843714113375",
-    "firebase_url": "https://ocean-erp.firebaseio.com",
-    "project_id": "ocean-erp",
-    "storage_bucket": "ocean-erp.appspot.com"
+    "project_number": "946329951994",
+    "firebase_url": "https://ocean-erp-d9fd5.firebaseio.com",
+    "project_id": "ocean-erp-d9fd5",
+    "storage_bucket": "ocean-erp-d9fd5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:843714113375:android:a3258e18d70c8a6abdd0ea",
+        "mobilesdk_app_id": "1:946329951994:android:c47e33e3c257ad3d06b343",
         "android_client_info": {
-          "package_name": "com.ocean.orcl"
+          "package_name": "com.excellenceict.ocean_erp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "843714113375-6iclgnodftqoij3fv84ct78gfb52dqiq.apps.googleusercontent.com",
+          "client_id": "946329951994-9btcv0l0b02c6lv82rm7uttfn3v86jdm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAnkUCnDuqZHLr_yvph8qAVki9e4gnZMMg"
+          "current_key": "AIzaSyB_7-ZVvmnETtQStY7S4VlZcE1MU1nYUnc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "843714113375-6iclgnodftqoij3fv84ct78gfb52dqiq.apps.googleusercontent.com",
+              "client_id": "946329951994-9btcv0l0b02c6lv82rm7uttfn3v86jdm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

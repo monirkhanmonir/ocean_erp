@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ocean.orcl">
+    package="com.excellenceict.ocean_erp">
     <!-- <permission -->
     <!-- android:name="info.android.permission.MAPS_RECEIVE" -->
     <!-- android:protectionLevel="signature" /> -->
@@ -12,8 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -22,47 +21,51 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.RegistrationActivity">
+
+        <activity android:name="com.excellenceict.ocean_erp.Chalan_Report_Details_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.Chalan_Report_Summary_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.Sales_Report_Details_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.Sales_Report_Summary_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.Expiory_List" />
+        <activity android:name="com.excellenceict.ocean_erp.Party_Due_Statement_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.ACC_View_Voucher" />
+        <activity android:name="com.excellenceict.ocean_erp.Sales_Chalan_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.Bill_Invoice_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.CurrentStock_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.MyAttendence_DetailsUpdate_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.MyAttendence_Details_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.Test_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.EmpInfo_detiles_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.Blood_Bank_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.Emp_info_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.AttendenceLog_Details_ativity" /> <!-- android:theme="@style/Theme.AppCompat.Dialog.Alert" -->
+        <activity android:name="com.excellenceict.ocean_erp.MyAttencence_Activity" />
+        <activity android:name="com.excellenceict.ocean_erp.MyTeamsAttendence_Activity" /> <!-- android:theme="@style/Theme.AppCompat.Light.DarkActionBar" -->
+        <activity android:name="com.excellenceict.ocean_erp.AttendenceLog_Activity"></activity>
+        <activity android:name="com.excellenceict.ocean_erp.MiscActivity" />
+        <activity android:name="com.excellenceict.ocean_erp.AccActivity" />
+        <activity android:name="com.excellenceict.ocean_erp.INVActivity" />
+        <activity android:name="com.excellenceict.ocean_erp.HRMActivity" />
+        <activity android:name="com.excellenceict.ocean_erp.MenuActivity" />
+        <activity
+            android:name="com.excellenceict.ocean_erp.LoginActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Chalan_Report_Details_Activity" />
-        <activity android:name=".Chalan_Report_Summary_Activity" />
-        <activity android:name=".Sales_Report_Details_Activity" />
-        <activity android:name=".Sales_Report_Summary_Activity" />
-        <activity android:name=".Expiory_List" />
-        <activity android:name=".Party_Due_Statement_Activity" />
-        <activity android:name=".ACC_View_Voucher" />
-        <activity android:name=".Sales_Chalan_Activity" />
-        <activity android:name=".Bill_Invoice_Activity" />
-        <activity android:name=".CurrentStock_Activity" />
-        <activity android:name=".MyAttendence_DetailsUpdate_Activity" />
-        <activity android:name=".MyAttendence_Details_Activity" />
-        <activity android:name=".Test_Activity" />
-        <activity android:name=".EmpInfo_detiles_Activity" />
-        <activity android:name=".Blood_Bank_Activity" />
-        <activity android:name=".Emp_info_Activity" />
-        <activity android:name=".AttendenceLog_Details_ativity" /> <!-- android:theme="@style/Theme.AppCompat.Dialog.Alert" -->
-        <activity android:name=".MyAttencence_Activity" />
-        <activity android:name=".MyTeamsAttendence_Activity" /> <!-- android:theme="@style/Theme.AppCompat.Light.DarkActionBar" -->
-        <activity android:name=".AttendenceLog_Activity"></activity>
-        <activity android:name=".MiscActivity" />
-        <activity android:name=".AccActivity" />
-        <activity android:name=".INVActivity" />
-        <activity android:name=".HRMActivity" />
-        <activity android:name=".MenuActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:windowSoftInputMode="stateHidden">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
+        <provider
+            android:authorities="com.excellenceict.ocean_erp.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+        
     </application>
 
 </manifest>

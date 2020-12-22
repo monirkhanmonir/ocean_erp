@@ -1,20 +1,29 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('E:\\H_backup\\ocean_erp\\ocean_apk.jks')
+            storePassword '@dmin4@ll'
+            keyAlias 'Key0'
+            keyPassword '@dmin4@ll'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.ocean.orcl"
+        applicationId "com.excellenceict.ocean_erp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.1.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -27,22 +36,21 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
     //for circle image view
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
+   // implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     //for firebase auth
-    implementation 'com.google.firebase:firebase-core:17.0.0'
-    implementation 'com.google.firebase:firebase-auth:17.0.0'
+//    implementation 'com.google.firebase:firebase-core:17.0.0'
+//    implementation 'com.google.firebase:firebase-auth:17.0.0'
 
     //for OTP authentication
-    implementation 'com.hbb20:ccp:2.1.9'
-    implementation 'pub.devrel:easypermissions:0.4.0'
+//    implementation 'com.hbb20:ccp:2.1.9'
+//    implementation 'pub.devrel:easypermissions:0.4.0'
 
     //for material design
     implementation 'com.google.android.material:material:1.0.0'
 
     //for image slider
     implementation 'com.github.denzcoskun:ImageSlideshow:0.0.6'
-
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
