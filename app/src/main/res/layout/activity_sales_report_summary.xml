@@ -13,7 +13,7 @@
         android:gravity="center">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mysales_report_ToolBarId"
+            android:id="@+id/mysales_reportSummary_ToolBarId"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorHeader"

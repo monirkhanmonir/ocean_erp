@@ -51,6 +51,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
     private Dialog dailog;
     private BusyDialog busyDialog;
     private Context context;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         j_sales_report_s_group_spinner = findViewById(R.id.sales_report_s_group_spinner);
         j_sales_report_s_item_spinner = findViewById(R.id.sales_report_s_item_spinner);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.salesChalanToolBarId);
+         toolbar = (Toolbar) findViewById(R.id.mysales_reportSummary_ToolBarId);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

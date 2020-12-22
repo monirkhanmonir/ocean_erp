@@ -125,11 +125,11 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
         if(weekends.equals("N") && holidays.equals("N") && login_flag.equals("Y")){
             loginTime.setTextColor(Color.RED);
         }else {
-            loginTime.setTextColor(Color.GREEN);
+            loginTime.setTextColor(Color.parseColor("#4D850D"));
         }if(weekends.equals("N") && holidays.equals("N") && logOut_flag.equals("Y")){
             logoutTime.setTextColor(Color.RED);
         }else {
-            logoutTime.setTextColor(Color.GREEN);
+            logoutTime.setTextColor(Color.parseColor("#4D850D"));
         }
 
         if (absence_flag.equals("0")) {

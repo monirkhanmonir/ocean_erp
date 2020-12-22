@@ -9,8 +9,8 @@ android {
             keyPassword '@dmin4@ll'
         }
     }
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.excellenceict.ocean_erp"
         minSdkVersion 21
