@@ -91,7 +91,7 @@ public class ACC_View_Voucher extends AppCompatActivity {
 
 
         j_viewVoucher_Reference_search.setActivated(true);
-        j_viewVoucher_Reference_search.setQueryHint("Search Here...");
+        j_viewVoucher_Reference_search.setQueryHint("Search Ref/Note...");
         j_viewVoucher_Reference_search.onActionViewExpanded();
         j_viewVoucher_Reference_search.setIconified(false);
         j_viewVoucher_Reference_search.clearFocus();
@@ -191,7 +191,13 @@ public class ACC_View_Voucher extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.d("CLASS", "SEARCH DATA>>>"+newText);
-                voucherListadapter.getFilter().filter(newText);
+                if (voucherListadapter != null){
+                    voucherListadapter.getFilter().filter(newText);
+
+                }else {
+//                    Toast.makeText(context, "please select item", Toast.LENGTH_SHORT).show();
+
+                }
 
                 return false;
             }

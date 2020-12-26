@@ -42,7 +42,7 @@
             android:drawableEnd="@drawable/ic_dropdown_arro_24"
             android:paddingVertical="10dp"
             android:paddingStart="10sp"
-            android:text="Select Customer"
+            android:text="Select Transaction"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
     </LinearLayout>
