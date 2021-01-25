@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class Db {
 
     private static final String DEFAULT_DRIVER = "oracle.jdbc.driver.OracleDriver";
-    private static final String DEFAULT_URL = "jdbc:oracle:thin:@202.125.75.236:1521:orcl";
+    private static final String DEFAULT_URL = "jdbc:oracle:thin:@202.125.75.236:1522:orcl1";
 //    private static final String DEFAULT_URL = "jdbc:oracle:thin:@192.168.0.8:1521:orcl";
     private static final String DEFAULT_USERNAME = "erp";
     private static final String DEFAULT_PASSWORD = "erp";
