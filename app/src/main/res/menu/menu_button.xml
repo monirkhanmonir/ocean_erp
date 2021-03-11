@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Emergency"
+        android:id="@+id/emg_call"
+        android:icon="@drawable/icon_call"/>
+<!--    <item-->
+<!--        android:title="Home"-->
+<!--        android:id="@+id/home"-->
+<!--        android:icon="@drawable/menu_icon"/>-->
+    <item
+        android:title="Profile"
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_user"/>
+    <item
+        android:title="Change"
+        android:id="@+id/passwordChange"
+        android:icon="@drawable/ic_change"/>
+    <item
+        android:title="Info"
+        android:id="@+id/info"
+        android:icon="@drawable/ic_info"/>
+
+</menu>

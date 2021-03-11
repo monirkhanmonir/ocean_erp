@@ -20,7 +20,7 @@ import com.excellenceict.ocean_erp.R;
 
 import java.util.List;
 
-public class CustomMyAttendenceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
+public class CustomMyAttendenceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<MyAttendence_Entity> myAttendenceList;
     private List<MyAttendence_Entity> myAttendenceFilterList;
@@ -33,44 +33,7 @@ public class CustomMyAttendenceAdapter extends RecyclerView.Adapter<RecyclerView
         this.selectedAttendence = selectedAttendence;
     }
 
-    @Override
-    public Filter getFilter() {
 
-//        Filter filter = new Filter() {
-//            @Override
-//            protected FilterResults performFiltering(CharSequence constraint) {
-//                FilterResults filterResults = new FilterResults();
-//                if (constraint==null | constraint.length()==0){
-//                    filterResults.count = myAttendenceFilterList.size();
-//                    filterResults.values = myAttendenceFilterList;
-//
-//                }else {
-//                    String searchChr = constraint.toString().toLowerCase();
-//                    List<MyAttendence_Entity> resultData = new ArrayList<>();
-//                    for (MyAttendence_Entity attendenceModel: myAttendenceFilterList){
-//                        if(attendenceModel.getPKG_DESCRIPTION().toLowerCase().contains(searchChr)| PackageModel.getSERVICE_NAME().toLowerCase().contains(searchChr)){
-//                            resultData.add(PackageModel);
-//                        }
-//                    }
-//
-//                    filterResults.count = resultData.size();
-//                    filterResults.values = resultData;
-//                }
-//
-//                return filterResults;
-//            }
-//
-//            @Override
-//            protected void publishResults(CharSequence constraint, FilterResults results) {
-//
-//                packageList = (List<PackageModel>) results.values;
-//                notifyDataSetChanged();
-//            }
-//        };
-//        return filter;
-
-        return null;
-    }
 
     @NonNull
     @Override

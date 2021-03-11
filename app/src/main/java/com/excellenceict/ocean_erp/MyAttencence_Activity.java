@@ -57,7 +57,7 @@ public class MyAttencence_Activity extends AppCompatActivity implements CustomMy
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_attencence);
+        setContentView(R.layout.my_attencence_activity);
         jmy_Attendence_listView =findViewById(R.id.my_Attendence_listView);
 
         textViewDateFrom = findViewById(R.id.From_date1);

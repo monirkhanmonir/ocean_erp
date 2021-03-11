@@ -14,13 +14,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.excellenceict.ocean_erp.Model.MyTeamsAttendance_Model;
+
 import java.util.ArrayList;
 import java.util.List;
 
 //public class CustomAdapter_MyTeamsAttendence extends BaseAdapter implements Filterable {
 public class CustomAdapter_MyTeamsAttendence  extends RecyclerView.Adapter<CustomAdapter_MyTeamsAttendence.ExampleViewHolder>implements Filterable{
-    private List<MyTeams_Entity> exampleList;
-    private List<MyTeams_Entity> exampleListFull;
+    private List<MyTeamsAttendance_Model> exampleList;
+    private List<MyTeamsAttendance_Model> exampleListFull;
     private  Context context;
     class ExampleViewHolder extends RecyclerView.ViewHolder {
         TextView textView1;
@@ -43,7 +45,7 @@ public class CustomAdapter_MyTeamsAttendence  extends RecyclerView.Adapter<Custo
         }
     }
 
-    CustomAdapter_MyTeamsAttendence(Context context, List<MyTeams_Entity> exampleList) {
+    CustomAdapter_MyTeamsAttendence(Context context, List<MyTeamsAttendance_Model> exampleList) {
         this.exampleList = exampleList;
         this.context =context;
         exampleListFull = new ArrayList<>(exampleList);
@@ -60,7 +62,7 @@ public class CustomAdapter_MyTeamsAttendence  extends RecyclerView.Adapter<Custo
 
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, final int position) {
-        MyTeams_Entity currentItem = exampleList.get(position);
+        MyTeamsAttendance_Model currentItem = exampleList.get(position);
         holder.textView1.setText(currentItem.getPerson_no());
         holder.textView2.setText(currentItem.getEmp_name());
         holder.textView3.setText(currentItem.getDesignation());
@@ -160,12 +162,12 @@ public class CustomAdapter_MyTeamsAttendence  extends RecyclerView.Adapter<Custo
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<MyTeams_Entity> filteredList = new ArrayList<>();
+            List<MyTeamsAttendance_Model> filteredList = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(exampleListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (MyTeams_Entity item : exampleListFull) {
+                for (MyTeamsAttendance_Model item : exampleListFull) {
                     if (item.getEmp_name().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
 
@@ -189,12 +191,12 @@ public class CustomAdapter_MyTeamsAttendence  extends RecyclerView.Adapter<Custo
 
 
 
-    public  void  updateList(List<MyTeams_Entity>newList){
+    public  void  updateList(List<MyTeamsAttendance_Model>newList){
         exampleList = new ArrayList<>();
         exampleList.addAll(newList);
         notifyDataSetChanged();
     }
-    public void filterList(ArrayList<MyTeams_Entity> newList) {
+    public void filterList(ArrayList<MyTeamsAttendance_Model> newList) {
         exampleList = new ArrayList<>();
         exampleList.addAll(newList);
         notifyDataSetChanged();

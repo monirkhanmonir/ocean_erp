@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.excellenceict.ocean_erp.Model.CurrentStock_Entity_F;
+
 import java.util.ArrayList;
 
 public class CustomAdapter_CurrentStock extends BaseAdapter {

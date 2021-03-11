@@ -21,7 +21,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.excellenceict.ocean_erp.Model.Billinvoice_Customer_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_Group_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_item_Model;
 import com.excellenceict.ocean_erp.util.BusyDialog;
+import com.excellenceict.ocean_erp.util.Helper;
 import com.excellenceict.ocean_erp.util.NetworkHelpers;
 
 import java.sql.Connection;
@@ -37,11 +41,14 @@ import java.util.Locale;
 public class Sales_Chalan_Activity extends AppCompatActivity {
     private Connection connection;
     TextView text_formDate, text_toDate;
-    String groupItem_id, item_id, customer_id, customer_contact;
+    String groupItem_id="-1";
+    String item_id="-1";
+    String customer_id="-1";
+    String customer_contact="-1";
     private ListView listView;
-    private ArrayList<Billinvoice_Group_Entity> groupNameList;
-    private ArrayList<Billinvoice_Customer_Entity> customerNameList;
-    private ArrayList<Billinvoice_item_Entity> itemNameList;
+    private ArrayList<Billinvoice_Group_Model> groupNameList;
+    private ArrayList<Billinvoice_Customer_Model> customerNameList;
+    private ArrayList<Billinvoice_item_Model> itemNameList;
     private ArrayList<SalesChalan_Result_Entity> resultList;
     private SalesChalan_Results_CustomAdapter result_adapter;
 
@@ -55,7 +62,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sales__chalan);
+        setContentView(R.layout.sales_chalan_activity);
         text_formDate = findViewById(R.id.salesChalan_from_date);
         text_toDate = findViewById(R.id.salesChalan_to_date);
         listView = findViewById(R.id.salesChalan_result_listView);
@@ -107,7 +114,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_Customer_Entity> salesChalanAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
+                final ArrayAdapter<Billinvoice_Customer_Model> salesChalanAdapter = new ArrayAdapter<Billinvoice_Customer_Model>(
                         Sales_Chalan_Activity.this, android.R.layout.simple_list_item_1, customerNameList
                 );
 
@@ -138,6 +145,9 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
 
                             groupNameList = null;
                             itemNameList = null;
+
+                            groupItem_id="-1";
+                            item_id="-1";
 
                             customer_id = salesChalanAdapter.getItem(position).getCustomer_Id();
 
@@ -193,7 +203,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_Group_Entity> salesChalanAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
+                final ArrayAdapter<Billinvoice_Group_Model> salesChalanAdapter = new ArrayAdapter<Billinvoice_Group_Model>(
                         Sales_Chalan_Activity.this, android.R.layout.simple_list_item_1, groupNameList
                 );
 
@@ -277,7 +287,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_item_Entity> salesChalanAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
+                final ArrayAdapter<Billinvoice_item_Model> salesChalanAdapter = new ArrayAdapter<Billinvoice_item_Model>(
                         Sales_Chalan_Activity.this, android.R.layout.simple_list_item_1, itemNameList
                 );
 
@@ -318,7 +328,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
     }
 
 
-    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Entity>> {
+    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Model>> {
 
         @Override
         protected void onPreExecute() {
@@ -327,7 +337,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Billinvoice_Customer_Entity> doInBackground(Void... voids) {
+        protected ArrayList<Billinvoice_Customer_Model> doInBackground(Void... voids) {
             customerNameList = new ArrayList<>();
 
             try {
@@ -351,28 +361,29 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1), rs.getString(2)));
+                        customerNameList.add(new Billinvoice_Customer_Model(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Customer====1===========" + rs.getString(1));
                         Log.d("value2", "======Customer====2===========" + rs.getString(2));
                     }
                 }
-
+                busyDialog.dismis();
                 connection.close();
 
             } catch (Exception e) {
 
                 Toast.makeText(Sales_Chalan_Activity.this, " " + e, Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
+                busyDialog.dismis();
             }
             return customerNameList;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
+        protected void onPostExecute(ArrayList<Billinvoice_Customer_Model> billinvoice_customer_entities) {
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }
-
 
     private class Result_Task extends AsyncTask<Void, Void, ArrayList<SalesChalan_Result_Entity>> {
 
@@ -427,9 +438,10 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<SalesChalan_Result_Entity> bill_result_entities) {
-            busyDialog.dismis();
             result_adapter = new SalesChalan_Results_CustomAdapter(getApplication(), resultList);
             listView.setAdapter(result_adapter);
+            Helper.getListViewSize(listView);
+            busyDialog.dismis();
         }
 
     }
@@ -555,7 +567,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1), rs.getString(2)));
+                        groupNameList.add(new Billinvoice_Group_Model(rs.getString(1), rs.getString(2)));
 
                     }
 
@@ -574,6 +586,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }
@@ -610,7 +623,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1), rs.getString(2)));
+                        itemNameList.add(new Billinvoice_item_Model(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Item====1===========" + rs.getString(1));
                         Log.d("value2", "======Item====2===========" + rs.getString(2));
 
@@ -628,6 +641,7 @@ public class Sales_Chalan_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }

@@ -10,11 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.excellenceict.ocean_erp.Model.Chalan_Report_Summary_Model;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class Chalan_Report_SummaryResult_Customadapter extends ArrayAdapter<Chalan_Report_Summary_Entity> {
-    public Chalan_Report_SummaryResult_Customadapter(Context context, ArrayList<Chalan_Report_Summary_Entity> result){
+public class Chalan_Report_SummaryResult_Customadapter extends ArrayAdapter<Chalan_Report_Summary_Model> {
+    public Chalan_Report_SummaryResult_Customadapter(Context context, ArrayList<Chalan_Report_Summary_Model> result){
         super(context,0,result);
 
     }
@@ -36,7 +38,7 @@ public class Chalan_Report_SummaryResult_Customadapter extends ArrayAdapter<Chal
         TextView invoice_no = convertView.findViewById(R.id.invoiceNO_text);
         TextView invoice_date = convertView.findViewById(R.id.invoiceDate_text);
         TextView invoice_amount = convertView.findViewById(R.id.amount_text);
-        Chalan_Report_Summary_Entity currentItems = (Chalan_Report_Summary_Entity) getItem(position);
+        Chalan_Report_Summary_Model currentItems = (Chalan_Report_Summary_Model) getItem(position);
         if(currentItems !=null){
             invoice_no.setText(currentItems.getChalanSell_qty());
             invoice_date.setText(currentItems.getChalanMu_name());

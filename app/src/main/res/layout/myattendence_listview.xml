@@ -102,11 +102,13 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
                 android:layout_weight="1"
                 android:text="Let In "/>
             <TextView
                 android:id="@+id/myAttendence_let_login_Reason"
                 android:layout_width="0dp"
+                android:textColor="@color/red"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:text="Resune "/>
@@ -121,11 +123,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@color/colorPrimary"
                 android:text="Early Out "/>
             <TextView
                 android:id="@+id/myAttendence_early_logout_reason"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/red"
                 android:layout_weight="4"
                 android:text="Resune: "/>
         </LinearLayout>
@@ -139,11 +143,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@color/colorPrimary"
                 android:text="Absent "/>
             <TextView
                 android:id="@+id/myAttendence_absence_reason"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/red"
                 android:layout_weight="4"
                 android:text="Resune: "/>
             </LinearLayout>

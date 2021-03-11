@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10sp">
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_custom_row"
+            android:backgroundTint="@color/rowColor">
+
+            <ImageView
+                android:id="@+id/spinner_icon_img1"
+                android:layout_width="19dp"
+                android:layout_height="18dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_sales_summary" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/spinner_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:text="Select One"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:textSize="18dp" />
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_custom_row">
+
+            <ImageView
+                android:id="@+id/spinner_close_icon_img1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_cancel"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <SearchView
+        android:id="@+id/spinner_search_ledger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:layout_marginHorizontal="10dp"
+        android:clickable="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerItemListView"
+        android:listSelector="@color/appBackground"/>
+
+</LinearLayout>

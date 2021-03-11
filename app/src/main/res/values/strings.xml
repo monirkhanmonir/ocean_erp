@@ -6,4 +6,24 @@
     <string name="hint_username">user name</string>
     <string name="loading">Loading...</string>
     <string name="alertInternet">Please Check Your Internet connection.</string>
+
+    <!--    for radio button-->
+    <string name="single">Single</string>
+    <string name="married">Married</string>
+    <string name="unknown">Unknown</string>
+
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="bts">
+        Biotech Service is a Company registered per the rules and regulations of the Peoples Republic of
+        Bangladesh and involoved in marketing and distribution of medical diagnostic devices and reagents.
+    </string>
+    <string name="hotline">
+        +88 02 8127945, +88 02 9139815
+    </string>
+    <string name="address">
+                57/3 &amp; 57/4,9th floor,ENA Tower Biruttam kazi Nurruzzaman, Road ,Sheikh Rasel Square ,Lake Circus,
+    </string>
+
 </resources>

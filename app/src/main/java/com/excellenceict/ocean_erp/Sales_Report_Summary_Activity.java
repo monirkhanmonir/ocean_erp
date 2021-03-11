@@ -23,7 +23,12 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.excellenceict.ocean_erp.Model.Billinvoice_Result_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_Customer_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_Group_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_item_Model;
 import com.excellenceict.ocean_erp.util.BusyDialog;
+import com.excellenceict.ocean_erp.util.Helper;
 import com.excellenceict.ocean_erp.util.NetworkHelpers;
 
 import java.sql.Connection;
@@ -39,12 +44,15 @@ import java.util.Locale;
 public class Sales_Report_Summary_Activity extends AppCompatActivity {
     private Connection connection;
     TextView text_formDate, text_toDate;
-    String groupItem_id, item_id, customer_id, customer_contact;
+    String customer_id = "-1";
+    String groupItem_id = "-1";
+    String item_id = "-1";
+    String customer_contact;
     private ListView listView;
-    private ArrayList<Billinvoice_Group_Entity> groupNameList;
-    private ArrayList<Billinvoice_Customer_Entity> customerNameList;
-    private ArrayList<Billinvoice_item_Entity> itemNameList;
-    private ArrayList<Bill_Result_Entity> resultList;
+    private ArrayList<Billinvoice_Group_Model> groupNameList;
+    private ArrayList<Billinvoice_Customer_Model> customerNameList;
+    private ArrayList<Billinvoice_item_Model> itemNameList;
+    private ArrayList<Billinvoice_Result_Model> resultList;
     private Bill_Results_CustomAdapter result_adapter;
 
     private TextView j_sales_report_s_customer_spinner, j_sales_report_s_group_spinner, j_sales_report_s_item_spinner;
@@ -56,7 +64,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sales_report_summary);
+        setContentView(R.layout.sales_report_summary_activity);
         text_formDate = findViewById(R.id.salesReport_from_date);
         text_toDate = findViewById(R.id.salesReport_to_date);
         listView = findViewById(R.id.salesReport_result_listView);
@@ -66,7 +74,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         j_sales_report_s_group_spinner = findViewById(R.id.sales_report_s_group_spinner);
         j_sales_report_s_item_spinner = findViewById(R.id.sales_report_s_item_spinner);
 
-         toolbar = (Toolbar) findViewById(R.id.mysales_reportSummary_ToolBarId);
+        toolbar = (Toolbar) findViewById(R.id.mysales_reportSummary_ToolBarId);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -111,7 +119,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                 calcen_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("Test","Click Close");
+                        Log.d("Test", "Click Close");
                         dailog.dismiss();
                     }
                 });
@@ -124,7 +132,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                 SpinnerSearchView.setIconified(false);
                 SpinnerSearchView.clearFocus();
 
-                final ArrayAdapter<Billinvoice_Customer_Entity> adapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
+                final ArrayAdapter<Billinvoice_Customer_Model> adapter = new ArrayAdapter<Billinvoice_Customer_Model>(
                         Sales_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, customerNameList
                 );
 
@@ -157,6 +165,9 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                             groupNameList = null;
                             itemNameList = null;
 
+                            groupItem_id = "-1";
+                            item_id = "-1";
+
                             customer_id = adapter.getItem(position).getCustomer_Id();
 
                             if (NetworkHelpers.isNetworkAvailable(context)) {
@@ -172,8 +183,6 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                         //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
 
 
             }
@@ -209,13 +218,13 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                 calcen_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("Test","Click Close");
+                        Log.d("Test", "Click Close");
                         dailog.dismiss();
                     }
                 });
 
 
-                final ArrayAdapter<Billinvoice_Group_Entity> adapter = new ArrayAdapter<Billinvoice_Group_Entity>(
+                final ArrayAdapter<Billinvoice_Group_Model> adapter = new ArrayAdapter<Billinvoice_Group_Model>(
                         Sales_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, groupNameList
                 );
 
@@ -267,7 +276,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (groupNameList == null) {
+                if (itemNameList == null) {
                     Toast.makeText(Sales_Report_Summary_Activity.this, "Please select group", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -292,17 +301,17 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                 calcen_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("Test","Click Close");
+                        Log.d("Test", "Click Close");
                         dailog.dismiss();
                     }
                 });
 
 
-                final ArrayAdapter<Billinvoice_item_Entity> adapter = new ArrayAdapter<Billinvoice_item_Entity>(
+                final ArrayAdapter<Billinvoice_item_Model> adapter = new ArrayAdapter<Billinvoice_item_Model>(
                         Sales_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, itemNameList
                 );
+                    SpinnerListView.setAdapter(adapter);
 
-                SpinnerListView.setAdapter(adapter);
 
                 SpinnerSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
@@ -332,9 +341,6 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
-                            dateSetFROM();
-                            dateSetTO();
-
                             dailog.dismiss();
                             j_sales_report_s_item_spinner.setText(adapter.getItem(position).getItem_name());
                         }
@@ -345,6 +351,8 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
             }
         });
 
+        dateSetFROM();
+        dateSetTO();
 
     }
 
@@ -438,7 +446,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         text_toDate.setText(currentDate.toUpperCase());
     }
 
-    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Entity>> {
+    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Model>> {
 
         @Override
         protected void onPreExecute() {
@@ -447,7 +455,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Billinvoice_Customer_Entity> doInBackground(Void... voids) {
+        protected ArrayList<Billinvoice_Customer_Model> doInBackground(Void... voids) {
             customerNameList = new ArrayList<>();
             try {
 
@@ -470,7 +478,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1), rs.getString(2)));
+                        customerNameList.add(new Billinvoice_Customer_Model(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Customer====1===========" + rs.getString(1));
                         Log.d("value2", "======Customer====2===========" + rs.getString(2));
                     }
@@ -487,13 +495,15 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
+        protected void onPostExecute(ArrayList<Billinvoice_Customer_Model> billinvoice_customer_entities) {
 
             busyDialog.dismis();
+            new Result_Task().execute();
+
         }
     }
 
-    private class Result_Task extends AsyncTask<Void, Void, ArrayList<Bill_Result_Entity>> {
+    private class Result_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Result_Model>> {
 
         @Override
         protected void onPreExecute() {
@@ -502,12 +512,14 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Bill_Result_Entity> doInBackground(Void... voids) {
-            resultList = new ArrayList<Bill_Result_Entity>();
+        protected ArrayList<Billinvoice_Result_Model> doInBackground(Void... voids) {
+            resultList = new ArrayList<Billinvoice_Result_Model>();
             try {
                 connection = com.excellenceict.ocean_erp.ODBC.Db.createConnection();
                 if (connection != null) {
-                    resultList = new ArrayList<Bill_Result_Entity>();
+                    resultList = new ArrayList<Billinvoice_Result_Model>();
+                    Log.d("daa111", "==========C=====>>>> " + customer_id + " ==G==>>> " + groupItem_id + "===I==>" + item_id);
+                    Log.d("dateTESt", "=========from======>>>> " + text_formDate.getText() + " ==to==>>> " + text_toDate.getText());
                     Statement stmt = connection.createStatement();
                     String query = "Select I.Item_Name,Sum(Fnc$Convert_Mu(C.ITEM_ID,C.Invoice_Qty,C.Mu_Id)) Sell_Qty,u.MU_NAME,\n" +
                             "Sum((Nvl(C.Invoice_RATE,0)*Nvl(C.Invoice_QTY, 0))+Nvl(C.VAT_AMT,0)-(Nvl(C.DISCOUNT_AMOUNT,0))) sale_amount\n" +
@@ -520,9 +532,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                             "and c.INVOICE_QTY>0 and c.INVOICE_RATE>0\n" +
                             "And ('" + customer_id + "' = -1 or m.CONTACT_ID = '" + customer_id + "')\n" +
                             "And ('" + groupItem_id + "' = -1 or ig.ITEMGROUP_ID = '" + groupItem_id + "')\n" +
-//                        "And ('"+item_id+"' = -1 or C.item_Id = C.item_Id)\n" +
                             "And ('" + item_id + "' = -1 or C.item_Id ='" + item_id + "')\n" +
-//                        "AND M.Invoice_DATE BETWEEN :P_Date_From AND :P_Date_To\n" +
                             "AND M.Invoice_DATE BETWEEN to_date('" + text_formDate.getText() + "','MON DD,RRRR') AND to_date('" + text_toDate.getText() + "','MON DD,RRRR')\n" +
                             "Group By C.ITEM_ID,I.ITEM_Name,i.UD_NO,ig.ITEMGROUP_NAME,u.MU_NAME\n" +
                             "Order By I.Item_Name";
@@ -530,7 +540,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        resultList.add(new Bill_Result_Entity(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+                        resultList.add(new Billinvoice_Result_Model(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
                         Log.d("value1", "======res=SLR===1===========" + rs.getString(1));
                         Log.d("value2", "======res====2===========" + rs.getString(2));
                         Log.d("value3", "======res====3===========" + rs.getString(3));
@@ -540,10 +550,11 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
 
                 }
                 connection.close();
+                busyDialog.dismis();
 
             } catch (Exception e) {
-
-                Toast.makeText(getApplicationContext(), " " + e, Toast.LENGTH_SHORT).show();
+                busyDialog.dismis();
+                Toast.makeText(getApplicationContext(), "" + e, Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 
@@ -552,10 +563,11 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Bill_Result_Entity> bill_result_entities) {
-            busyDialog.dismis();
+        protected void onPostExecute(ArrayList<Billinvoice_Result_Model> bill_result_entities) {
             result_adapter = new Bill_Results_CustomAdapter(getApplication(), resultList);
             listView.setAdapter(result_adapter);
+            Helper.getListViewSize(listView);
+            busyDialog.dismis();
         }
 
     }
@@ -593,7 +605,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1), rs.getString(2)));
+                        groupNameList.add(new Billinvoice_Group_Model(rs.getString(1), rs.getString(2)));
 
                     }
                     busyDialog.dismis();
@@ -611,6 +623,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
 
             busyDialog.dismis();
+            new Result_Task().execute();
         }
     }
 
@@ -646,15 +659,13 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1), rs.getString(2)));
+                        itemNameList.add(new Billinvoice_item_Model(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Item====1===========" + rs.getString(1));
                         Log.d("value2", "======Item====2===========" + rs.getString(2));
 
                     }
                     busyDialog.dismis();
                 }
-
-
                 connection.close();
 
             } catch (Exception e) {
@@ -668,6 +679,7 @@ public class Sales_Report_Summary_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             busyDialog.dismis();
+            new Result_Task().execute();
         }
     }
 

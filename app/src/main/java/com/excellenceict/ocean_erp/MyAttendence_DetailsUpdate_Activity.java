@@ -29,13 +29,13 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
-    private TextView date,weekend,holiday,loginTime,dueLoginTime,logoutTime,dueLogOutTime,dept,absenceFlag,reason_text_absence;
+    private TextView date, weekend, holiday, loginTime, dueLoginTime, logoutTime, dueLogOutTime, dept, absenceFlag, reason_text_absence;
 
 
-    private TextInputEditText lateLogin_reason,earlyLogout_reason, absent_reason;
+    private TextInputEditText lateLogin_reason, earlyLogout_reason, absent_reason;
     private LinearLayout j_absentReasonUpdateLayout;
 
-    String dates,userInput, st_lateLogin_reason,st_earlyLogout_reason,st_absent_reason;
+    String dates, userInput, st_lateLogin_reason, st_earlyLogout_reason, st_absent_reason;
     private Button update_btn;
     private Connection connection;
     private Context context;
@@ -46,18 +46,18 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_attendence__details_update);
-        date =findViewById(R.id.myAttendance_updateDate);
-        lateLogin_reason =findViewById(R.id.updateLateLoginReason);
-        earlyLogout_reason =findViewById(R.id.updateEarlyLogOutReason);
-        absent_reason =findViewById(R.id.updateAbsentReason);
-        weekend =findViewById(R.id.update_weekend);
+        setContentView(R.layout.my_attendence_details_update_activity);
+        date = findViewById(R.id.myAttendance_updateDate);
+        lateLogin_reason = findViewById(R.id.updateLateLoginReason);
+        earlyLogout_reason = findViewById(R.id.updateEarlyLogOutReason);
+        absent_reason = findViewById(R.id.updateAbsentReason);
+        weekend = findViewById(R.id.update_weekend);
         holiday = findViewById(R.id.update_holiday);
-        loginTime =findViewById(R.id.updateInTime);
-        dueLoginTime =findViewById(R.id.updateLoginDueTime);
-        logoutTime =findViewById(R.id.updateOutTime);
-        dueLogOutTime =findViewById(R.id.updateLogOutDueTime);
-        dept =findViewById(R.id.updateDept);
+        loginTime = findViewById(R.id.updateInTime);
+        dueLoginTime = findViewById(R.id.updateLoginDueTime);
+        logoutTime = findViewById(R.id.updateOutTime);
+        dueLogOutTime = findViewById(R.id.updateLogOutDueTime);
+        dept = findViewById(R.id.updateDept);
         toolbar = findViewById(R.id.myTeamAttendenceReasonUpdateToolBarId);
 
 
@@ -82,7 +82,7 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
         context = MyAttendence_DetailsUpdate_Activity.this;
         handler = new Handler();
 
-        update_btn =findViewById(R.id.update_Btn);
+        update_btn = findViewById(R.id.update_Btn);
         j_absentReasonUpdateLayout = findViewById(R.id.absentReasonUpdateLayout);
 
         final Intent intent = getIntent();
@@ -94,7 +94,7 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
         String login_flag = intent.getStringExtra("late_login_flag");
         String logOut_flag = intent.getStringExtra("early_logout_flag");
         String absence_flag = intent.getStringExtra("absence");
-        Log.d("absence_flag","======absence_flag====="+absence_flag);
+        Log.d("absence_flag", "======absence_flag=====" + absence_flag);
 
         String login_time = intent.getStringExtra("login_time");
         String loginDept = intent.getStringExtra("dept");
@@ -122,13 +122,14 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
         dept.setText(loginDept);
 
 
-        if(weekends.equals("N") && holidays.equals("N") && login_flag.equals("Y")){
+        if (weekends.equals("N") && holidays.equals("N") && login_flag.equals("Y")) {
             loginTime.setTextColor(Color.RED);
-        }else {
+        } else {
             loginTime.setTextColor(Color.parseColor("#4D850D"));
-        }if(weekends.equals("N") && holidays.equals("N") && logOut_flag.equals("Y")){
+        }
+        if (weekends.equals("N") && holidays.equals("N") && logOut_flag.equals("Y")) {
             logoutTime.setTextColor(Color.RED);
-        }else {
+        } else {
             logoutTime.setTextColor(Color.parseColor("#4D850D"));
         }
 
@@ -138,22 +139,23 @@ public class MyAttendence_DetailsUpdate_Activity extends AppCompatActivity {
         } else {
             j_absentReasonUpdateLayout.setVisibility(View.VISIBLE);
         }
-update_btn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
+        update_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        st_lateLogin_reason = "Late Login Reason: " + lateLogin_reason.getText();
-        st_earlyLogout_reason = "Early LogOut Reason: " + earlyLogout_reason.getText();
-        st_absent_reason = "Absence Reason: " + absent_reason.getText();
+                st_lateLogin_reason = "Late Login Reason: " + lateLogin_reason.getText();
+                st_earlyLogout_reason = "Early LogOut Reason: " + earlyLogout_reason.getText();
+                st_absent_reason = "Absence Reason: " + absent_reason.getText();
 
-        alertDialog();
+                alertDialog();
+
+            }
+        });
 
     }
-});
 
-    }
     private void alertDialog() {
-        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
         TextView textView = new TextView(this);
         textView.setText("Are you sure to commit changes?");
@@ -164,52 +166,24 @@ update_btn.setOnClickListener(new View.OnClickListener() {
         dialog.setCustomTitle(textView);
 
 
-
         dialog.setPositiveButton("YES",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-//                        try {
-//                            connection = com.ocean.orcl.ODBC.Db.createConnection();
-//
-//                            if (connection != null) {
-//
-//                            }
-//                            Statement stmt = connection.createStatement();
-//                            String sql = "update hrm_attendance_mst\n" +
-//                                    "set V_LATE_LOGIN_REASON = '"+lateLogin_reason.getText()+"',\n" +
-//                                    "V_EARLY_LOGOUT_REASON='"+earlyLogout_reason.getText()+"',\n" +
-//                                    "V_ABSENT_REASON='"+absent_reason.getText()+"'\n"+
-//                                    "where V_PERSON_NO = (select V_PERSON_NO from sec_user u, bas_person p where u.N_PERSON_ID=p.N_PERSON_ID and V_USER_NAME='"+userInput.toUpperCase()+"') \n" +
-//                                    "and D_DATE=to_date('"+dates.toUpperCase() + "','MON DD,RRRR')";
-//
-//                            stmt.executeUpdate(sql);
-//                            connection.commit();
-//                            Toast.makeText(getApplicationContext(),"Data Update success",Toast.LENGTH_SHORT).show();
-//
-//                            connection.close();
-//                        } catch (Exception e) {
-//
-//                            Toast.makeText(MyAttendence_DetailsUpdate_Activity.this, "" + e,
-//                                    Toast.LENGTH_SHORT).show();
-//                            e.printStackTrace();
-//                        }
 
-                        if(NetworkHelpers.isNetworkAvailable(context)){
+                        if (NetworkHelpers.isNetworkAvailable(context)) {
                             new MyAttendenceDetailsUpdatetask().execute();
                         }
-
-
                     }
                 });
-        dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(),"cancel",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "cancel", Toast.LENGTH_LONG).show();
 
             }
         });
-        AlertDialog alertDialog=dialog.create();
+        AlertDialog alertDialog = dialog.create();
         alertDialog.show();
         Button buttonOK = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         Button buttonCancle = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
@@ -218,7 +192,7 @@ update_btn.setOnClickListener(new View.OnClickListener() {
     }
 
 
-    private class MyAttendenceDetailsUpdatetask extends AsyncTask<Void,Void,Void>{
+    private class MyAttendenceDetailsUpdatetask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -237,19 +211,20 @@ update_btn.setOnClickListener(new View.OnClickListener() {
 
                 Statement stmt = connection.createStatement();
                 String sql = "update hrm_attendance_mst\n" +
-                        "set V_LATE_LOGIN_REASON = '"+lateLogin_reason.getText()+"',\n" +
-                        "V_EARLY_LOGOUT_REASON='"+earlyLogout_reason.getText()+"',\n" +
-                        "V_ABSENT_REASON='"+absent_reason.getText()+"'\n"+
-                        "where V_PERSON_NO = (select V_PERSON_NO from sec_user u, bas_person p where u.N_PERSON_ID=p.N_PERSON_ID and V_USER_NAME='"+userInput.toUpperCase()+"') \n" +
-                        "and D_DATE=to_date('"+dates.toUpperCase() + "','MON DD,RRRR')";
+                        "set V_LATE_LOGIN_REASON = '" + lateLogin_reason.getText() + "',\n" +
+                        "V_EARLY_LOGOUT_REASON='" + earlyLogout_reason.getText() + "',\n" +
+                        "V_ABSENT_REASON='" + absent_reason.getText() + "'\n" +
+                        "where N_EMP_ID = (select N_PERSON_ID from sec_user u where V_USER_NAME='" + userInput.toUpperCase() + "') \n" +
+                        "and D_DATE=to_date('" + dates.toUpperCase() + "','MON DD,RRRR')";
 
                 stmt.executeUpdate(sql);
                 connection.commit();
                 busyDialog.dismis();
+
                 connection.close();
             } catch (Exception e) {
 
-               busyDialog.dismis();
+                busyDialog.dismis();
                 e.printStackTrace();
             }
 
@@ -260,12 +235,13 @@ update_btn.setOnClickListener(new View.OnClickListener() {
         @Override
         protected void onPostExecute(Void aVoid) {
             busyDialog.dismis();
-            Intent intent = new Intent(getApplicationContext(),MyAttendence_Details_Activity.class);
-            intent.putExtra("login_value",userInput);
-            intent.putExtra("date",dates);
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //finish only previous activity
+            startActivity(getIntent());
+            Intent intent = new Intent(getApplicationContext(), MyAttendence_Details_Activity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("login_value", userInput);
+            intent.putExtra("date", dates);
             startActivity(intent);
-            finish();
         }
     }
 

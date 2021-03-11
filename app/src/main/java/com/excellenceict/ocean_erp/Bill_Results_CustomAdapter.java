@@ -10,11 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.excellenceict.ocean_erp.Model.Billinvoice_Result_Model;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class Bill_Results_CustomAdapter extends ArrayAdapter<Bill_Result_Entity> {
-    public Bill_Results_CustomAdapter(Context context, ArrayList<Bill_Result_Entity> result){
+public class Bill_Results_CustomAdapter extends ArrayAdapter<Billinvoice_Result_Model> {
+    public Bill_Results_CustomAdapter(Context context, ArrayList<Billinvoice_Result_Model> result){
         super(context,0,result);
 
     }
@@ -37,7 +39,7 @@ public class Bill_Results_CustomAdapter extends ArrayAdapter<Bill_Result_Entity>
         TextView invoice_no = convertView.findViewById(R.id.invoiceNO_text);
         TextView invoice_date = convertView.findViewById(R.id.invoiceDate_text);
         TextView invoice_amount = convertView.findViewById(R.id.amount_text);
-        Bill_Result_Entity currentItems = (Bill_Result_Entity) getItem(position);
+        Billinvoice_Result_Model currentItems = (Billinvoice_Result_Model) getItem(position);
         if(currentItems !=null){
             invoice_no.setText(currentItems.getInvoide_No());
             invoice_date.setText(currentItems.getInvoice_Date());

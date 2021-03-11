@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:background="@color/appPoorBackground"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="8">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -107,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Login time"
+                    android:text="Login"
                     android:textColor="#4d4d4d" />
 
                 <TextView
@@ -130,7 +130,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Logout time"
+                    android:text="Late in"
+                    android:textColor="#4d4d4d" />
+
+                <TextView
+                    android:id="@+id/login_duration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="00:00h"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#4d4d4d"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Logout"
                     android:textColor="#4d4d4d" />
 
                 <TextView
@@ -143,157 +167,32 @@
                     android:textColor="#4d4d4d"
                     android:textSize="15sp" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical">
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:orientation="vertical">-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Duration"
+                    android:textColor="#4d4d4d" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="Extras"-->
-<!--                    android:textColor="#4d4d4d" />-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="00:00h"-->
-<!--                    android:textAppearance="?android:attr/textAppearanceMedium"-->
-<!--                    android:textColor="#4d4d4d"-->
-<!--                    android:textSize="15sp" />-->
-<!--            </LinearLayout>-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:orientation="vertical">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="Late"-->
-<!--                    android:textColor="#4d4d4d" />-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="00:00h"-->
-<!--                    android:textAppearance="?android:attr/textAppearanceMedium"-->
-<!--                    android:textColor="#4d4d4d"-->
-<!--                    android:textSize="15sp" />-->
-<!--            </LinearLayout>-->
+                <TextView
+                    android:id="@+id/logout_duration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="00:00h"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#4d4d4d"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:orientation="horizontal">-->
-    <!--&lt;!&ndash;        <TextView&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:id="@+id/empId_text"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:fontFamily="sans-serif-condensed-light"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_gravity="center"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:text="Medium Text"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textSize="15sp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textStyle="bold"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_marginLeft="10dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_marginTop="5dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textColor="@color/blue"&ndash;&gt;-->
-    <!--&lt;!&ndash;            />&ndash;&gt;-->
-    <!--&lt;!&ndash;        <TextView&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:id="@+id/personName_text"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:fontFamily="sans-serif-condensed-light"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_gravity="center"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:text="Medium"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textSize="15sp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textStyle="bold"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_marginTop="5dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_marginLeft="25dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textColor="@color/blue"&ndash;&gt;-->
-    <!--&lt;!&ndash;            />&ndash;&gt;-->
-
-    <!--    </LinearLayout>-->
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:orientation="horizontal">-->
-
-
-    <!--&lt;!&ndash;        <TextView&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:id="@+id/department_text"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_gravity="center"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:text="Medium Text"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textSize="14sp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_marginLeft="15dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_marginTop="0.5dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textStyle="italic"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textColor="#1189E7"&ndash;&gt;-->
-    <!--&lt;!&ndash;            />&ndash;&gt;-->
-
-    <!--    </LinearLayout>-->
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:orientation="horizontal">-->
-    <!--&lt;!&ndash;        <TextView&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:text="In :"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textSize="15sp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_marginLeft="10dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textColor="#4d4d4d"/>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;        <TextView&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:id="@+id/login_text"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:fontFamily="sans-serif-condensed-light"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_width="80dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_gravity="center"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:text="Medium Text"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textSize="15sp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textStyle="bold"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textAppearance="?android:attr/textAppearanceMedium"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:layout_marginLeft="2dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;            android:textColor="#4d4d4d"&ndash;&gt;-->
-    <!--&lt;!&ndash;            />&ndash;&gt;-->
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="Out :"-->
-    <!--            android:layout_marginLeft="2dp"-->
-    <!--            android:textColor="#4d4d4d"/>-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/Logout_text"-->
-    <!--            android:fontFamily="sans-serif-condensed-light"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="center"-->
-    <!--            android:text="Medium Text"-->
-    <!--            android:textSize="15sp"-->
-    <!--            android:textStyle="bold"-->
-    <!--            android:layout_marginLeft="2dp"-->
-    <!--            android:textColor="#4d4d4d"-->
-    <!--            />-->
-
-
-    <!--    </LinearLayout>-->
 
 </androidx.cardview.widget.CardView>

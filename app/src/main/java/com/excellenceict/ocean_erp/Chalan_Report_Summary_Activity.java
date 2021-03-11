@@ -23,7 +23,12 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.excellenceict.ocean_erp.Model.Billinvoice_Customer_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_Group_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_item_Model;
+import com.excellenceict.ocean_erp.Model.Chalan_Report_Summary_Model;
 import com.excellenceict.ocean_erp.util.BusyDialog;
+import com.excellenceict.ocean_erp.util.Helper;
 import com.excellenceict.ocean_erp.util.NetworkHelpers;
 
 import java.sql.Connection;
@@ -38,13 +43,18 @@ import java.util.Locale;
 
 public class Chalan_Report_Summary_Activity extends AppCompatActivity {
     private Connection connection;
-    TextView text_formDate, text_toDate;
-    String groupItem_id, item_id, customer_id, customer_contact;
+    private TextView text_formDate, text_toDate;
+
+    private String groupItem_id = "-1";
+    private String item_id = "-1";
+    private String customer_id = "-1";
+    private String customer_contact = "-1";
+
     private ListView listView;
-    private ArrayList<Billinvoice_Group_Entity> groupNameList;
-    private ArrayList<Billinvoice_Customer_Entity> customerNameList;
-    private ArrayList<Billinvoice_item_Entity> itemNameList;
-    private ArrayList<Chalan_Report_Summary_Entity> resultList;
+    private ArrayList<Billinvoice_Group_Model> groupNameList;
+    private ArrayList<Billinvoice_Customer_Model> customerNameList;
+    private ArrayList<Billinvoice_item_Model> itemNameList;
+    private ArrayList<Chalan_Report_Summary_Model> resultList;
     private Chalan_Report_SummaryResult_Customadapter result_adapter;
 
     private Dialog chalan_report_customer_dailog;
@@ -56,7 +66,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chalan_report_summary);
+        setContentView(R.layout.chalan_report_summary_activity);
 
         text_formDate = findViewById(R.id.chalanReportSummary_from_date);
         text_toDate = findViewById(R.id.chalanReportSummary_to_date);
@@ -90,6 +100,8 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         }
 
         CurrentDate();
+        dateSetFROM();
+        dateSetTO();
 
         j_chalan_customer_dropdown_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +136,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_Customer_Entity> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
+                final ArrayAdapter<Billinvoice_Customer_Model> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Model>(
                         Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, customerNameList
                 );
 
@@ -157,10 +169,13 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                             groupNameList = null;
                             itemNameList = null;
 
+                            groupItem_id = "-1";
+                            item_id = "-1";
+
                             customer_id = customerAdapter.getItem(position).getCustomer_Id();
 
                             if (NetworkHelpers.isNetworkAvailable(context)) {
-                                new ChalanReportSummaryGriuoTask().execute();
+                                new ChalanReportSummaryGroupTask().execute();
                             } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
@@ -209,7 +224,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_Group_Entity> groupAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
+                final ArrayAdapter<Billinvoice_Group_Model> groupAdapter = new ArrayAdapter<Billinvoice_Group_Model>(
                         Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, groupNameList
                 );
 
@@ -293,7 +308,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_item_Entity> itemNameAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
+                final ArrayAdapter<Billinvoice_item_Model> itemNameAdapter = new ArrayAdapter<Billinvoice_item_Model>(
                         Chalan_Report_Summary_Activity.this, android.R.layout.simple_list_item_1, itemNameList
                 );
 
@@ -327,8 +342,6 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
-                            dateSetFROM();
-                            dateSetTO();
                             chalan_report_customer_dailog.dismiss();
                             j_chalanReportSummary_itemName_spinner.setText(itemNameAdapter.getItem(position).getItem_name());
                         }
@@ -431,7 +444,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         text_toDate.setText(currentDate.toUpperCase());
     }
 
-    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Entity>> {
+    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Model>> {
 
         @Override
         protected void onPreExecute() {
@@ -440,7 +453,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Billinvoice_Customer_Entity> doInBackground(Void... voids) {
+        protected ArrayList<Billinvoice_Customer_Model> doInBackground(Void... voids) {
             customerNameList = new ArrayList<>();
             try {
 
@@ -463,7 +476,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1), rs.getString(2)));
+                        customerNameList.add(new Billinvoice_Customer_Model(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Customer====1===========" + rs.getString(1));
                         Log.d("value2", "======Customer====2===========" + rs.getString(2));
                     }
@@ -480,12 +493,13 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
+        protected void onPostExecute(ArrayList<Billinvoice_Customer_Model> billinvoice_customer_entities) {
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }
 
-    private class Result_Task extends AsyncTask<Void, Void, ArrayList<Chalan_Report_Summary_Entity>> {
+    private class Result_Task extends AsyncTask<Void, Void, ArrayList<Chalan_Report_Summary_Model>> {
 
         @Override
         protected void onPreExecute() {
@@ -495,12 +509,12 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Chalan_Report_Summary_Entity> doInBackground(Void... voids) {
-            resultList = new ArrayList<Chalan_Report_Summary_Entity>();
+        protected ArrayList<Chalan_Report_Summary_Model> doInBackground(Void... voids) {
+            resultList = new ArrayList<Chalan_Report_Summary_Model>();
             try {
                 connection = com.excellenceict.ocean_erp.ODBC.Db.createConnection();
                 if (connection != null) {
-                    resultList = new ArrayList<Chalan_Report_Summary_Entity>();
+                    resultList = new ArrayList<Chalan_Report_Summary_Model>();
                     Statement stmt = connection.createStatement();
                     String query = "Select I.Item_Name,Sum(Fnc$Convert_Mu(C.ITEM_ID,C.chalan_Qty,C.Mu_Id)) Sell_Qty,u.MU_NAME,\n" +
                             "Sum((Nvl(C.chalan_RATE,0)*Nvl(C.chalan_QTY, 0))+Nvl(C.VAT_AMT,0)-(Nvl(C.DISCOUNT_AMOUNT,0))) sale_amount\n" +
@@ -520,7 +534,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
 
                     ResultSet rs = stmt.executeQuery(query);
                     while (rs.next()) {
-                        resultList.add(new Chalan_Report_Summary_Entity(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+                        resultList.add(new Chalan_Report_Summary_Model(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
                     }
 
                     busyDialog.dismis();
@@ -535,15 +549,15 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Chalan_Report_Summary_Entity> chalan_report_summary_entities) {
+        protected void onPostExecute(ArrayList<Chalan_Report_Summary_Model> chalan_report_summary_entities) {
             busyDialog.dismis();
             result_adapter = new Chalan_Report_SummaryResult_Customadapter(getApplication(), resultList);
             listView.setAdapter(result_adapter);
+            Helper.getListViewSize(listView);
         }
     }
 
-
-    private class ChalanReportSummaryGriuoTask extends AsyncTask<Void, Void, Void> {
+    private class ChalanReportSummaryGroupTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -574,7 +588,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1), rs.getString(2)));
+                        groupNameList.add(new Billinvoice_Group_Model(rs.getString(1), rs.getString(2)));
 
                     }
 
@@ -593,10 +607,10 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }
-
 
     private class ChalanReportSummaryItemNameTask extends AsyncTask<Void, Void, Void> {
 
@@ -631,7 +645,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1), rs.getString(2)));
+                        itemNameList.add(new Billinvoice_item_Model(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Item====1===========" + rs.getString(1));
                         Log.d("value2", "======Item====2===========" + rs.getString(2));
 
@@ -650,6 +664,7 @@ public class Chalan_Report_Summary_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }

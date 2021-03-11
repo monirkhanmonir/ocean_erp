@@ -3,15 +3,14 @@
     <color name="colorPrimary">#035483</color>
     <color name="colorPrimaryDark">#035483</color>
     <color name="blue">#1D3BE2</color>
-    <color name="black">#121213</color>
+
     <color name="nevy_blue">#0C1D80</color>
     <color name="sky">#5B6FE6</color>
     <color name="yelow">#FBCB38</color>
     <color name="red">#E9092B</color>
     <color name="green">#008000</color>
-    <color name="white">#ffff</color>
     <color name="dark_green">#006400</color>
-    <color name="light_blue">#62b4cf </color>
+    <color name="light_blue">#62b4cf</color>
     <color name="light_green">#4D850D</color>
     <color name="blues">#03AFC6</color>
     <color name="rowColor">#4378B8D8</color>
@@ -19,6 +18,7 @@
     <color name="colorRowMiddle">#B287BBDA</color>
     <color name="appBackground">#4378B8D8</color>
     <color name="appPoorBackground">#43AFD3E4</color>
+    <color name="solid_red">#FF6347</color>
 
     <color name="colorYellow">#ffb300</color>
     <color name="colorGray">#D7D7D8</color>
@@ -26,5 +26,8 @@
     <color name="colorGray1">#C3196A98</color>
     <color name="transparent">#00000000</color>
     <color name="half_transparent">#44000000</color>
+
+    <color name="white">#FFF</color>
+    <color name="black">#121213</color>
 
 </resources>

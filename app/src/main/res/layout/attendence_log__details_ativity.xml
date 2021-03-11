@@ -6,12 +6,13 @@
     android:layout_height="fill_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context=".AttendenceLog_Details_ativity">
+    tools:context=".AttendenceLog_Details_Activity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/AttendenceDetailsToolBarId"
             android:layout_width="match_parent"
@@ -160,14 +161,14 @@
                     android:textColor="@android:color/black" />
             </LinearLayout>
 
-
             <!--    ...................For Query B.............-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="4">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -197,11 +198,12 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@color/rowColor"
                         android:paddingVertical="5dp"
                         android:paddingLeft="10sp"
-                        android:text="Location"
+                        android:text="Due"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -215,20 +217,40 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@color/rowColor"
                         android:paddingVertical="5dp"
                         android:paddingLeft="10sp"
-                        android:text="Due"
+                        android:text="Duration"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/rowColor"
+                        android:paddingVertical="5dp"
+                        android:paddingLeft="10sp"
+                        android:text="Location"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="4">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -242,7 +264,23 @@
                         android:id="@+id/aDetailes_inTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Medium Text"
+                        android:textColor="@color/colorHeader"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/appBackground"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/aDetailes_requireLoginTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:textColor="@color/colorHeader"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -253,46 +291,44 @@
                     android:layout_weight="1"
                     android:background="@color/appPoorBackground"
                     android:orientation="vertical"
+                    android:paddingHorizontal="8dp"
                     android:paddingVertical="8dp">
 
                     <TextView
-                        android:id="@+id/aDetailes_login_Office_Location"
+                        android:id="@+id/att_log_lateDuration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Medium Text"
                         android:textColor="@color/colorHeader"
                         android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingHorizontal="8dp"
                     android:paddingVertical="8dp">
 
                     <TextView
-                        android:id="@+id/aDetailes_requireLoginTime"
+                        android:id="@+id/aDetailes_login_Office_Location"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Medium Text"
+                        android:layout_height="match_parent"
                         android:textColor="@color/colorHeader"
                         android:textSize="14sp" />
                 </LinearLayout>
+
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/rowColor" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="4">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -304,9 +340,9 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingVertical="5dp"
+                        android:paddingVertical="5sp"
                         android:paddingLeft="10sp"
-                        android:text="Log Out"
+                        android:text="Logout"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -322,9 +358,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@color/rowColor"
                         android:paddingVertical="5dp"
                         android:paddingLeft="10sp"
-                        android:text="Location"
+                        android:text="Due"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -340,20 +377,40 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@color/rowColor"
                         android:paddingVertical="5dp"
                         android:paddingLeft="10sp"
-                        android:text="Due"
+                        android:text="Duration"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/rowColor"
+                        android:paddingVertical="5dp"
+                        android:paddingLeft="10sp"
+                        android:text="Location"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="4">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -367,7 +424,23 @@
                         android:id="@+id/aDetailes_officeLogOut"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Medium Text"
+                        android:textColor="@color/colorHeader"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/appBackground"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/aDetailes_requireLogOutTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:textColor="@color/colorHeader"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -378,33 +451,32 @@
                     android:layout_weight="1"
                     android:background="@color/appPoorBackground"
                     android:orientation="vertical"
+                    android:paddingHorizontal="8dp"
                     android:paddingVertical="8dp">
 
                     <TextView
-                        android:id="@+id/aDetailes_logOutOffice_Location"
+                        android:id="@+id/att_log_earlyDuration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Medium Text"
                         android:textColor="@color/colorHeader"
                         android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingHorizontal="8dp"
                     android:paddingVertical="8dp">
 
                     <TextView
-                        android:id="@+id/aDetailes_requireLogOutTime"
+                        android:id="@+id/aDetailes_logOutOffice_Location"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Medium Text"
+                        android:layout_height="match_parent"
                         android:textColor="@color/colorHeader"
                         android:textSize="14sp" />
                 </LinearLayout>
+
             </LinearLayout>
 
             <View
@@ -418,23 +490,6 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="" />
-
-
-            <!--    <LinearLayout-->
-            <!--        android:layout_width="match_parent"-->
-            <!--        android:layout_height="wrap_content"-->
-            <!--        android:layout_marginTop="10dp"-->
-            <!--        android:background="@color/colorPrimary"-->
-            <!--        android:gravity="center"-->
-            <!--        android:orientation="vertical">-->
-            <!--        <TextView-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:text="Details"-->
-            <!--            android:textColor="@android:color/white"-->
-            <!--            android:textSize="16sp"-->
-            <!--            android:textStyle="bold"/>-->
-            <!--    </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -496,7 +551,7 @@
                             android:layout_height="match_parent"
                             android:paddingVertical="10dp"
                             android:paddingLeft="10sp"
-                            android:text="Loaction"
+                            android:text="Location"
                             android:textColor="@android:color/white"
                             android:textSize="16sp"
                             android:textStyle="bold" />

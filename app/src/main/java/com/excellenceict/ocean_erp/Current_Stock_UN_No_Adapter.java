@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.excellenceict.ocean_erp.Model.CurrentStock_UD_No_Entity_D;
+
 import java.util.ArrayList;
 
 public class Current_Stock_UN_No_Adapter extends ArrayAdapter {

@@ -2,6 +2,9 @@ package com.excellenceict.ocean_erp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -23,6 +26,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.excellenceict.ocean_erp.adapter.PartyDueStatement_Adapter;
 import com.excellenceict.ocean_erp.util.BusyDialog;
 import com.excellenceict.ocean_erp.util.NetworkHelpers;
 
@@ -40,11 +44,10 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
     private Connection connection;
     String sub_header_name;
     String sub_header_code = "-1";
-    private ArrayList<ACC_partyDueStatement_Entity> customerNameList;
-    private ArrayList<Acc_PartyDueStatement_Result_Entity> resultList;
-    private ACC_PartyDueResult_Adapter result_adapter;
-
-    private ListView listView;
+    private ArrayList<PartyDueStatement_Entity> customerNameList;
+    private ArrayList<PartyDueStatement_Result_Entity> resultList;
+    private PartyDueStatement_Adapter adapter;
+    private RecyclerView recyclerView;
     private TextView toDate;
 
     private TextView j_partyDue_statement_spinner;
@@ -56,9 +59,9 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_party_due_statement);
+        setContentView(R.layout.partydue_statement_activity);
         //customer_spinner =findViewById(R.id.partyDue_statement_spinner);
-        listView = findViewById(R.id.partyDueStatement_result_listView);
+        recyclerView = findViewById(R.id.partyDueStatement_recyclerView);
         j_partyDue_statement_spinner = findViewById(R.id.partyDue_statement_spinner);
         toDate = findViewById(R.id.partyDue_dateTex);
         toolbar = findViewById(R.id.partyDueStatementToolBarId);
@@ -117,7 +120,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<ACC_partyDueStatement_Entity> adapter = new ArrayAdapter<ACC_partyDueStatement_Entity>(
+                final ArrayAdapter<PartyDueStatement_Entity> adapter = new ArrayAdapter<PartyDueStatement_Entity>(
                         Party_Due_Statement_Activity.this, android.R.layout.simple_spinner_dropdown_item,customerNameList
                 );
 
@@ -157,7 +160,6 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
                             j_partyDue_statement_spinner.setText(adapter.getItem(position).getSub_head_name());
                         }
 
-                        //    Toast.makeText(CurrentStock_Activity.this, "Selected: "+menuAdapter.getItem(position).getMenufacture_Name(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -178,7 +180,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
 
 
 
-    private class CustomerName_Task extends AsyncTask<Void,Void,ArrayList<ACC_partyDueStatement_Entity>> {
+    private class CustomerName_Task extends AsyncTask<Void,Void,ArrayList<PartyDueStatement_Entity>> {
 
         @Override
         protected void onPreExecute() {
@@ -187,7 +189,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<ACC_partyDueStatement_Entity> doInBackground(Void... voids) {
+        protected ArrayList<PartyDueStatement_Entity> doInBackground(Void... voids) {
             customerNameList = new ArrayList<>();
             try {
                 connection = com.excellenceict.ocean_erp.ODBC.Db.createConnection();
@@ -210,7 +212,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
                     ResultSet rs=stmt.executeQuery(query);
 
                     while(rs.next()) {
-                        customerNameList.add(new ACC_partyDueStatement_Entity(rs.getString(1),rs.getString(2)));
+                        customerNameList.add(new PartyDueStatement_Entity(rs.getString(1),rs.getString(2)));
                     }
 
                 }
@@ -218,19 +220,15 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
                 connection.close();
             }
             catch (Exception e) {
-              //  busyDialog.dismis();
+                busyDialog.dismis();
                 e.printStackTrace();
             }
 
             return customerNameList;
         }
 
-        @Override
-        protected void onPostExecute(ArrayList<ACC_partyDueStatement_Entity> acc_partyDueStatement_entities) {
-          //  busyDialog.dismis();
-        }
     }
-    private class Result_Task extends AsyncTask<Void,Void,ArrayList<Acc_PartyDueStatement_Result_Entity>> {
+    private class Result_Task extends AsyncTask<Void,Void,ArrayList<PartyDueStatement_Result_Entity>> {
 
         @Override
         protected void onPreExecute() {
@@ -239,14 +237,14 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Acc_PartyDueStatement_Result_Entity> doInBackground(Void... voids) {
+        protected ArrayList<PartyDueStatement_Result_Entity> doInBackground(Void... voids) {
             resultList = new ArrayList<>();
             try {
                 connection = com.excellenceict.ocean_erp.ODBC.Db.createConnection();
                 Log.d("query","=========customer_Header ="+sub_header_name);
                 Log.d("query1","=========customer_Header_code ="+sub_header_code);
                 if(connection != null){
-                    resultList = new ArrayList<Acc_PartyDueStatement_Result_Entity>();
+                    resultList = new ArrayList<PartyDueStatement_Result_Entity>();
 
                     Statement stmt=connection.createStatement();
                     String query1,query2;
@@ -261,7 +259,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
                     ResultSet rs=stmt.executeQuery(query2);
 
                     while(rs.next()) {
-                        resultList.add(new Acc_PartyDueStatement_Result_Entity(rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
+                        resultList.add(new PartyDueStatement_Result_Entity(rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
                     }
                     busyDialog.dismis();
                 }
@@ -277,14 +275,18 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Acc_PartyDueStatement_Result_Entity> acc_partyDueStatement_entities) {
+        protected void onPostExecute(ArrayList<PartyDueStatement_Result_Entity> acc_partyDueStatement_entities) {
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+            adapter = new PartyDueStatement_Adapter(resultList);
+            recyclerView.setAdapter(adapter);
 
             busyDialog.dismis();
-            result_adapter =new ACC_PartyDueResult_Adapter(getApplication(),resultList);
-            listView.setAdapter(result_adapter);
 
         }
     }
+
     private void DateSetTO(){
 
         toDate.setOnClickListener(new View.OnClickListener() {
@@ -326,6 +328,7 @@ public class Party_Due_Statement_Activity extends AppCompatActivity {
             }
         });
     }
+
     private void CurrentDate(){
         String currentDate = new SimpleDateFormat("MMM dd,yyyy", Locale.getDefault()).format(new Date());
         toDate.setText(currentDate.toUpperCase());

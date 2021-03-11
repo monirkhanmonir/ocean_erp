@@ -2,11 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<item android:id="@+id/item1"
-    android:title="LogOut"
-    app:showAsAction="never"/>
-<!--    <item android:id="@+id/item2"-->
-<!--        android:title="LogOut2"-->
-<!--        app:showAsAction="never"/>-->
-
+    <item
+        android:id="@+id/action_more"
+        android:icon="@drawable/ic_more"
+        android:title=""
+        app:showAsAction="always">
+    <menu>
+    <item
+        android:id="@+id/call_help"
+        android:icon="@drawable/icon_call"
+        android:title="Help call"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/pass_change"
+        android:icon="@drawable/ic_change"
+        android:title="Change password"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/logout_menu"
+        android:icon="@drawable/ic_logout"
+        android:title="Logout"
+        app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_info"
+            android:title="About us"
+            app:showAsAction="ifRoom" />
+    </menu>
+    </item>
 </menu>

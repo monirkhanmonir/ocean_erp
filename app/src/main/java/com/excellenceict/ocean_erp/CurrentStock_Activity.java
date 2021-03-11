@@ -22,6 +22,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.excellenceict.ocean_erp.Model.CurrentStock_Entity_F;
+import com.excellenceict.ocean_erp.Model.CurrentStock_Group_Entity_B;
+import com.excellenceict.ocean_erp.Model.CurrentStock_ItemName_Entity_C;
+import com.excellenceict.ocean_erp.Model.CurrentStock_Manufacturer_Entity_A;
+import com.excellenceict.ocean_erp.Model.CurrentStock_Quantity_Entity_E;
 import com.excellenceict.ocean_erp.util.BusyDialog;
 import com.excellenceict.ocean_erp.util.Helper;
 import com.excellenceict.ocean_erp.util.NetworkHelpers;
@@ -44,13 +49,14 @@ import java.util.ArrayList;
     private ArrayList<CurrentStock_Group_Entity_B> groupnameList;
     private ArrayList<CurrentStock_ItemName_Entity_C> itemNameList;
     private ArrayList<CurrentStock_Quantity_Entity_E> qtyList;
+    private String defaultQuantity;
 
 
     //for search
     private TextView manufacture_dropdown, j_stock_group_dropdown_btn, j_stock_item_dropdown_btn,
             j_stock_quentity_dropdown_btn, j_currentStock_textView;
 
-    private Dialog manufacture_dailog;
+    private Dialog dailog;
     private BusyDialog busyDialog;
     private Context context;
     private Handler handler;
@@ -66,7 +72,7 @@ import java.util.ArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_current_stock);
+        setContentView(R.layout.current_stock_activity);
 
 //        udNo_spinner = (Spinner) findViewById(R.id.ud_no_spinner);
 //        j_currentStock_textView = findViewById(R.id.currentStock_textView);
@@ -109,30 +115,30 @@ import java.util.ArrayList;
                     return;
                 }
 
-                manufacture_dailog = new Dialog(CurrentStock_Activity.this);
-                manufacture_dailog.setContentView(R.layout.manufacture_dailog_spinner);
-                manufacture_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog = new Dialog(CurrentStock_Activity.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
-                manufacture_dailog.show();
+                dailog.show();
 
 
-                SearchView manufactureSpinnerSearchView = manufacture_dailog.findViewById(R.id.spinner_search);
-                ListView manufactureSpinnerListView = manufacture_dailog.findViewById(R.id.spinnerItemList);
+                SearchView manufactureSpinnerSearchView = dailog.findViewById(R.id.spinner_search);
+                ListView manufactureSpinnerListView = dailog.findViewById(R.id.spinnerItemList);
 
-                ImageView current_stock_image = manufacture_dailog.findViewById(R.id.spinner_icon_img);
+                ImageView current_stock_image = dailog.findViewById(R.id.spinner_icon_img);
                 current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
                 manufactureSpinnerSearchView.setQueryHint("Search here...");
                 manufactureSpinnerSearchView.onActionViewExpanded();
                 manufactureSpinnerSearchView.setIconified(false);
                 manufactureSpinnerSearchView.clearFocus();
 
-                ImageView calcen_btn = manufacture_dailog.findViewById(R.id.spinner_close_icon_img);
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
                 calcen_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.d("Test","Click Close");
-                        manufacture_dailog.dismiss();
+                        dailog.dismiss();
                     }
                 });
 
@@ -166,7 +172,7 @@ import java.util.ArrayList;
 
                             j_stock_group_dropdown_btn.setText("Select Group");
                             j_stock_item_dropdown_btn.setText("Select Item Name");
-                            j_stock_quentity_dropdown_btn.setText("Select Quentity");
+                            j_stock_quentity_dropdown_btn.setText("Select Quantity");
 
                             groupnameList = null;
                             itemNameList = null;
@@ -179,7 +185,7 @@ import java.util.ArrayList;
                             } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
-                            manufacture_dailog.dismiss();
+                            dailog.dismiss();
                             manufacture_dropdown.setText(menuAdapter.getItem(position).getMenufacture_Name());
                         }
 
@@ -202,28 +208,28 @@ import java.util.ArrayList;
                     return;
                 }
 
-                manufacture_dailog = new Dialog(CurrentStock_Activity.this);
-                manufacture_dailog.setContentView(R.layout.manufacture_dailog_spinner);
-                manufacture_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                manufacture_dailog.show();
+                dailog = new Dialog(CurrentStock_Activity.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
 
 
-                ImageView current_stock_image = manufacture_dailog.findViewById(R.id.spinner_icon_img);
+                ImageView current_stock_image = dailog.findViewById(R.id.spinner_icon_img);
                 current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
 
-                ListView stockGroupSpinnerListView = manufacture_dailog.findViewById(R.id.spinnerItemList);
-                SearchView manufactureSpinnerSearchView = manufacture_dailog.findViewById(R.id.spinner_search);
+                ListView stockGroupSpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+                SearchView manufactureSpinnerSearchView = dailog.findViewById(R.id.spinner_search);
                 manufactureSpinnerSearchView.setQueryHint("Search here...");
                 manufactureSpinnerSearchView.onActionViewExpanded();
                 manufactureSpinnerSearchView.setIconified(false);
                 manufactureSpinnerSearchView.clearFocus();
 
-                ImageView calcen_btn = manufacture_dailog.findViewById(R.id.spinner_close_icon_img);
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
                 calcen_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.d("Test","Click Close");
-                        manufacture_dailog.dismiss();
+                        dailog.dismiss();
                     }
                 });
 
@@ -268,7 +274,7 @@ import java.util.ArrayList;
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
-                            manufacture_dailog.dismiss();
+                            dailog.dismiss();
                             j_stock_group_dropdown_btn.setText(groupAdapter.getItem(position).getItem_groupName());
                         }
 
@@ -291,28 +297,28 @@ import java.util.ArrayList;
                     return;
                 }
 
-                manufacture_dailog = new Dialog(CurrentStock_Activity.this);
-                manufacture_dailog.setContentView(R.layout.manufacture_dailog_spinner);
-                manufacture_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                manufacture_dailog.show();
+                dailog = new Dialog(CurrentStock_Activity.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
 
 
-                ImageView current_stock_image = manufacture_dailog.findViewById(R.id.spinner_icon_img);
+                ImageView current_stock_image = dailog.findViewById(R.id.spinner_icon_img);
                 current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
 
-                ListView itemNameSpinnerListView = manufacture_dailog.findViewById(R.id.spinnerItemList);
-                SearchView itemNameSpinnerSearchView = manufacture_dailog.findViewById(R.id.spinner_search);
+                ListView itemNameSpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+                SearchView itemNameSpinnerSearchView = dailog.findViewById(R.id.spinner_search);
                 itemNameSpinnerSearchView.setQueryHint("Search here...");
                 itemNameSpinnerSearchView.onActionViewExpanded();
                 itemNameSpinnerSearchView.setIconified(false);
                 itemNameSpinnerSearchView.clearFocus();
 
-                ImageView calcen_btn = manufacture_dailog.findViewById(R.id.spinner_close_icon_img);
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
                 calcen_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.d("Test","Click Close");
-                        manufacture_dailog.dismiss();
+                        dailog.dismiss();
                     }
                 });
 
@@ -346,9 +352,9 @@ import java.util.ArrayList;
                             Toast.makeText(CurrentStock_Activity.this, "Please select an item", Toast.LENGTH_SHORT).show();
                         } else {
 
-                            j_stock_quentity_dropdown_btn.setText("Select Quentity");
+//                            j_stock_quentity_dropdown_btn.setText("Select Quantity");
 
-                            qtyList = null;
+//                            qtyList = null;
 
                             item_Id = itemAdapter.getItem(position).getItem_Id();
 
@@ -358,7 +364,7 @@ import java.util.ArrayList;
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
 
-                            manufacture_dailog.dismiss();
+                            dailog.dismiss();
                             j_stock_item_dropdown_btn.setText(itemAdapter.getItem(position).getItem_Name());
                         }
 
@@ -380,28 +386,28 @@ import java.util.ArrayList;
                     return;
                 }
 
-                manufacture_dailog = new Dialog(CurrentStock_Activity.this);
-                manufacture_dailog.setContentView(R.layout.manufacture_dailog_spinner);
-                manufacture_dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                manufacture_dailog.show();
+                dailog = new Dialog(CurrentStock_Activity.this);
+                dailog.setContentView(R.layout.manufacture_dailog_spinner);
+                dailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dailog.show();
 
 
-                ImageView current_stock_image = manufacture_dailog.findViewById(R.id.spinner_icon_img);
+                ImageView current_stock_image = dailog.findViewById(R.id.spinner_icon_img);
                 current_stock_image.setImageResource(R.drawable.ic_stock_inventory);
 
-                ListView stockQuentitySpinnerListView = manufacture_dailog.findViewById(R.id.spinnerItemList);
-                SearchView stockQuentitySpinnerSearchView = manufacture_dailog.findViewById(R.id.spinner_search);
+                ListView stockQuentitySpinnerListView = dailog.findViewById(R.id.spinnerItemList);
+                SearchView stockQuentitySpinnerSearchView = dailog.findViewById(R.id.spinner_search);
                 stockQuentitySpinnerSearchView.setQueryHint("Search here...");
                 stockQuentitySpinnerSearchView.onActionViewExpanded();
                 stockQuentitySpinnerSearchView.setIconified(false);
                 stockQuentitySpinnerSearchView.clearFocus();
 
-                ImageView calcen_btn = manufacture_dailog.findViewById(R.id.spinner_close_icon_img);
+                ImageView calcen_btn = dailog.findViewById(R.id.spinner_close_icon_img);
                 calcen_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.d("Test","Click Close");
-                        manufacture_dailog.dismiss();
+                        dailog.dismiss();
                     }
                 });
 
@@ -430,10 +436,11 @@ import java.util.ArrayList;
 
                         quantity = quentityAdapter.getItem(position).getQty();
 
-                        Log.d(TAG, "print quentity: " + quantity);
-                        Log.d(TAG, "print quentity 1: " + quentityAdapter.getItem(position).getQty1());
-                        j_stock_quentity_dropdown_btn.setText(quentityAdapter.getItem(position).getQty1());
-                        manufacture_dailog.dismiss();
+                        Log.d(TAG, "print quantity: " + quantity);
+                        Log.d(TAG, "print quantity 1: " + quentityAdapter.getItem(position).getQty1());
+                        String setqtyValText = quentityAdapter.getItem(position).getQty1();
+                        j_stock_quentity_dropdown_btn.setText(setqtyValText.substring(2, setqtyValText.length() -2));
+                        dailog.dismiss();
 
                         if (NetworkHelpers.isNetworkAvailable(context)) {
                             new CurrectStpockResultTask().execute();
@@ -454,50 +461,6 @@ import java.util.ArrayList;
         new ManufactureInfoTask().execute();
     }
 
-//    private void udNo_initList(){
-//        try {
-//
-//            connection = com.example.testorcl.ODBC.Db.createConnection();
-//            Log.d("connection","================UD_No query==Connected===========");
-//            Log.d("item_id_nested","=====UD No====="+groupId);
-//            if(connection != null){
-//                udNoList = new ArrayList<>();
-//
-//                Statement stmt=connection.createStatement();
-//                String query = "select UD_NO,UD_NO1\n" +
-//                        "from(\n" +
-//                        "select 1 sl,'-1' UD_NO,'<< Select UD No. >>' UD_NO1\n" +
-//                        "from dual\n" +
-//                        "union all\n" +
-//                        "SELECT 2 sl, UD_NO, UD_NO||' ('||ITEM_NAME||')' UD_NO1\n" +
-//                        "FROM INV_ITEM\n" +
-//                        "WHERE ('"+groupId+"'=-1 or ITEMGROUP_ID='"+groupId+"')\n" +
-//                        ")\n" +
-//                        "order by sl,UD_NO";
-//
-//                ResultSet rs=stmt.executeQuery(query);
-//
-//                while(rs.next()) {
-//
-//                    Log.d("value1","==========1==========="+rs.getString(1));
-//                    Log.d("value2","==========2==========="+rs.getString(2));
-//                    udNoList.add(new CurrentStock_UD_No_Entity_D(rs.getString(1),rs.getString(2)));
-//                }
-//                unNo_adapter =new Current_Stock_UN_No_Adapter(CurrentStock_Activity.this,udNoList);
-//                udNo_spinner.setAdapter(unNo_adapter);
-//
-//            }
-//
-//            connection.close();
-//
-//        }
-//        catch (Exception e) {
-//
-//            Toast.makeText(CurrentStock_Activity.this, " " + e,Toast.LENGTH_SHORT).show();
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     private class ManufactureInfoTask extends AsyncTask<Void, Void, ArrayList<CurrentStock_Manufacturer_Entity_A>> {
         @Override
@@ -548,7 +511,6 @@ import java.util.ArrayList;
         }
 
     }
-
 
     private class GroupNameTask extends AsyncTask<Void, Void, Void> {
 
@@ -685,11 +647,11 @@ import java.util.ArrayList;
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-
-                        Log.d("value1", "==========1===========" + rs.getString(1));
-                        Log.d("value2", "==========2===========" + rs.getString(2));
+                        Log.d("qty", "==========1===========" + rs.getString(1));
+                        Log.d("qty1", "==========2===========" + rs.getString(2));
                         qtyList.add(new CurrentStock_Quantity_Entity_E(rs.getString(1), rs.getString(2)));
                     }
+
                 }
                 busyDialog.dismis();
                 connection.close();
@@ -703,6 +665,21 @@ import java.util.ArrayList;
         @Override
         protected void onPostExecute(Void aVoid) {
             busyDialog.dismis();
+            if(NetworkHelpers.isNetworkAvailable(context)){
+               if(qtyList.size()>0){
+                   quantity = qtyList.get(0).getQty();
+                   new CurrectStpockResultTask().execute();
+                   String qtyVal = qtyList.get(0).getQty1();
+                   j_stock_quentity_dropdown_btn.setText(qtyVal.substring(2,qtyVal.length() -2));
+
+
+               }else {
+                   Log.d(TAG,"qtyList is empty");
+               }
+
+            }else {
+                Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
+            }
 
         }
     }
@@ -726,7 +703,7 @@ import java.util.ArrayList;
 
                     Statement stmt = connection.createStatement();
                     String query = "Select LOT_NO,to_char(EXP_DATE,'MON DD,RRRR') EXP_DATE,sum(CURR_STOCK) ||' '||MU_NAME CURR_STOCK\n" +
-                            "From INV_ITEMSTOCK_SUMMARY@inv_core s\n" +
+                            "From VW_CURRENTSTOCK_SUMMARY s\n" +
                             "where ITEM_ID='" + item_Id + "'\n" +
                             "and ('" + quantity + "' = -1 or ('" + quantity + "'= 1 and CURR_STOCK>0) or ('" + quantity + "' = 2 and CURR_STOCK=0))\n" +
                             "group by LOT_NO,EXP_DATE, MU_NAME\n" +

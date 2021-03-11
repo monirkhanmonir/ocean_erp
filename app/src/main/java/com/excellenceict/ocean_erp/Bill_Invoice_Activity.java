@@ -24,6 +24,10 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.excellenceict.ocean_erp.Model.Billinvoice_Result_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_Customer_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_Group_Model;
+import com.excellenceict.ocean_erp.Model.Billinvoice_item_Model;
 import com.excellenceict.ocean_erp.util.BusyDialog;
 import com.excellenceict.ocean_erp.util.Helper;
 import com.excellenceict.ocean_erp.util.NetworkHelpers;
@@ -41,12 +45,16 @@ import java.util.Locale;
 public class Bill_Invoice_Activity extends AppCompatActivity {
     private Connection connection;
     TextView text_formDate, text_toDate;
-    String groupItem_id, item_id, customer_id, customer_contact;
+    String groupItem_id = "-1";
+    String item_id = "-1";
+    String customer_id = "-1";
+    String customer_contact = "-1";
+
     private ListView listView;
-    private ArrayList<Billinvoice_Group_Entity> groupNameList;
-    private ArrayList<Billinvoice_Customer_Entity> customerNameList;
-    private ArrayList<Billinvoice_item_Entity> itemNameList;
-    private ArrayList<Bill_Result_Entity> resultList;
+    private ArrayList<Billinvoice_Group_Model> groupNameList;
+    private ArrayList<Billinvoice_Customer_Model> customerNameList;
+    private ArrayList<Billinvoice_item_Model> itemNameList;
+    private ArrayList<Billinvoice_Result_Model> resultList;
     private Bill_Results_CustomAdapter result_adapter;
 
     private TextView j_bill_customer_dropdown_btn, j_bill_group_dropdown_btn, j_bill_item_dropdown_btn;
@@ -58,7 +66,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bill__invoice);
+        setContentView(R.layout.bill_invoice_activity);
         //group_spinner =findViewById(R.id.bill_Group_spinner);
         // customerName_spinner =findViewById(R.id.bill_customer_spinner);
         text_formDate = findViewById(R.id.bill_from_date);
@@ -124,7 +132,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_Customer_Entity> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Entity>(
+                final ArrayAdapter<Billinvoice_Customer_Model> customerAdapter = new ArrayAdapter<Billinvoice_Customer_Model>(
                         Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1, customerNameList
                 );
 
@@ -158,7 +166,9 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
                             groupNameList = null;
                             itemNameList = null;
-//                            qtyList = null;
+
+                            groupItem_id ="-1";
+                            item_id ="-1";
 
 
                             customer_id = customerAdapter.getItem(position).getCustomer_Id();
@@ -169,8 +179,8 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                             } else {
                                 Toast.makeText(context, R.string.alertInternet, Toast.LENGTH_SHORT).show();
                             }
-
-
+//                            dateSetFROM();
+//                            dateSetTO();
                             j_bill_customer_dropdown_btn.setText(customerAdapter.getItem(position).getCustomer_Name());
                         }
 
@@ -217,7 +227,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_Group_Entity> itemGroupAdapter = new ArrayAdapter<Billinvoice_Group_Entity>(
+                final ArrayAdapter<Billinvoice_Group_Model> itemGroupAdapter = new ArrayAdapter<Billinvoice_Group_Model>(
                         Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1, groupNameList
                 );
 
@@ -306,7 +316,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                     }
                 });
 
-                final ArrayAdapter<Billinvoice_item_Entity> billItemAdapter = new ArrayAdapter<Billinvoice_item_Entity>(
+                final ArrayAdapter<Billinvoice_item_Model> billItemAdapter = new ArrayAdapter<Billinvoice_item_Model>(
                         Bill_Invoice_Activity.this, android.R.layout.simple_list_item_1, itemNameList
                 );
 
@@ -335,8 +345,6 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
                             item_id = billItemAdapter.getItem(position).getItem_id();
 
-                            dateSetFROM();
-                            dateSetTO();
                             new Result_Task().execute();
 
                             bill_customer_dailog.dismiss();
@@ -353,16 +361,11 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
         new CustomerName_Task().execute();
         currentDate();
-//        dateSetFROM();
-//        dateSetTO();
+        dateSetFROM();
+        dateSetTO();
     }
 
-
-    private void showResult_initList() {
-
-    }
-
-    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Entity>> {
+    private class CustomerName_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Customer_Model>> {
 
         @Override
         protected void onPreExecute() {
@@ -371,7 +374,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Billinvoice_Customer_Entity> doInBackground(Void... voids) {
+        protected ArrayList<Billinvoice_Customer_Model> doInBackground(Void... voids) {
             customerNameList = new ArrayList<>();
             try {
                 connection = com.excellenceict.ocean_erp.ODBC.Db.createConnection();
@@ -393,7 +396,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        customerNameList.add(new Billinvoice_Customer_Entity(rs.getString(1), rs.getString(2)));
+                        customerNameList.add(new Billinvoice_Customer_Model(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Customer====1===========" + rs.getString(1));
                         Log.d("value2", "======Customer====2===========" + rs.getString(2));
 
@@ -403,9 +406,10 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
 
                 connection.close();
+                busyDialog.dismis();
 
             } catch (Exception e) {
-
+                busyDialog.dismis();
                 Toast.makeText(Bill_Invoice_Activity.this, " " + e, Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
@@ -414,13 +418,13 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Billinvoice_Customer_Entity> billinvoice_customer_entities) {
+        protected void onPostExecute(ArrayList<Billinvoice_Customer_Model> billinvoice_customer_entities) {
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }
 
-
-    private class Result_Task extends AsyncTask<Void, Void, ArrayList<Bill_Result_Entity>> {
+    private class Result_Task extends AsyncTask<Void, Void, ArrayList<Billinvoice_Result_Model>> {
 
         @Override
         protected void onPreExecute() {
@@ -429,13 +433,13 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<Bill_Result_Entity> doInBackground(Void... voids) {
-            resultList = new ArrayList<Bill_Result_Entity>();
+        protected ArrayList<Billinvoice_Result_Model> doInBackground(Void... voids) {
+            resultList = new ArrayList<Billinvoice_Result_Model>();
             try {
 
                 connection = com.excellenceict.ocean_erp.ODBC.Db.createConnection();
                 if (connection != null) {
-                    resultList = new ArrayList<Bill_Result_Entity>();
+                    resultList = new ArrayList<Billinvoice_Result_Model>();
 
                     Statement stmt = connection.createStatement();
                     String query = "Select m.INVOICE_ID,INVOICE_NO,to_char(INVOICE_DATE,'MON DD,RRRR')INVOICE_DATE,\n" +
@@ -458,7 +462,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        resultList.add(new Bill_Result_Entity(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+                        resultList.add(new Billinvoice_Result_Model(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)));
                         Log.d("value1", "======res====1===========" + rs.getString(1));
                         Log.d("value2", "======res====2===========" + rs.getString(2));
                         Log.d("value3", "======res====3===========" + rs.getString(3));
@@ -481,7 +485,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Bill_Result_Entity> bill_result_entities) {
+        protected void onPostExecute(ArrayList<Billinvoice_Result_Model> bill_result_entities) {
             busyDialog.dismis();
             result_adapter = new Bill_Results_CustomAdapter(getApplication(), resultList);
             listView.setAdapter(result_adapter);
@@ -610,7 +614,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        groupNameList.add(new Billinvoice_Group_Entity(rs.getString(1), rs.getString(2)));
+                        groupNameList.add(new Billinvoice_Group_Model(rs.getString(1), rs.getString(2)));
 
                     }
                     busyDialog.dismis();
@@ -628,7 +632,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }
@@ -664,7 +668,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
                     ResultSet rs = stmt.executeQuery(query);
 
                     while (rs.next()) {
-                        itemNameList.add(new Billinvoice_item_Entity(rs.getString(1), rs.getString(2)));
+                        itemNameList.add(new Billinvoice_item_Model(rs.getString(1), rs.getString(2)));
                         Log.d("value1", "======Item====1===========" + rs.getString(1));
                         Log.d("value2", "======Item====2===========" + rs.getString(2));
 
@@ -685,7 +689,7 @@ public class Bill_Invoice_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
+            new Result_Task().execute();
             busyDialog.dismis();
         }
     }

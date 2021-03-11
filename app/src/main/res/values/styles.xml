@@ -17,5 +17,19 @@
         <item name="android:windowBackground">@color/transparent</item>
     </style>
 
+<!--   for toolbar : color change-->
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">#fff</item>
+    </style>
+
+<!--    <style name="ToolBarPopUpTheme" parent="@android:style/Widget.PopupMenu">-->
+<!--        <item name="android:popupBackground">@android:color/black</item>-->
+<!--    </style>-->
+    <style name="ToolBarPopUpTheme" parent="ThemeOverlay.AppCompat.Light">
+<!--        <item name="android:colorBackground">@color/colorHeader</item>-->
+        <item name="android:textColor">@color/colorHeader</item>
+    </style>
+
+
 
 </resources>

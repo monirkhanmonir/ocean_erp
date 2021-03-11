@@ -15,19 +15,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.excellenceict.ocean_erp.Blood_Bank_Entity;
+import com.excellenceict.ocean_erp.Model.Blood_Bank_Model;
 import com.excellenceict.ocean_erp.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomBloodBankAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
-    private List<Blood_Bank_Entity> bloodBankList;
-    private List<Blood_Bank_Entity> bloodBankFilterList;
+    private List<Blood_Bank_Model> bloodBankList;
+    private List<Blood_Bank_Model> bloodBankFilterList;
     private Context context;
     private SelectedBloodDonner selectedBloodDonner;
 
-    public CustomBloodBankAdapter(List<Blood_Bank_Entity> bloodBankList, SelectedBloodDonner selectedBloodDonner) {
+    public CustomBloodBankAdapter(List<Blood_Bank_Model> bloodBankList, SelectedBloodDonner selectedBloodDonner) {
         this.bloodBankList = bloodBankList;
         this.selectedBloodDonner = selectedBloodDonner;
         this.bloodBankFilterList = bloodBankList;
@@ -43,7 +43,7 @@ public class CustomBloodBankAdapter  extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Blood_Bank_Entity bloodBankModel = bloodBankList.get(position);
+        Blood_Bank_Model bloodBankModel = bloodBankList.get(position);
         BloodBankViewHolder  viewHolder =(BloodBankViewHolder) holder;
         viewHolder.jdonner_blood_group.setText(bloodBankModel.getBlood_Grp());
         viewHolder.jblood_donner_name.setText(bloodBankModel.getF_name()+" "+bloodBankModel.getL_name());
@@ -96,9 +96,9 @@ public class CustomBloodBankAdapter  extends RecyclerView.Adapter<RecyclerView.V
 
                 }else {
                     String searchChr = constraint.toString().toLowerCase();
-                    List<Blood_Bank_Entity> resultData = new ArrayList<>();
+                    List<Blood_Bank_Model> resultData = new ArrayList<>();
 
-                    for (Blood_Bank_Entity donnerModel: bloodBankFilterList){
+                    for (Blood_Bank_Model donnerModel: bloodBankFilterList){
 
                         String name = donnerModel.getF_name()+" "+donnerModel.getL_name();
 
@@ -117,7 +117,7 @@ public class CustomBloodBankAdapter  extends RecyclerView.Adapter<RecyclerView.V
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                bloodBankList = (List<Blood_Bank_Entity>) results.values;
+                bloodBankList = (List<Blood_Bank_Model>) results.values;
                 notifyDataSetChanged();
             }
         };
@@ -164,7 +164,7 @@ public class CustomBloodBankAdapter  extends RecyclerView.Adapter<RecyclerView.V
 
 
     public interface SelectedBloodDonner{
-        void getSelectedBloodDonner(Blood_Bank_Entity bloodDonnerModel);
+        void getSelectedBloodDonner(Blood_Bank_Model bloodDonnerModel);
         void onCallBloodDonner(String donner_number);
     }
 

@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.excellenceict.ocean_erp.Model.Blood_Bank_Model;
 import com.excellenceict.ocean_erp.adapter.CustomBloodBankAdapter;
 import com.excellenceict.ocean_erp.util.BusyDialog;
 import com.excellenceict.ocean_erp.util.NetworkHelpers;
@@ -37,8 +38,8 @@ import java.util.List;
 public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloodBankAdapter.SelectedBloodDonner {
     private Connection connection;
     private static final int REQUEST_CALL =1;
-    private ArrayList<Blood_Bank_Entity> bloodBankItems, bloodBankFilterItems;
-    CustomBloodBankAdapter adapter;
+    private ArrayList<Blood_Bank_Model> bloodBankItems, bloodBankFilterItems;
+    private CustomBloodBankAdapter adapter;
     private RecyclerView jbloodBank_recyclerView;
     private SearchView searchBlood;
     private BusyDialog busyDialog;
@@ -53,7 +54,7 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blood_bank);
+        setContentView(R.layout.blood_bank_activity);
         jbloodBank_recyclerView =findViewById(R.id.bloodBank_recyclerView);
         jmyBloodBankToolBarId = findViewById(R.id.myBloodBankToolBarId);
         searchBlood = findViewById(R.id.search_blood);
@@ -108,10 +109,6 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
         catagories.add("O+");
         catagories.add("O-");
         catagories.add("N/A");
-//        ArrayAdapter<String> dataAdapter;
-//        dataAdapter = new ArrayAdapter<>(Blood_Bank_Activity.this,android.R.layout.simple_spinner_item,catagories);
-//        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-       // spinner.setAdapter(dataAdapter);
 
 
         if(NetworkHelpers.isNetworkAvailable(context)){
@@ -169,7 +166,7 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
 
 
     @Override
-    public void getSelectedBloodDonner(Blood_Bank_Entity bloodDonnerModel) {
+    public void getSelectedBloodDonner(Blood_Bank_Model bloodDonnerModel) {
         Toast.makeText(this,"Donner name:"+ bloodDonnerModel.getF_name(), Toast.LENGTH_SHORT).show();
     }
 
@@ -188,7 +185,7 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
             jbloodBank_recyclerView.setAdapter(adapter);
         }else {
             bloodBankFilterItems = new ArrayList<>();
-            for (Blood_Bank_Entity blood_donner: bloodBankItems){
+            for (Blood_Bank_Model blood_donner: bloodBankItems){
                if(blood_donner.getBlood_Grp().equals(group)){
                    bloodBankFilterItems.add(blood_donner);
                }
@@ -221,7 +218,7 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
                 connection = com.excellenceict.ocean_erp.ODBC.Db.createConnection();
                 Log.d("connection", "=============BloodBnk_DB========Connect===========");
                 if (connection != null) {
-                    bloodBankItems = new ArrayList<Blood_Bank_Entity>();
+                    bloodBankItems = new ArrayList<Blood_Bank_Model>();
 
                 }
 
@@ -237,7 +234,7 @@ public class Blood_Bank_Activity extends AppCompatActivity implements CustomBloo
 
                 while (rs.next()) {
 
-                    bloodBankItems.add(new Blood_Bank_Entity(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
+                    bloodBankItems.add(new Blood_Bank_Model(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
                 }
                 busyDialog.dismis();
                 connection.close();

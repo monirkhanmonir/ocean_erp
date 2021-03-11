@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.excellenceict.ocean_erp.ACC_View_Voucher_Result_Entity;
+import com.excellenceict.ocean_erp.View_Voucher_Result_Entity;
 import com.excellenceict.ocean_erp.R;
 
 import java.util.ArrayList;
@@ -20,12 +20,12 @@ import java.util.List;
 
 public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
-    private List<ACC_View_Voucher_Result_Entity> voucherList;
-    private List<ACC_View_Voucher_Result_Entity> voucherFilterList;
+    private List<View_Voucher_Result_Entity> voucherList;
+    private List<View_Voucher_Result_Entity> voucherFilterList;
     private Context context;
     private SelectedVoucher selectedVoucher;
 
-    public CustomACCVoucherResultAdapter(List<ACC_View_Voucher_Result_Entity> voucherList) {
+    public CustomACCVoucherResultAdapter(List<View_Voucher_Result_Entity> voucherList) {
         this.voucherList = voucherList;
        // this.selectedVoucher = selectedVoucher;
         this.voucherFilterList = voucherList;
@@ -37,12 +37,12 @@ public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new VoucherViewHolder(LayoutInflater.from(context).inflate(R.layout.acc_view_voucher_result_listview,parent,false));
+        return new VoucherViewHolder(LayoutInflater.from(context).inflate(R.layout.view_voucher_result_listview,parent,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ACC_View_Voucher_Result_Entity voucherModel = voucherList.get(position);
+        View_Voucher_Result_Entity voucherModel = voucherList.get(position);
         VoucherViewHolder  viewHolder = (VoucherViewHolder) holder;
         viewHolder.j_voucherRes_date.setText(": "+voucherModel.getDate());
         viewHolder.j_voucherRes_Amount.setText(": "+voucherModel.getAmount());
@@ -52,6 +52,7 @@ public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<Recycler
         viewHolder.j_voucherRes_Note.setText(": "+voucherModel.getNote());
 
         viewHolder.j_acc_voucher_row_layout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
+
 
     }
 
@@ -73,8 +74,8 @@ public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<Recycler
 
                 }else {
                     String searchChr = constraint.toString().toLowerCase();
-                    List<ACC_View_Voucher_Result_Entity> resultData = new ArrayList<>();
-                    for (ACC_View_Voucher_Result_Entity voucherModel: voucherFilterList){
+                    List<View_Voucher_Result_Entity> resultData = new ArrayList<>();
+                    for (View_Voucher_Result_Entity voucherModel: voucherFilterList){
 
                         if(voucherModel.getRef().toLowerCase().contains(searchChr) | voucherModel.getNote().toLowerCase().contains(searchChr)){
                             resultData.add(voucherModel);
@@ -91,7 +92,7 @@ public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<Recycler
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                voucherList = (List<ACC_View_Voucher_Result_Entity>) results.values;
+                voucherList = (List<View_Voucher_Result_Entity>) results.values;
                 notifyDataSetChanged();
             }
         };
@@ -123,7 +124,7 @@ public class CustomACCVoucherResultAdapter extends RecyclerView.Adapter<Recycler
 
 
     public interface SelectedVoucher{
-        void getSelectedVoucher( ACC_View_Voucher_Result_Entity voucherModel);
+        void getSelectedVoucher( View_Voucher_Result_Entity voucherModel);
     }
 
 
